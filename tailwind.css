@@ -1,0 +1,177 @@
+@import "tailwindcss";
+@import "tw-animate-css";
+@import "@zayne-labs/ui-react/css/preset.css";
+
+@plugin "@tailwindcss/typography";
+
+/* ------------------*/
+/* App Color Theme         */
+/*-------------------*/
+@theme {
+	--color-app-dark: hsl(0, 0%, 4%);
+	--color-app-dark-2: hsl(0, 0%, 9%);
+	--color-app-light: hsl(0, 0%, 100%);
+	--color-app-dark-blue: hsl(230, 46%, 5%);
+	--color-app-gray: hsl(0, 0%, 62%);
+}
+
+@custom-variant dark (&:where([data-theme=dark], [data-theme=dark] *));
+
+/* ------------------*/
+/* Custom Properties */
+/*-------------------*/
+@layer base {
+}
+
+/* ------------------*/
+/* Fonts */
+/*-------------------*/
+@theme inline {
+	--font-inter: var(--font-inter);
+	--font-albert-sans: var(--font-albert-sans);
+}
+
+/* ------------------*/
+/* Main Theme */
+/*-------------------*/
+@theme {
+	--breakpoint-*: initial;
+	--breakpoint-sm: 480px;
+	--breakpoint-md: 780px;
+	--breakpoint-lg: 1000px;
+	--breakpoint-xl: 1280px;
+
+	--animate-accordion-down: accordion-down 0.2s ease-out;
+	--animate-accordion-up: accordion-up 0.2s ease-out;
+
+	@keyframes accordion-down {
+		from {
+			height: 0;
+		}
+		to {
+			height: var(--radix-accordion-content-height);
+		}
+	}
+	@keyframes accordion-up {
+		from {
+			height: var(--radix-accordion-content-height);
+		}
+		to {
+			height: 0;
+		}
+	}
+}
+
+/* ------------------*/
+/* Shadcn Theme      */
+/*-------------------*/
+@theme {
+	--color-shadcn-background: hsl(0, 0%, 100%);
+	--color-shadcn-foreground: hsl(222.2, 47.4%, 11.2%);
+
+	--color-shadcn-primary: hsl(222.2, 47.4%, 11.2%);
+	--color-shadcn-primary-foreground: hsl(210, 40%, 98%);
+
+	--color-shadcn-secondary: hsl(210, 40%, 96.1%);
+	--color-shadcn-secondary-foreground: hsl(222.2, 47.4%, 11.2%);
+
+	--color-shadcn-popover: hsl(0, 0%, 100%);
+	--color-shadcn-popover-foreground: hsl(222.2, 47.4%, 11.2%);
+
+	--color-shadcn-accent: hsl(210, 40%, 96.1%);
+	--color-shadcn-accent-foreground: hsl(222.2, 47.4%, 11.2%);
+
+	--color-shadcn-muted: hsl(210, 40%, 96.1%);
+	--color-shadcn-muted-foreground: hsl(215.4, 16.3%, 46.9%);
+
+	--color-shadcn-input: hsl(214.3, 31.8%, 91.4%);
+	--color-shadcn-border: hsl(214.3, 31.8%, 91.4%);
+	--color-shadcn-ring: hsl(215, 20.2%, 65.1%);
+
+	--color-sonner-success-bg: hsl(150, 100%, 6%);
+	--color-sonner-success-text: hsl(150, 100%, 90%);
+	--color-sonner-success-border: hsl(147, 100%, 12%);
+
+	--color-sonner-error-bg: hsl(358, 76%, 10%);
+	--color-sonner-error-text: hsl(358, 100%, 81%);
+	--color-sonner-error-border: hsl(357, 89%, 16%);
+}
+
+/* ------------------*/
+/* General CSS Reset */
+/*-------------------*/
+@layer base {
+	* {
+		margin: 0;
+		padding: 0;
+		box-sizing: border-box;
+	}
+
+	html {
+		height: 100%;
+	}
+
+	body {
+		min-height: 100%;
+	}
+
+	html {
+		scroll-behavior: smooth;
+		-webkit-tap-highlight-color: transparent;
+		font-synthesis: none;
+		text-rendering: optimizeLegibility;
+		-webkit-font-smoothing: antialiased;
+		-moz-osx-font-smoothing: grayscale;
+	}
+
+	input:focus-visible {
+		outline: 2px solid transparent;
+		outline-offset: 2px;
+	}
+
+	img {
+		width: 100%;
+		max-inline-size: 100%;
+		max-width: unset;
+	}
+
+	button:not(:disabled) {
+		cursor: pointer;
+	}
+
+	button {
+		outline: transparent;
+	}
+
+	body {
+		line-height: 1.5;
+		font-family: var(--font-inter);
+		color: var(--color-app-light);
+	}
+}
+
+/* ------------------*/
+/* Custom Utilities */
+/*-------------------*/
+@utility custom-scrollbar {
+	&::-webkit-scrollbar {
+		width: 10px;
+	}
+
+	&::-webkit-scrollbar-track {
+		background-color: hsl(0, 0%, 76%);
+		border-radius: 10px 10px 0 0;
+	}
+
+	&::-webkit-scrollbar-thumb {
+		background-color: hsl(0, 0%, 39%);
+		border: 1px solid hsl(0, 0%, 76%);
+		border-radius: 10px;
+	}
+}
+
+@utility scrollbar-hidden {
+	&::-webkit-scrollbar {
+		display: none;
+	}
+}
