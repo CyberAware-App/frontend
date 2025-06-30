@@ -10,6 +10,7 @@
 @theme {
 	--color-unizik-orange: hsl(27, 100%, 56%);
 	--color-cyberaware-primary: hsl(238, 80%, 8%);
+	--color-cyberaware-body-color: hsl(0, 0%, 29%);
 }
 
 /* ------------------*/
@@ -137,7 +138,7 @@
 	body {
 		line-height: 1.5;
 		font-family: var(--font-work-sans);
-		color: var(--color-medinfo-body-color);
+		color: var(--color-cyberaware-body-color);
 	}
 }
 

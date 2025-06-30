@@ -1,7 +1,7 @@
-import { Main } from "./-components";
+import { Main } from "../-components";
 
 function HomePage() {
-	return <Main className="gap-8" />;
+	return <Main />;
 }
 
 export default HomePage;
