@@ -1,22 +1,15 @@
 import { zayne } from "@zayne-labs/eslint-config";
 
 export default zayne({
-	ignores: [
-		"dist/**",
-		"build/**",
-		".next/**",
-		"eslint.config.mjs",
-		"tailwind.config.ts",
-		"postcss.config.js",
-		"next.config.mjs",
-		"lint-staged.config.mjs",
-	],
+	ignores: ["dist/**", "build/**", ".next/**", "postcss.config.js"],
 	react: {
 		nextjs: true,
 	},
-	// tailwindcss: true,
+	tailwindcssBetter: true,
 	perfectionist: false,
-	tanstack: true,
+	tanstack: {
+		query: true,
+	},
 	typescript: {
 		tsconfigPath: "tsconfig.json",
 	},
