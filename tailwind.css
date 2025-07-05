@@ -8,8 +8,8 @@
 @custom-variant dark (&:where([data-theme=dark], [data-theme=dark] *));
 
 @theme {
-	--color-unizik-orange: hsl(27, 100%, 56%);
-	--color-cyberaware-primary: hsl(238, 80%, 8%);
+	--color-cyberaware-unizik-orange: hsl(27, 100%, 56%);
+	--color-cyberaware-aceces-blue: hsl(238, 80%, 8%);
 	--color-cyberaware-body-color: hsl(0, 0%, 29%);
 }
 

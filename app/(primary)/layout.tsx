@@ -1,6 +1,8 @@
 function PrimaryLayout({ children }: { children: React.ReactNode }) {
 	return (
-		<div className="flex min-h-svh w-full flex-col items-center bg-cyberaware-primary">{children}</div>
+		<div className="flex min-h-svh w-full flex-col items-center bg-cyberaware-aceces-blue">
+			{children}
+		</div>
 	);
 }
 
