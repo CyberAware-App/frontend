@@ -22,7 +22,7 @@ const buttonVariants = tv({
 		theme: {
 			orange: "bg-cyberaware-unizik-orange text-white",
 
-			"blue-ghost": "border-2 border-cyberaware-aceces-blue bg-transparent",
+			"blue-ghost": "border-2 border-cyberaware-aeces-blue bg-transparent",
 		},
 
 		isLoading: {
