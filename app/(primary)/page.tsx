@@ -1,11 +1,11 @@
 import Image from "next/image";
 import { Button } from "@/components/ui/button";
-import { aecesLogo, heading, unizikLogo } from "@/public/assets";
+import { aecesLogo, heading, modelOne, unizikLogo } from "@/public/assets";
 import { Main } from "../-components";
 
 function HomePage() {
 	return (
-		<Main className="gap-12">
+		<Main>
 			<section className="mx-4 mt-4 flex flex-col gap-8 bg-white px-[45px] pt-[170px] pb-4">
 				<Image src={heading} alt="Heading" className="mx-auto" />
 				<p className="text-center text-[16px] text-cyberaware-body-color">
@@ -34,6 +34,11 @@ function HomePage() {
 						</figure>
 					</div>
 				</article>
+			</section>
+
+			<section className="mx-4 mt-12 flex">
+				<span className="block w-[15px] shrink-0 bg-cyberaware-unizik-orange" />
+				<Image src={modelOne} alt="Model One" />
 			</section>
 		</Main>
 	);
