@@ -86,7 +86,7 @@ function HomePage() {
 					<div className="flex flex-col gap-2.5">
 						<figure className="flex items-center gap-2.5">
 							<Image src={aecesLogo} alt="AECES Logo" className="size-6" />
-							<figcaption>Association and Electronic and computer engineering students,</figcaption>
+							<figcaption>Association of Electronic and Computer Engineering Students,</figcaption>
 						</figure>
 						<figure className="flex items-center gap-2.5">
 							<Image src={unizikLogo} alt="Unizik Logo" className="size-7" />
