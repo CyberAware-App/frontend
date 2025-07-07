@@ -11,6 +11,6 @@ export default zayne({
 		query: true,
 	},
 	typescript: {
-		tsconfigPath: "tsconfig.json",
+		tsconfigPath: true,
 	},
 });

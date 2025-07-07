@@ -8,8 +8,10 @@
 @custom-variant dark (&:where([data-theme=dark], [data-theme=dark] *));
 
 @theme {
-	--color-unizik-orange: hsl(27, 100%, 56%);
-	--color-cyberaware-primary: hsl(238, 80%, 8%);
+	--color-cyberaware-aeces-blue: hsl(238, 80%, 8%);
+	--color-cyberaware-unizik-orange: hsl(27, 100%, 56%);
+	--color-cyberaware-light-orange: hsl(27, 65%, 93%);
+	--color-cyberaware-body-color: hsl(0, 0%, 29%);
 }
 
 /* ------------------*/
@@ -135,9 +137,9 @@
 	}
 
 	body {
-		line-height: 1.5;
+		line-height: 1.3;
 		font-family: var(--font-work-sans);
-		color: var(--color-medinfo-body-color);
+		color: var(--color-cyberaware-body-color);
 	}
 }
 
