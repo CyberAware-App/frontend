@@ -30,6 +30,46 @@
 	--breakpoint-md: 780px;
 	--breakpoint-lg: 1000px;
 	--breakpoint-xl: 1280px;
+
+	--animate-fd-fade-in: fd-fade-in 300ms ease;
+	--animate-fd-fade-out: fd-fade-out 300ms ease;
+
+	--animate-fd-sidebar-in: fd-sidebar-in 250ms ease;
+	--animate-fd-sidebar-out: fd-sidebar-out 250ms ease;
+
+	@keyframes fd-fade-in {
+		from {
+			opacity: 0;
+			visibility: hidden;
+		}
+		to {
+			opacity: 1;
+			visibility: visible;
+		}
+	}
+
+	@keyframes fd-fade-out {
+		from {
+			opacity: 1;
+			visibility: visible;
+		}
+		to {
+			opacity: 0;
+			visibility: hidden;
+		}
+	}
+
+	@keyframes fd-sidebar-in {
+		from {
+			transform: translateX(-100%);
+		}
+	}
+
+	@keyframes fd-sidebar-out {
+		to {
+			transform: translateX(-100%);
+		}
+	}
 }
 
 /* ------------------*/
