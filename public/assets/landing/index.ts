@@ -1,0 +1,9 @@
+export { default as aecesLogo } from "./aeces-logo.svg";
+export { default as eyeShield } from "./eye-shield.svg";
+export { default as modelOne } from "./model-1.svg";
+export { default as modelTwo } from "./model-2.svg";
+export { default as reasonOne } from "./reason-1.svg";
+export { default as reasonTwo } from "./reason-2.svg";
+export { default as reasonThree } from "./reason-3.svg";
+export { default as reasonFour } from "./reason-4.svg";
+export { default as unizikLogo } from "./unizik-logo.svg";

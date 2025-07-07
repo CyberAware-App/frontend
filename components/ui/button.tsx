@@ -16,12 +16,12 @@ export type ButtonProps = Prettify<
 	& InferProps<"button">;
 
 const buttonVariants = tv({
-	base: "flex h-12 w-full min-w-fit items-center justify-center text-base font-medium",
+	base: "flex h-[52px] w-full min-w-fit items-center justify-center p-3.5 text-base font-medium",
 
 	variants: {
 		theme: {
 			orange: "bg-cyberaware-unizik-orange text-white",
-
+			white: "bg-white text-cyberaware-aeces-blue",
 			"blue-ghost": "border-2 border-cyberaware-aeces-blue bg-transparent",
 		},
 
@@ -34,8 +34,6 @@ const buttonVariants = tv({
 		},
 
 		isDisabled: {
-			// true: `border-medinfo-dark-4 bg-medinfo-disabled-fill text-medinfo-dark-4 cursor-not-allowed
-			// border-2`,
 			true: "",
 		},
 	},

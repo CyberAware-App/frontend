@@ -1,7 +1,7 @@
 import type { InferProps } from "@zayne-labs/toolkit-react/utils";
 import { Select as SelectPrimitive } from "radix-ui";
 import { cnMerge } from "@/lib/utils/cn";
-import { IconBox } from "../common";
+import { IconBox } from "../common/IconBox";
 
 function SelectRoot(props: InferProps<typeof SelectPrimitive.Root>) {
 	return <SelectPrimitive.Root data-slot="select-root" {...props} />;
