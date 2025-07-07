@@ -17,9 +17,9 @@ function NavBar() {
 	return (
 		<header
 			className="absolute top-[72px] z-500 flex w-full max-w-[312px] items-center justify-between
-				bg-cyberaware-aeces-blue py-1 pr-5 pl-6"
+				bg-cyberaware-aeces-blue py-1 pr-5 pl-1"
 		>
-			<div className="flex items-center">
+			<div className="flex items-center gap-1">
 				<Image src={logoSmall} alt="Logo" className="w-[55px]" />
 				<h3 className="font-medium text-white">CyberAware</h3>
 			</div>
@@ -73,10 +73,11 @@ function MobileNavigation(props: MobileNavProps) {
 					onClick={toggleNavShow}
 				/>
 			</Presence>
+
 			<aside
 				className={cnMerge(
 					`fixed inset-[2px_auto_2px_2px] z-40 flex max-w-[380px] flex-col items-center gap-7
-					overflow-x-hidden bg-cyberaware-aeces-blue pt-[100px] text-white`,
+					overflow-x-hidden bg-cyberaware-aeces-blue pt-[150px] text-white`,
 					isNavShow ? "w-[80%] [transition:width_350ms_ease]" : "w-0 [transition:width_500ms_ease]",
 					className
 				)}
@@ -86,8 +87,6 @@ function MobileNavigation(props: MobileNavProps) {
 					element.tagName === "A" && toggleNavShow();
 				}}
 			>
-				<Image src={logoSmall} alt="Logo" className="size-[55px]" />
-
 				<ForWithWrapper
 					as="nav"
 					className="flex flex-col gap-5 font-medium text-nowrap"
