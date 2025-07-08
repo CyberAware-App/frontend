@@ -25,7 +25,7 @@ function ScrollToTopButton() {
 					isScrolled && "translate-y-0 duration-1200 ease-in-out"
 				)}
 			>
-				<IconBox icon="bi:arrow-up" className="size-6 text-white" />
+				<IconBox icon="material-symbols:arrow-upward-rounded" className="size-6 text-white" />
 			</Button>
 		</div>
 	);
