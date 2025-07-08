@@ -68,6 +68,7 @@ function HomePage() {
 					</span>
 					.
 				</h1>
+
 				<p className="text-center text-[16px] text-cyberaware-body-color">
 					Learn how to protect your digital world in just 10 days. Designed for lecturers, staff, and
 					students.
@@ -86,7 +87,7 @@ function HomePage() {
 					<div className="flex flex-col gap-2.5">
 						<figure className="flex items-center gap-2.5">
 							<Image src={aecesLogo} alt="AECES Logo" className="size-6" />
-							<figcaption>Association and Electronic and computer engineering students,</figcaption>
+							<figcaption>Association of Electronic and Computer Engineering Students,</figcaption>
 						</figure>
 						<figure className="flex items-center gap-2.5">
 							<Image src={unizikLogo} alt="Unizik Logo" className="size-7" />
@@ -105,7 +106,7 @@ function HomePage() {
 				</div>
 			</section>
 
-			<section className="mt-13 flex flex-col gap-10 px-[64px]">
+			<section className="mt-13 flex flex-col gap-10 px-[72px]">
 				<h2 className="mx-6 max-w-[238px] text-[28px] font-semibold text-white">
 					Why you need to be Aware
 				</h2>
@@ -114,7 +115,7 @@ function HomePage() {
 					className="flex flex-col gap-5"
 					each={reasons}
 					render={(item) => (
-						<li key={item.title} className="flex flex-col gap-3 bg-white p-4">
+						<li key={item.title} className="flex flex-col gap-3 bg-white px-6 py-4">
 							<Image src={item.icon.src} alt={item.title} className={item.icon.size} />
 							<h4 className="text-[22px] font-semibold text-cyberaware-aeces-blue">{item.title}</h4>
 							<p className="text-[14px]">{item.description}</p>

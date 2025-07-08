@@ -31,7 +31,7 @@ function Footer() {
 			<ForWithWrapper
 				className="flex flex-col gap-1.5 text-[14px]"
 				each={footerLinks}
-				render={(item) => <li>{item.title}</li>}
+				render={(item) => <li key={item.title}>{item.title}</li>}
 			/>
 			<p className="font-medium">© 2025 CyberAware. All rights reserved.</p>
 		</footer>
