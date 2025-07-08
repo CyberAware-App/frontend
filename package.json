@@ -26,7 +26,6 @@
 		"@zayne-labs/toolkit-type-helpers": "^0.10.3",
 		"@zayne-labs/ui-react": "^0.9.21",
 		"clsx": "^2.1.1",
-		"motion": "^12.23.0",
 		"next": "15.3.5",
 		"radix-ui": "^1.4.2",
 		"react": "19.1.0",

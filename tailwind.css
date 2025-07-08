@@ -31,13 +31,38 @@
 	--breakpoint-lg: 1000px;
 	--breakpoint-xl: 1280px;
 
-	--animate-fd-fade-in: fd-fade-in 300ms ease;
-	--animate-fd-fade-out: fd-fade-out 300ms ease;
+	--animate-nav-show: nav-show 350ms ease forwards;
+	--animate-nav-close: nav-close 500ms ease forwards;
 
-	--animate-fd-sidebar-in: fd-sidebar-in 250ms ease;
-	--animate-fd-sidebar-out: fd-sidebar-out 250ms ease;
+	--animate-fade-in: fade-in 300ms ease forwards;
+	--animate-fade-out: fade-out 300ms ease forwards;
 
-	@keyframes fd-fade-in {
+	--animate-sidebar-in: sidebar-in 250ms ease;
+	--animate-sidebar-out: sidebar-out 250ms ease;
+
+	@keyframes nav-show {
+		from {
+			width: 0;
+			visibility: hidden;
+		}
+		to {
+			width: 82%;
+			visibility: visible;
+		}
+	}
+
+	@keyframes nav-close {
+		from {
+			width: 82%;
+			visibility: visible;
+		}
+		to {
+			width: 0;
+			visibility: hidden;
+		}
+	}
+
+	@keyframes fade-in {
 		from {
 			opacity: 0;
 			visibility: hidden;
@@ -48,7 +73,7 @@
 		}
 	}
 
-	@keyframes fd-fade-out {
+	@keyframes fade-out {
 		from {
 			opacity: 1;
 			visibility: visible;
@@ -59,13 +84,13 @@
 		}
 	}
 
-	@keyframes fd-sidebar-in {
+	@keyframes sidebar-in {
 		from {
 			transform: translateX(-100%);
 		}
 	}
 
-	@keyframes fd-sidebar-out {
+	@keyframes sidebar-out {
 		to {
 			transform: translateX(-100%);
 		}
