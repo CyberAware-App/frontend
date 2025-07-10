@@ -68,7 +68,7 @@ function MobileNavigation(props: MobileNavProps) {
 				<div
 					className={cnMerge(
 						"fixed inset-0 z-40 backdrop-blur-xs",
-						isNavShow ? "animate-fd-fade-in" : "animate-fd-fade-out"
+						isNavShow ? "animate-fade-in" : "animate-fade-out"
 					)}
 					onClick={toggleNavShow}
 				/>
@@ -76,9 +76,10 @@ function MobileNavigation(props: MobileNavProps) {
 
 			<aside
 				className={cnMerge(
-					`fixed inset-[2px_auto_2px_2px] z-40 flex max-w-[380px] flex-col items-center gap-7
-					overflow-x-hidden bg-cyberaware-aeces-blue pt-[150px] text-white`,
-					isNavShow ? "w-[80%] [transition:width_350ms_ease]" : "w-0 [transition:width_500ms_ease]",
+					`fixed inset-[4px_auto_4px_4px] z-40 flex max-w-[380px] flex-col items-center gap-7
+					overflow-x-hidden bg-cyberaware-aeces-blue pt-[150px] text-white shadow-lg
+					shadow-cyberaware-light-orange`,
+					isNavShow ? "animate-nav-show" : "animate-nav-close",
 					className
 				)}
 				onClick={(event) => {
