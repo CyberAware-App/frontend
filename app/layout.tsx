@@ -6,6 +6,7 @@ import "../tailwind.css";
 
 const workSans = Work_Sans({
 	variable: "--font-work-sans",
+	weight: ["400", "500", "600", "700"],
 	subsets: ["latin"],
 });
 
