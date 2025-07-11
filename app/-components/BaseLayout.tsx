@@ -1,18 +1,14 @@
 import type { InferProps } from "@zayne-labs/toolkit-react/utils";
 import { cnMerge } from "@/lib/utils/cn";
 
-function Main(props: InferProps<"main">) {
+function BaseLayout(props: InferProps<"div">) {
 	const { children, className, ...restOfProps } = props;
 
 	return (
-		<main
-			id="main"
-			className={cnMerge("flex w-full max-w-[430px] grow flex-col", className)}
-			{...restOfProps}
-		>
+		<div className={cnMerge("flex min-h-svh w-full flex-col items-center", className)} {...restOfProps}>
 			{children}
-		</main>
+		</div>
 	);
 }
 
-export { Main };
+export { BaseLayout };

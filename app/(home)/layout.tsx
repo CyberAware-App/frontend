@@ -1,14 +1,15 @@
+import { BaseLayout } from "../-components";
 import { Footer, NavBar, ScrollToTopButton } from "./-components";
 
-function PrimaryLayout({ children }: { children: React.ReactNode }) {
+function HomeLayout({ children }: { children: React.ReactNode }) {
 	return (
-		<div className="flex min-h-svh w-full flex-col items-center bg-cyberaware-aeces-blue">
+		<BaseLayout className="relative bg-cyberaware-aeces-blue">
 			<ScrollToTopButton />
 			<NavBar />
 			{children}
 			<Footer />
-		</div>
+		</BaseLayout>
 	);
 }
 
-export default PrimaryLayout;
+export default HomeLayout;

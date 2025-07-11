@@ -19,10 +19,10 @@ function NavBar() {
 			className="absolute top-[72px] z-500 flex w-full max-w-[312px] items-center justify-between
 				bg-cyberaware-aeces-blue py-1 pr-5 pl-1"
 		>
-			<div className="flex items-center gap-1">
+			<Link href="/" className="flex items-center gap-1">
 				<Image src={logoSmall} alt="Logo" className="w-[55px]" />
 				<h3 className="font-medium text-white">CyberAware</h3>
-			</div>
+			</Link>
 
 			<MobileNavigation isNavShow={isNavShow} toggleNavShow={toggleNavShow} />
 
@@ -74,36 +74,38 @@ function MobileNavigation(props: MobileNavProps) {
 				/>
 			</Presence>
 
-			<aside
-				className={cnMerge(
-					`fixed inset-[4px_auto_4px_4px] z-40 flex max-w-[380px] flex-col items-center gap-7
-					overflow-x-hidden bg-cyberaware-aeces-blue pt-[150px] text-white shadow-lg
-					shadow-cyberaware-light-orange`,
-					isNavShow ? "animate-nav-show" : "animate-nav-close",
-					className
-				)}
-				onClick={(event) => {
-					const element = event.target as HTMLElement;
-
-					element.tagName === "A" && toggleNavShow();
-				}}
-			>
-				<ForWithWrapper
-					as="nav"
-					className="flex flex-col gap-5 font-medium text-nowrap"
-					each={linkItems}
-					render={(linkItem) => (
-						<Link key={linkItem.title} href={linkItem.href} className="flex items-center gap-2">
-							<IconBox icon={linkItem.icon} />
-							{linkItem.title}
-						</Link>
+			<Presence present={isNavShow}>
+				<aside
+					className={cnMerge(
+						`fixed inset-[4px_auto_4px_4px] z-40 flex max-w-[380px] flex-col items-center gap-7
+						overflow-x-hidden bg-cyberaware-aeces-blue pt-[150px] text-white shadow-lg
+						shadow-cyberaware-light-orange`,
+						isNavShow ? "animate-nav-show" : "animate-nav-close",
+						className
 					)}
-				/>
+					onClick={(event) => {
+						const element = event.target as HTMLElement;
 
-				<Button unstyled={true} className="absolute top-8 right-8" onClick={toggleNavShow}>
-					<XIcon />
-				</Button>
-			</aside>
+						element.tagName === "A" && toggleNavShow();
+					}}
+				>
+					<ForWithWrapper
+						as="nav"
+						className="flex flex-col gap-5 font-medium text-nowrap"
+						each={linkItems}
+						render={(linkItem) => (
+							<Link key={linkItem.title} href={linkItem.href} className="flex items-center gap-2">
+								<IconBox icon={linkItem.icon} />
+								{linkItem.title}
+							</Link>
+						)}
+					/>
+
+					<Button unstyled={true} className="absolute top-8 right-8" onClick={toggleNavShow}>
+						<XIcon />
+					</Button>
+				</aside>
+			</Presence>
 		</>
 	);
 }

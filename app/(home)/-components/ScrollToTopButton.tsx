@@ -7,7 +7,7 @@ import { cnMerge } from "@/lib/utils/cn";
 
 function ScrollToTopButton() {
 	const { isScrolled, observedElementRef } = useScrollObserver<HTMLDivElement>({
-		rootMargin: "1000px 0px 0px",
+		rootMargin: "700px 0px 0px",
 	});
 
 	return (
@@ -20,7 +20,7 @@ function ScrollToTopButton() {
 				unstyled={true}
 				className={cnMerge(
 					`flex size-[52px] translate-y-[-5000%] items-center justify-center
-					rounded-[62%_38%_46%_54%/60%_63%_37%_40%] bg-cyberaware-unizik-orange/90 backdrop-blur-md
+					rounded-[62%_38%_46%_54%_/_60%_63%_37%_40%] bg-cyberaware-unizik-orange/90 backdrop-blur-md
 					transition-[translate] duration-400`,
 					isScrolled && "translate-y-0 duration-1200 ease-in-out"
 				)}
