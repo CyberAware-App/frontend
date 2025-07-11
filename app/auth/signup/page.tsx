@@ -41,7 +41,7 @@ function SignupPage() {
 			</header>
 
 			<section>
-				<Form.Root methods={form} className="flex flex-col gap-2">
+				<Form.Root methods={form} className="gap-3">
 					<Form.Field name="name">
 						<Form.Label className="text-white">Full name</Form.Label>
 						<Form.Input
