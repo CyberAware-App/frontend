@@ -7,19 +7,30 @@ import { createContext, use, useCallback, useEffect, useMemo, useState } from "r
 import { tv, type VariantProps } from "tailwind-variants";
 import { Button } from "@/components/ui/button";
 import { FormInput } from "@/components/ui/form";
-import { Separator } from "@/components/ui/separator";
-import * as Sheet from "@/components/ui/sheet";
+import { Separator as SeparatorPrimitive } from "@/components/ui/separator";
+import {
+	Content as SheetContent,
+	Description as SheetDescription,
+	Header as SheetHeader,
+	Root as SheetRoot,
+	Title as SheetTitle,
+} from "@/components/ui/sheet";
 import { Skeleton } from "@/components/ui/skeleton";
-import * as Tooltip from "@/components/ui/tooltip";
-import { useIsMobile } from "@/lib/hooks/useMobile";
+import {
+	Content as TooltipContent,
+	Root as TooltipRoot,
+	RootProvider as TooltipRootProvider,
+	Trigger as TooltipTrigger,
+} from "@/components/ui/tooltip";
+import { useIsMobile } from "@/components/ui/useMobile";
 import { cnMerge } from "@/lib/utils/cn";
 import { IconBox } from "../common/IconBox";
 
 const SIDEBAR_COOKIE_NAME = "sidebar_state";
 const SIDEBAR_COOKIE_MAX_AGE = 60 * 60 * 24 * 7;
-const SIDEBAR_WIDTH = "16rem";
-const SIDEBAR_WIDTH_MOBILE = "18rem";
-const SIDEBAR_WIDTH_ICON = "3rem";
+const SIDEBAR_WIDTH = "256px";
+const SIDEBAR_WIDTH_MOBILE = "288px";
+const SIDEBAR_WIDTH_ICON = "48px";
 const SIDEBAR_KEYBOARD_SHORTCUT = "b";
 
 type SidebarContextProps = {
@@ -45,7 +56,7 @@ export function useSidebarContext() {
 	return context;
 }
 
-function SidebarProvider(
+function SidebarRootProvider(
 	props: InferProps<"div"> & {
 		defaultOpen?: boolean;
 		open?: boolean;
@@ -119,7 +130,7 @@ function SidebarProvider(
 
 	return (
 		<SidebarContext value={contextValue}>
-			<Tooltip.ContextProvider delayDuration={0}>
+			<TooltipRootProvider delayDuration={0}>
 				<div
 					data-slot="sidebar-wrapper"
 					style={
@@ -137,7 +148,7 @@ function SidebarProvider(
 				>
 					{children}
 				</div>
-			</Tooltip.ContextProvider>
+			</TooltipRootProvider>
 		</SidebarContext>
 	);
 }
@@ -162,7 +173,7 @@ function SidebarRoot(
 
 	if (collapsible === "none") {
 		return (
-			<div
+			<aside
 				data-slot="sidebar"
 				className={cnMerge(
 					"flex h-full w-(--sidebar-width) flex-col bg-shadcn-sidebar text-shadcn-sidebar-foreground",
@@ -171,14 +182,14 @@ function SidebarRoot(
 				{...restOfProps}
 			>
 				{children}
-			</div>
+			</aside>
 		);
 	}
 
 	if (isMobile) {
 		return (
-			<Sheet.Root open={openMobile} onOpenChange={setOpenMobile} {...props}>
-				<Sheet.Content
+			<SheetRoot open={openMobile} onOpenChange={setOpenMobile} {...props}>
+				<SheetContent
 					data-sidebar="sidebar"
 					data-slot="sidebar"
 					data-mobile="true"
@@ -191,18 +202,18 @@ function SidebarRoot(
 					}
 					side={side}
 				>
-					<Sheet.Header className="sr-only">
-						<Sheet.Title>Sidebar</Sheet.Title>
-						<Sheet.Description>Displays the mobile sidebar.</Sheet.Description>
-					</Sheet.Header>
+					<SheetHeader className="sr-only">
+						<SheetTitle>Sidebar</SheetTitle>
+						<SheetDescription>Displays the mobile sidebar.</SheetDescription>
+					</SheetHeader>
 					<div className="flex h-full w-full flex-col">{children}</div>
-				</Sheet.Content>
-			</Sheet.Root>
+				</SheetContent>
+			</SheetRoot>
 		);
 	}
 
 	return (
-		<div
+		<aside
 			className="group peer hidden text-shadcn-sidebar-foreground data-[side=right]:order-last md:block"
 			data-state={state}
 			data-collapsible={state === "collapsed" ? collapsible : ""}
@@ -255,7 +266,7 @@ function SidebarRoot(
 					{children}
 				</div>
 			</div>
-		</div>
+		</aside>
 	);
 }
 
@@ -287,8 +298,8 @@ function SidebarRail(props: InferProps<"button"> & { side?: "left" | "right" }) 
 	const { toggleSidebar, state } = useSidebarContext();
 
 	return (
-		<Tooltip.Root>
-			<Tooltip.Trigger asChild={true}>
+		<TooltipRoot>
+			<TooltipTrigger asChild={true}>
 				<button
 					type="button"
 					data-sidebar="rail"
@@ -338,12 +349,12 @@ function SidebarRail(props: InferProps<"button"> & { side?: "left" | "right" }) 
 						aria-hidden="true"
 					/>
 				</button>
-			</Tooltip.Trigger>
+			</TooltipTrigger>
 
-			<Tooltip.Content side={side === "right" ? "left" : "right"} className="[&_span]:hidden">
+			<TooltipContent side={side === "right" ? "left" : "right"} className="[&_span]:hidden">
 				{state === "collapsed" ? "Expand" : "Collapse"}
-			</Tooltip.Content>
-		</Tooltip.Root>
+			</TooltipContent>
+		</TooltipRoot>
 	);
 }
 
@@ -404,11 +415,11 @@ function SidebarFooter(props: InferProps<"div">) {
 	);
 }
 
-function SidebarSeparator(props: InferProps<typeof Separator>) {
+function SidebarSeparator(props: InferProps<typeof SeparatorPrimitive>) {
 	const { className, ...restOfProps } = props;
 
 	return (
-		<Separator
+		<SeparatorPrimitive
 			data-slot="sidebar-separator"
 			data-sidebar="separator"
 			className={cnMerge("mx-2 w-auto bg-shadcn-sidebar-border", className)}
@@ -567,7 +578,7 @@ function SidebarMenuButton(
 	props: InferProps<"button"> & {
 		asChild?: boolean;
 		isActive?: boolean;
-		tooltip?: string | InferProps<typeof Tooltip.Content>;
+		tooltip?: string | InferProps<typeof TooltipContent>;
 	} & VariantProps<typeof sidebarMenuButtonVariants>
 ) {
 	let {
@@ -604,16 +615,16 @@ function SidebarMenuButton(
 	}
 
 	return (
-		<Tooltip.Root>
-			<Tooltip.Trigger asChild={true}>{button}</Tooltip.Trigger>
+		<TooltipRoot>
+			<TooltipTrigger asChild={true}>{button}</TooltipTrigger>
 
-			<Tooltip.Content
+			<TooltipContent
 				side="right"
 				align="center"
 				hidden={state !== "collapsed" || isMobile}
 				{...tooltip}
 			/>
-		</Tooltip.Root>
+		</TooltipRoot>
 	);
 }
 
@@ -773,28 +784,26 @@ function SidebarMenuSubButton(
 	);
 }
 
-export {
-	SidebarRoot,
-	SidebarContent,
-	SidebarFooter,
-	SidebarGroup,
-	SidebarGroupAction,
-	SidebarGroupContent,
-	SidebarGroupLabel,
-	SidebarHeader,
-	SidebarInput,
-	SidebarInset,
-	SidebarMenu,
-	SidebarMenuAction,
-	SidebarMenuBadge,
-	SidebarMenuButton,
-	SidebarMenuItem,
-	SidebarMenuSkeleton,
-	SidebarMenuSub,
-	SidebarMenuSubButton,
-	SidebarMenuSubItem,
-	SidebarProvider,
-	SidebarRail,
-	SidebarSeparator,
-	SidebarTrigger,
-};
+export const Root = SidebarRoot;
+export const RootProvider = SidebarRootProvider;
+export const Content = SidebarContent;
+export const Footer = SidebarFooter;
+export const Group = SidebarGroup;
+export const GroupAction = SidebarGroupAction;
+export const GroupContent = SidebarGroupContent;
+export const GroupLabel = SidebarGroupLabel;
+export const Header = SidebarHeader;
+export const Input = SidebarInput;
+export const Inset = SidebarInset;
+export const Menu = SidebarMenu;
+export const MenuAction = SidebarMenuAction;
+export const MenuBadge = SidebarMenuBadge;
+export const MenuButton = SidebarMenuButton;
+export const MenuItem = SidebarMenuItem;
+export const MenuSkeleton = SidebarMenuSkeleton;
+export const MenuSub = SidebarMenuSub;
+export const MenuSubButton = SidebarMenuSubButton;
+export const MenuSubItem = SidebarMenuSubItem;
+export const Rail = SidebarRail;
+export const Separator = SidebarSeparator;
+export const Trigger = SidebarTrigger;

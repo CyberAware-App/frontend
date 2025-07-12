@@ -1,7 +1,11 @@
 "use client";
 
 import { createCustomContext, useCallbackRef, useToggle } from "@zayne-labs/toolkit-react";
-import type { DiscriminatedRenderProps, InferProps } from "@zayne-labs/toolkit-react/utils";
+import {
+	composeEventHandlers,
+	type DiscriminatedRenderProps,
+	type InferProps,
+} from "@zayne-labs/toolkit-react/utils";
 import { isFunction } from "@zayne-labs/toolkit-type-helpers";
 import { Dialog as DialogPrimitive } from "radix-ui";
 import { useCallback, useMemo } from "react";
@@ -180,10 +184,7 @@ function DialogTrigger(props: InferProps<typeof DialogPrimitive.Trigger>) {
 		<DialogPrimitive.Trigger
 			data-slot="dialog-trigger"
 			{...restOfProps}
-			onClick={(event) => {
-				onOpen();
-				onClick?.(event);
-			}}
+			onClick={composeEventHandlers(onClick, onOpen)}
 		/>
 	);
 }
