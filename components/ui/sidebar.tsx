@@ -206,7 +206,7 @@ function SidebarRoot(
 						<SheetTitle>Sidebar</SheetTitle>
 						<SheetDescription>Displays the mobile sidebar.</SheetDescription>
 					</SheetHeader>
-					<div className="flex h-full w-full flex-col">{children}</div>
+					<div className="flex size-full flex-col">{children}</div>
 				</SheetContent>
 			</SheetRoot>
 		);
@@ -258,7 +258,7 @@ function SidebarRoot(
 				<div
 					data-sidebar="sidebar"
 					data-slot="sidebar-inner"
-					className="flex h-full w-full flex-col bg-shadcn-sidebar
+					className="flex size-full flex-col bg-shadcn-sidebar
 						group-data-[variant=floating]:rounded-lg group-data-[variant=floating]:border
 						group-data-[variant=floating]:border-shadcn-sidebar-border
 						group-data-[variant=floating]:shadow-sm"

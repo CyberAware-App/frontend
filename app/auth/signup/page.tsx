@@ -2,10 +2,10 @@
 
 import { zodResolver } from "@hookform/resolvers/zod";
 import { Form } from "@zayne-labs/ui-react/ui/form";
-import Link from "next/link";
 import { useForm } from "react-hook-form";
 import { z } from "zod";
 import { Main } from "@/app/-components";
+import { NavLink } from "@/components/common/NavLink";
 import { Button } from "@/components/ui/button";
 
 const SignupSchema = z.object({
@@ -25,8 +25,10 @@ function SignupPage() {
 		resolver: zodResolver(SignupSchema),
 	});
 
+	const onSubmit = form.handleSubmit((data) => console.info({ data }));
+
 	return (
-		<Main className="relative gap-11 px-4 py-[158px]">
+		<Main className="relative gap-13 px-4 py-[158px]">
 			<header className="flex flex-col gap-5">
 				<h1 className="text-[36px] font-bold text-white">Create your Free Account </h1>
 				<p className="text-[14px] text-white">
@@ -34,15 +36,15 @@ function SignupPage() {
 				</p>
 				<p>
 					Already have an account?{" "}
-					<Link href="/auth/signin" className="text-white">
+					<NavLink href="/auth/signin" className="text-white">
 						Login
-					</Link>
+					</NavLink>
 				</p>
 			</header>
 
 			<section>
-				<Form.Root methods={form} className="gap-3">
-					<Form.Field name="name">
+				<Form.Root methods={form} className="gap-6" onSubmit={(event) => void onSubmit(event)}>
+					<Form.Field control={form.control} name="name">
 						<Form.Label className="text-white">Full name</Form.Label>
 						<Form.Input
 							placeholder="Enter full name"
@@ -53,7 +55,7 @@ function SignupPage() {
 						<Form.ErrorMessage />
 					</Form.Field>
 
-					<Form.Field name="email">
+					<Form.Field control={form.control} name="email">
 						<Form.Label className="text-white">Email address</Form.Label>
 						<Form.Input
 							placeholder="Enter email address"
@@ -64,21 +66,22 @@ function SignupPage() {
 						<Form.ErrorMessage />
 					</Form.Field>
 
-					<Form.Field name="password">
+					<Form.Field control={form.control} name="password">
 						<Form.Label className="text-white">Password</Form.Label>
 						<Form.Input
 							type="password"
 							placeholder="Enter password"
 							classNames={{
-								inputGroup: `h-[64px] border-2 border-cyberaware-neutral-gray-light px-8 text-base
-								text-white placeholder:text-white/50 data-invalid:border-red-600`,
+								inputGroup: `h-[64px] border-2 border-cyberaware-neutral-gray-light px-8
+								data-invalid:border-red-600`,
+								input: "text-base text-white placeholder:text-white/50",
 							}}
 						/>
 
 						<Form.ErrorMessage />
 					</Form.Field>
 
-					<Form.Submit asChild={true} className="mt-[66px]">
+					<Form.Submit asChild={true} className="mt-[42px]">
 						<Button className="h-[64px] max-w-[260px] self-end">Create Account</Button>
 					</Form.Submit>
 				</Form.Root>

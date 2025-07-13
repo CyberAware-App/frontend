@@ -1,5 +1,6 @@
 import Image from "next/image";
 import { ForWithWrapper } from "@/components/common/for";
+import { NavLink } from "@/components/common/NavLink";
 import { Button } from "@/components/ui/button";
 import { tw } from "@/lib/utils/cn";
 import {
@@ -78,7 +79,9 @@ function HomePage() {
 					<Button theme="blue-ghost" className="max-w-[118px]">
 						Learn More
 					</Button>
-					<Button className="max-w-[175px]">Get Started</Button>
+					<Button className="max-w-[175px]">
+						<NavLink href="/auth/signup">Get Started</NavLink>
+					</Button>
 				</div>
 
 				<article className="flex items-start gap-2.5 text-[10px]">
@@ -159,9 +162,23 @@ function HomePage() {
 				<p className="mt-3.5 text-[14px]">
 					Join thousands of users becoming cyber smart in just 10 days.
 				</p>
-				<Button theme="white" className="mt-10 h-[72px] max-w-[314px]">
-					Get Started
+				<Button theme="white" className="mt-10 h-[72px] max-w-[314px]" asChild={true}>
+					<NavLink href="/auth/signup">Get Started</NavLink>
 				</Button>
+			</section>
+
+			<section className="mt-7 px-6">
+				<h2 className="font-semibold text-white">Powered by AECES 2025 Set – Computer Option</h2>
+				<p className="mt-2 text-[14px] text-white">
+					Project designed and develod by the 2025 final-year students of the Department of
+					Electronics and Computer Engineering, NAU.
+				</p>
+				<Button className="mt-5 h-[57px] max-w-[240px]">
+					<NavLink href="/team-leads">Meet the team Leads</NavLink>
+				</Button>
+				<p className="mt-5 text-[14px] text-white">
+					including UI/UX, Frontend, Backend, and Content Leads.
+				</p>
 			</section>
 		</Main>
 	);
