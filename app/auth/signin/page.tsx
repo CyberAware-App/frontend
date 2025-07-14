@@ -27,9 +27,7 @@ function SigninPage() {
 		<Main className="relative gap-11 px-4 py-[158px]">
 			<header className="flex flex-col gap-5">
 				<h1 className="text-[36px] font-bold text-white">Welcome Back </h1>
-				<p className="text-[14px] text-white">
-					Log In to continue your 10-day cybersecurity Journey
-				</p>
+				<p className="text-[14px] text-white">Log In to continue your 10-day cybersecurity Journey</p>
 				<p>
 					Don't have an Account?{" "}
 					<Link href="/auth/signup" className="text-white">
