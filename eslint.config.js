@@ -10,7 +10,5 @@ export default zayne({
 	tanstack: {
 		query: true,
 	},
-	typescript: {
-		tsconfigPath: true,
-	},
+	typescript: true,
 });

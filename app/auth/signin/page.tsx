@@ -23,8 +23,10 @@ function SigninPage() {
 		resolver: zodResolver(SigninSchema),
 	});
 
+	const onSubmit = form.handleSubmit((data) => console.info({ data }));
+
 	return (
-		<Main className="relative gap-11 px-4 py-[158px]">
+		<Main className="relative gap-13 px-4 py-[158px]">
 			<header className="flex flex-col gap-5">
 				<h1 className="text-[36px] font-bold text-white">Welcome Back </h1>
 				<p className="text-[14px] text-white">Log In to continue your 10-day cybersecurity Journey</p>
@@ -37,8 +39,12 @@ function SigninPage() {
 			</header>
 
 			<section>
-				<Form.Root methods={form} className="flex flex-col gap-2">
-					<Form.Field name="email">
+				<Form.Root
+					methods={form}
+					className="flex flex-col gap-6"
+					onSubmit={(event) => void onSubmit(event)}
+				>
+					<Form.Field control={form.control} name="email">
 						<Form.Label className="text-white">Email address</Form.Label>
 						<Form.Input
 							placeholder="Enter email address"
@@ -49,21 +55,22 @@ function SigninPage() {
 						<Form.ErrorMessage />
 					</Form.Field>
 
-					<Form.Field name="password">
+					<Form.Field control={form.control} name="password">
 						<Form.Label className="text-white">Password</Form.Label>
 						<Form.Input
 							type="password"
 							placeholder="Enter password"
 							classNames={{
-								inputGroup: `h-[64px] border-2 border-cyberaware-neutral-gray-light px-8 text-base
-								text-white placeholder:text-white/50 data-invalid:border-red-600`,
+								inputGroup: `h-[64px] border-2 border-cyberaware-neutral-gray-light px-8
+								data-invalid:border-red-600`,
+								input: "text-base text-white placeholder:text-white/50",
 							}}
 						/>
 
 						<Form.ErrorMessage />
 					</Form.Field>
 
-					<Form.Submit asChild={true} className="mt-[66px]">
+					<Form.Submit asChild={true} className="mt-[42px]">
 						<Button className="h-[64px] max-w-[260px] self-end">Log In</Button>
 					</Form.Submit>
 				</Form.Root>
