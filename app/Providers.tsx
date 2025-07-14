@@ -2,7 +2,7 @@
 
 import { ProgressProvider } from "@bprogress/next/app";
 import { QueryClient, QueryClientProvider } from "@tanstack/react-query";
-// import { ReactQueryDevtools } from "@tanstack/react-query-devtools";
+import { ReactQueryDevtools } from "@tanstack/react-query-devtools";
 import { cache } from "react";
 
 const makeQueryClient = () => {
@@ -31,15 +31,15 @@ function Providers(props: ProvidersProps) {
 	return (
 		<QueryClientProvider client={queryClient}>
 			<ProgressProvider
-				height="1.5px"
-				color="hsl(0,0%,100%)"
+				height="2px"
+				color="hsl(27, 100%, 56%)"
 				options={{ showSpinner: true }}
 				shallowRouting={true}
 			>
 				{children}
 			</ProgressProvider>
 
-			{/* <ReactQueryDevtools buttonPosition="bottom-left" initialIsOpen={false} /> */}
+			<ReactQueryDevtools buttonPosition="bottom-left" initialIsOpen={false} />
 		</QueryClientProvider>
 	);
 }
