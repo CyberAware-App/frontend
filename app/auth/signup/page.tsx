@@ -72,7 +72,7 @@ function SignupPage() {
 							type="password"
 							placeholder="Enter password"
 							classNames={{
-								inputGroup: `h-[64px] border-2 border-cyberaware-neutral-gray-light px-8
+								inputGroup: `h-[64px] border-2 border-cyberaware-neutral-gray-light px-8 text-white
 								data-invalid:border-red-600`,
 								input: "text-base text-white placeholder:text-white/50",
 							}}

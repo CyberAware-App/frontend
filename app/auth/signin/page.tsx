@@ -6,6 +6,7 @@ import Link from "next/link";
 import { useForm } from "react-hook-form";
 import { z } from "zod";
 import { Main } from "@/app/-components";
+import { NavLink } from "@/components/common/NavLink";
 import { Button } from "@/components/ui/button";
 
 const SigninSchema = z.object({
@@ -61,13 +62,17 @@ function SigninPage() {
 							type="password"
 							placeholder="Enter password"
 							classNames={{
-								inputGroup: `h-[64px] border-2 border-cyberaware-neutral-gray-light px-8
+								inputGroup: `h-[64px] border-2 border-cyberaware-neutral-gray-light px-8 text-white
 								data-invalid:border-red-600`,
 								input: "text-base text-white placeholder:text-white/50",
 							}}
 						/>
 
 						<Form.ErrorMessage />
+
+						<NavLink href="/auth/reset-password" className="self-end font-semibold text-white">
+							Forgot Password?
+						</NavLink>
 					</Form.Field>
 
 					<Form.Submit asChild={true} className="mt-[42px]">

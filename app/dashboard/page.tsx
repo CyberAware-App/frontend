@@ -1,10 +1,10 @@
-import React from "react";
 import Image from "next/image";
+import React from "react";
 import { Main } from "@/app/-components";
-import { LockIcon } from "@/components/icons/LockIcon";
-import { Button } from "@/components/ui/button";
-import { UnizikIcon } from "@/components/icons/unizik-logo";
 import { Aeces } from "@/components/icons/aeces";
+import { LockIcon } from "@/components/icons/LockIcon";
+import { UnizikIcon } from "@/components/icons/unizik-logo";
+import { Button } from "@/components/ui/button";
 import Afam from "@/public/afamHeadshot.jpg";
 import SideBar from "./-components/sideBar";
 
@@ -38,13 +38,14 @@ const page = () => {
 					<div className="flex justify-between gap-5">
 						<div className="flex flex-col gap-1">
 							{/* Name and excerpt */}
-							<p className="text-[28px] font-semibold text-[#040524]">Hello, {`Aniekwe`}!</p>
-							<p>You’re on Day {1} of 10</p>
+							<p className="text-[28px] font-semibold text-[#040524]">Hello, Aniekwe!</p>
+							<p>You’re on Day 1 of 10</p>
 						</div>
+
 						<Image
 							src={Afam}
 							alt="user"
-							className="h-[50px] w-[50px] rounded-full border-[2px] border-solid
+							className="size-[50px] rounded-full border-[2px] border-solid
 								border-cyberaware-unizik-orange"
 						/>
 						{/* image */}
