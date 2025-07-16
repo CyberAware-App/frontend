@@ -12,7 +12,7 @@
 	--color-cyberaware-unizik-orange: hsl(27, 100%, 56%);
 	--color-cyberaware-light-orange: hsl(27, 65%, 93%);
 	--color-cyberaware-neutral-gray-light: hsl(0, 0%, 82%);
-	--color-cyberaware-neutral-gray-lighter: hsl(0, 0%, 96%, 1);
+	--color-cyberaware-neutral-gray-lighter: hsl(0, 0%, 96%);
 	--color-cyberaware-body-color: hsl(0, 0%, 29%);
 }
 
@@ -127,6 +127,15 @@
 
 	--color-shadcn-destructive: hsl(0 100% 50%);
 	--color-shadcn-destructive-foreground: hsl(210 40% 98%);
+
+	--color-shadcn-sidebar: oklch(0.985 0 0);
+	--color-shadcn-sidebar-foreground: oklch(0.145 0 0);
+	--color-shadcn-sidebar-primary: oklch(0.205 0 0);
+	--color-shadcn-sidebar-primary-foreground: oklch(0.985 0 0);
+	--color-shadcn-sidebar-accent: oklch(0.97 0 0);
+	--color-shadcn-sidebar-accent-foreground: oklch(0.205 0 0);
+	--color-shadcn-sidebar-border: oklch(0.922 0 0);
+	--color-shadcn-sidebar-ring: oklch(0.708 0 0);
 
 	--color-sonner-success-bg: hsl(150, 100%, 6%);
 	--color-sonner-success-text: hsl(150, 100%, 90%);
