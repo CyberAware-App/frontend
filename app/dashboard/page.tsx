@@ -5,7 +5,7 @@ import { LockIcon } from "@/components/icons/LockIcon";
 import { Button } from "@/components/ui/button";
 import { UnizikIcon } from "@/components/icons/unizik-logo";
 import { Aeces } from "@/components/icons/aeces";
-import Afam from "@/public/afamHeadshot.jpg";
+import { Afam } from "@/public/assets";
 import SideBar from "./-components/sideBar";
 
 const cardDetails = [
