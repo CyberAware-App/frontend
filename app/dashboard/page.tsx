@@ -28,7 +28,7 @@ const cardDetails = [
 
 const page = () => {
 	return (
-		<Main className="gap-8 bg-white px-4 pt-[80px]">
+		<Main className="max-w-[360px] gap-8 bg-white px-4 pt-[80px]">
 			<section className="flex flex-col gap-5">
 				<article className="flex items-center justify-between gap-5">
 					<div className="flex flex-col gap-1">
@@ -68,10 +68,11 @@ const page = () => {
 						>
 							<div className={cnJoin("flex flex-col", isSub ? "items-center gap-3.5" : "gap-2")}>
 								<h4 className="text-[22px] font-semibold text-cyberaware-aeces-blue">{title}</h4>
+
 								<p
 									className={cnJoin(
 										isSub ?
-											"text-[24px] font-semibold text-cyberaware-aeces-blue"
+											"text-[22px] font-semibold text-cyberaware-aeces-blue"
 										:	"text-[10px]"
 									)}
 								>
@@ -93,7 +94,7 @@ const page = () => {
 				})}
 			</section>
 
-			<footer className="flex items-center gap-4 py-4 text-[10px]">
+			<footer className="flex items-center gap-4 pb-6 text-[10px]">
 				<Credits />
 			</footer>
 		</Main>
