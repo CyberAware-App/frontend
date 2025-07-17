@@ -1,8 +1,7 @@
+import Image from "next/image";
 import { HamburgerIcon } from "@/components/icons";
 import { Arrow } from "@/components/icons/arrow";
 import { logoSmall } from "@/public/assets";
-import Image from "next/image";
-import React from "react";
 
 const SideBar = () => {
 	return (
@@ -19,4 +18,4 @@ const SideBar = () => {
 	);
 };
 
-export default SideBar;
+export { SideBar };

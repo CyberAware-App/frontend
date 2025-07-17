@@ -5,8 +5,8 @@ import { Aeces } from "@/components/icons/aeces";
 import { LockIcon } from "@/components/icons/LockIcon";
 import { UnizikIcon } from "@/components/icons/unizik-logo";
 import { Button } from "@/components/ui/button";
+import { Progress } from "@/components/ui/progress";
 import { Afam } from "@/public/assets";
-import SideBar from "./-components/sideBar";
 
 const cardDetails = [
 	{
@@ -27,13 +27,11 @@ const cardDetails = [
 		isSub: false,
 	},
 ];
+
 const page = () => {
 	return (
 		<Main>
 			<div className="flex w-full">
-				<SideBar />
-
-				{/* Main Page */}
 				<div className="flex flex-col gap-3 bg-white px-4 pt-[80px] pb-5">
 					<div className="flex justify-between gap-5">
 						<div className="flex flex-col gap-1">
@@ -50,10 +48,13 @@ const page = () => {
 						/>
 						{/* image */}
 					</div>
-					<div className="w-full rounded-full bg-[#D9D9D9]">
-						<div className="h-3 w-[10%] rounded-full bg-cyberaware-unizik-orange" />
-					</div>
-					{/* progress bar */}
+					<Progress
+						value={10}
+						classNames={{
+							base: "h-3 rounded-[20px] bg-[hsl(0,0%,85%)]",
+							indicator: "rounded-[20px] bg-cyberaware-unizik-orange",
+						}}
+					/>
 					<p>10% complete</p>
 					<div className="flex flex-wrap gap-1">
 						{cardDetails.map(({ id, title, body, buttonText, isSub }) => {
