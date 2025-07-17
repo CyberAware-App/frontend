@@ -4,9 +4,9 @@ import { Main } from "@/app/-components";
 import { Aeces } from "@/components/icons/aeces";
 import { LockIcon } from "@/components/icons/LockIcon";
 import { UnizikIcon } from "@/components/icons/unizik-logo";
+import { Button } from "@/components/ui/button";
 import { Afam } from "@/public/assets";
 import SideBar from "./-components/sideBar";
-import { Button } from "@/components/ui/button";
 
 const cardDetails = [
 	{

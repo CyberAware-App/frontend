@@ -167,18 +167,20 @@ function HomePage() {
 				</Button>
 			</section>
 
-			<section className="mt-7 px-6">
+			<section className="mt-7 px-4">
 				<h2 className="font-semibold text-white">Powered by AECES 2025 Set – Computer Option</h2>
 				<p className="mt-2 text-[14px] text-white">
 					Project designed and develod by the 2025 final-year students of the Department of
 					Electronics and Computer Engineering, NAU.
 				</p>
-				<Button className="mt-5 h-[57px] max-w-[240px]">
+
+				<Button className="mt-5 h-[57px] max-w-[240px]" asChild={true}>
 					<NavLink href="/team-leads">Meet the team Leads</NavLink>
 				</Button>
-				<p className="mt-5 text-[14px] text-white">
+
+				{/* <p className="mt-5 text-[14px] text-white">
 					including UI/UX, Frontend, Backend, and Content Leads.
-				</p>
+				</p> */}
 			</section>
 		</Main>
 	);
