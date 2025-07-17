@@ -6,6 +6,7 @@ import { ForWithWrapper } from "@zayne-labs/ui-react/common/for";
 import Image from "next/image";
 import { IconBox } from "@/components/common/IconBox";
 import { NavLink } from "@/components/common/NavLink";
+import { Teleport } from "@/components/common/teleport";
 import { HamburgerIcon, XIcon } from "@/components/icons";
 import { Button } from "@/components/ui/button";
 import { cnMerge } from "@/lib/utils/cn";
@@ -16,8 +17,8 @@ function NavBar() {
 
 	return (
 		<header
-			className="absolute top-[72px] z-500 flex w-full max-w-[312px] items-center justify-between
-				bg-cyberaware-aeces-blue py-1 pr-5 pl-1"
+			className="absolute top-[72px] isolate z-100 flex w-full max-w-[312px] items-center
+				justify-between bg-cyberaware-aeces-blue py-1 pr-5 pl-1"
 		>
 			<NavLink href="/" className="flex items-center gap-1">
 				<Image src={logoSmall} alt="Logo" className="w-[55px]" />
@@ -63,11 +64,11 @@ function MobileNavigation(props: MobileNavProps) {
 	const { className, isNavShow, toggleNavShow } = props;
 
 	return (
-		<>
+		<Teleport to="#main" insertPosition="afterbegin">
 			<Presence present={isNavShow}>
 				<div
 					className={cnMerge(
-						"fixed inset-0 z-40 backdrop-blur-xs",
+						"absolute inset-0 z-200 backdrop-blur-xs",
 						isNavShow ? "animate-fade-in" : "animate-fade-out"
 					)}
 					onClick={toggleNavShow}
@@ -77,7 +78,7 @@ function MobileNavigation(props: MobileNavProps) {
 			<Presence present={isNavShow}>
 				<aside
 					className={cnMerge(
-						`fixed inset-[4px_auto_4px_4px] z-40 flex max-w-[380px] flex-col items-center gap-7
+						`absolute inset-[4px_auto_4px_4px] z-200 flex max-w-[380px] flex-col items-center gap-7
 						overflow-x-hidden bg-cyberaware-aeces-blue pt-[150px] text-white shadow-lg
 						shadow-cyberaware-light-orange`,
 						isNavShow ? "animate-nav-show" : "animate-nav-close",
@@ -110,6 +111,6 @@ function MobileNavigation(props: MobileNavProps) {
 					</Button>
 				</aside>
 			</Presence>
-		</>
+		</Teleport>
 	);
 }

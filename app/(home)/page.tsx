@@ -4,7 +4,6 @@ import { NavLink } from "@/components/common/NavLink";
 import { Button } from "@/components/ui/button";
 import { tw } from "@/lib/utils/cn";
 import {
-	aecesLogo,
 	eyeShield,
 	modelOne,
 	modelTwo,
@@ -12,9 +11,8 @@ import {
 	reasonOne,
 	reasonThree,
 	reasonTwo,
-	unizikLogo,
 } from "@/public/assets/landing";
-import { Main } from "../-components";
+import { Credits, Main } from "../-components";
 
 const reasons = [
 	{
@@ -84,20 +82,7 @@ function HomePage() {
 					</Button>
 				</div>
 
-				<article className="flex items-start gap-2.5 text-[10px]">
-					<h4 className="mt-1 shrink-0">Powered By:</h4>
-
-					<div className="flex flex-col gap-2.5">
-						<figure className="flex items-center gap-2.5">
-							<Image src={aecesLogo} alt="AECES Logo" className="size-6" />
-							<figcaption>Association of Electronic and Computer Engineering Students,</figcaption>
-						</figure>
-						<figure className="flex items-center gap-2.5">
-							<Image src={unizikLogo} alt="Unizik Logo" className="size-7" />
-							<figcaption>Nnamdi Azikiwe University, Awka</figcaption>
-						</figure>
-					</div>
-				</article>
+				<Credits />
 			</section>
 
 			<section className="mt-12 flex px-4">
@@ -167,18 +152,20 @@ function HomePage() {
 				</Button>
 			</section>
 
-			<section className="mt-7 px-6">
+			<section className="mt-7 px-4">
 				<h2 className="font-semibold text-white">Powered by AECES 2025 Set – Computer Option</h2>
 				<p className="mt-2 text-[14px] text-white">
 					Project designed and develod by the 2025 final-year students of the Department of
 					Electronics and Computer Engineering, NAU.
 				</p>
-				<Button className="mt-5 h-[57px] max-w-[240px]">
+
+				<Button className="mt-5 h-[57px] max-w-[240px]" asChild={true}>
 					<NavLink href="/team-leads">Meet the team Leads</NavLink>
 				</Button>
-				<p className="mt-5 text-[14px] text-white">
+
+				{/* <p className="mt-5 text-[14px] text-white">
 					including UI/UX, Frontend, Backend, and Content Leads.
-				</p>
+				</p> */}
 			</section>
 		</Main>
 	);

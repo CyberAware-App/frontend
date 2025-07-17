@@ -30,7 +30,7 @@ const buttonVariants = tv({
 		},
 
 		disabled: {
-			true: "cursor-not-allowed",
+			true: "cursor-not-allowed bg-cyberaware-neutral-gray-light",
 		},
 
 		isDisabled: {

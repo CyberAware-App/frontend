@@ -28,7 +28,7 @@ function SignupPage() {
 	const onSubmit = form.handleSubmit((data) => console.info({ data }));
 
 	return (
-		<Main className="relative gap-13 px-4 py-[158px]">
+		<Main className="gap-13 px-4 py-[158px]">
 			<header className="flex flex-col gap-5">
 				<h1 className="text-[36px] font-bold text-white">Create your Free Account </h1>
 				<p className="text-[14px] text-white">
@@ -72,7 +72,7 @@ function SignupPage() {
 							type="password"
 							placeholder="Enter password"
 							classNames={{
-								inputGroup: `h-[64px] border-2 border-cyberaware-neutral-gray-light px-8
+								inputGroup: `h-[64px] border-2 border-cyberaware-neutral-gray-light px-8 text-white
 								data-invalid:border-red-600`,
 								input: "text-base text-white placeholder:text-white/50",
 							}}

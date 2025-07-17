@@ -7,7 +7,7 @@ function Main(props: InferProps<"main">) {
 	return (
 		<main
 			id="main"
-			className={cnMerge("flex w-full max-w-[430px] grow flex-col", className)}
+			className={cnMerge("relative flex w-full max-w-[430px] grow flex-col", className)}
 			{...restOfProps}
 		>
 			{children}
