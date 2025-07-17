@@ -1,11 +1,9 @@
 import Image from "next/image";
-import React from "react";
-import { Main } from "@/app/-components";
-import { Aeces } from "@/components/icons/aeces";
+import { Credits, Main } from "@/app/-components";
 import { LockIcon } from "@/components/icons/LockIcon";
-import { UnizikIcon } from "@/components/icons/unizik-logo";
 import { Button } from "@/components/ui/button";
 import { Progress } from "@/components/ui/progress";
+import { cnJoin, cnMerge } from "@/lib/utils/cn";
 import { Afam } from "@/public/assets";
 
 const cardDetails = [
@@ -30,24 +28,23 @@ const cardDetails = [
 
 const page = () => {
 	return (
-		<Main>
-			<div className="flex w-full">
-				<div className="flex flex-col gap-3 bg-white px-4 pt-[80px] pb-5">
-					<div className="flex justify-between gap-5">
-						<div className="flex flex-col gap-1">
-							{/* Name and excerpt */}
-							<p className="text-[28px] font-semibold text-[#040524]">Hello, Aniekwe!</p>
-							<p>You’re on Day 1 of 10</p>
-						</div>
-
-						<Image
-							src={Afam}
-							alt="user"
-							className="size-[50px] rounded-full border-[2px] border-solid
-								border-cyberaware-unizik-orange"
-						/>
-						{/* image */}
+		<Main className="gap-8 bg-white px-4 pt-[80px]">
+			<section className="flex flex-col gap-5">
+				<article className="flex items-center justify-between gap-5">
+					<div className="flex flex-col gap-1">
+						<p className="text-[28px] font-semibold text-cyberaware-aeces-blue">Hello, Aniekwe!</p>
+						<p className="text-[14px]">You’re on Day 1 of 10</p>
 					</div>
+
+					<Image
+						src={Afam}
+						alt="user"
+						className="size-[50px] rounded-full border-[2px] border-solid
+							border-cyberaware-unizik-orange"
+					/>
+				</article>
+
+				<article className="flex flex-col gap-3">
 					<Progress
 						value={10}
 						classNames={{
@@ -55,58 +52,50 @@ const page = () => {
 							indicator: "rounded-[20px] bg-cyberaware-unizik-orange",
 						}}
 					/>
-					<p>10% complete</p>
-					<div className="flex flex-wrap gap-1">
-						{cardDetails.map(({ id, title, body, buttonText, isSub }) => {
-							return (
-								<div
-									key={id}
-									className={`flex flex-col gap-2 bg-cyberaware-neutral-gray-lighter px-5 py-6
-									${!isSub ? "w-full" : "w-[49%]"}`}
+					<p className="text-cyberaware-aeces-blue">10% complete</p>
+				</article>
+			</section>
+
+			<section className="grid gap-x-3 gap-y-3.5">
+				{cardDetails.map(({ id, title, body, buttonText, isSub }) => {
+					return (
+						<div
+							key={id}
+							className={cnJoin(
+								"flex flex-col gap-5 bg-cyberaware-neutral-gray-lighter px-5 py-6",
+								isSub ? "col-span-1" : "col-span-2"
+							)}
+						>
+							<div className={cnJoin("flex flex-col", isSub ? "items-center gap-3.5" : "gap-2")}>
+								<h4 className="text-[22px] font-semibold text-cyberaware-aeces-blue">{title}</h4>
+								<p
+									className={cnJoin(
+										isSub ?
+											"text-[24px] font-semibold text-cyberaware-aeces-blue"
+										:	"text-[10px]"
+									)}
 								>
-									<div className={isSub ? "flex flex-col items-center gap-4" : ""}>
-										<p
-											className={`${isSub ? "text-[24px]" : "text-[22px]"} font-semibold
-											text-cyberaware-aeces-blue`}
-										>
-											{title}
-										</p>
-										<p
-											className={
-												isSub ?
-													"text-[24px] font-semibold text-cyberaware-aeces-blue"
-												:	"text-[10px]"
-											}
-										>
-											{body}
-										</p>
-									</div>
-									<div className="flex justify-end">
-										{!isSub && (
-											<Button theme={id === 1 ? "orange" : "blue-ghost"} className="w-[50%]">
-												{buttonText}
-											</Button>
-										)}
-									</div>
-								</div>
-							);
-						})}
-					</div>
-					<div className="flex items-center gap-4 py-4 text-[10px]">
-						<p>Powered By:</p>
-						<div className="">
-							<div className="flex items-center gap-1">
-								<Aeces />
-								<p>Association and Electronic and computer engineering students,</p>
+									{body}
+								</p>
 							</div>
-							<div className="flex items-center">
-								<UnizikIcon />
-								<p>Nnamdi Azikiwe University, Awka</p>
-							</div>
+
+							{!isSub && (
+								<Button
+									theme="orange"
+									disabled={id !== 1}
+									className={cnMerge("max-w-[150px] self-end")}
+								>
+									{buttonText}
+								</Button>
+							)}
 						</div>
-					</div>
-				</div>
-			</div>
+					);
+				})}
+			</section>
+
+			<footer className="flex items-center gap-4 py-4 text-[10px]">
+				<Credits />
+			</footer>
 		</Main>
 	);
 };

@@ -4,7 +4,6 @@ import { NavLink } from "@/components/common/NavLink";
 import { Button } from "@/components/ui/button";
 import { tw } from "@/lib/utils/cn";
 import {
-	aecesLogo,
 	eyeShield,
 	modelOne,
 	modelTwo,
@@ -12,9 +11,8 @@ import {
 	reasonOne,
 	reasonThree,
 	reasonTwo,
-	unizikLogo,
 } from "@/public/assets/landing";
-import { Main } from "../-components";
+import { Credits, Main } from "../-components";
 
 const reasons = [
 	{
@@ -84,20 +82,7 @@ function HomePage() {
 					</Button>
 				</div>
 
-				<article className="flex items-start gap-2.5 text-[10px]">
-					<h4 className="mt-1 shrink-0">Powered By:</h4>
-
-					<div className="flex flex-col gap-2.5">
-						<figure className="flex items-center gap-2.5">
-							<Image src={aecesLogo} alt="AECES Logo" className="size-6" />
-							<figcaption>Association of Electronic and Computer Engineering Students,</figcaption>
-						</figure>
-						<figure className="flex items-center gap-2.5">
-							<Image src={unizikLogo} alt="Unizik Logo" className="size-7" />
-							<figcaption>Nnamdi Azikiwe University, Awka</figcaption>
-						</figure>
-					</div>
-				</article>
+				<Credits />
 			</section>
 
 			<section className="mt-12 flex px-4">

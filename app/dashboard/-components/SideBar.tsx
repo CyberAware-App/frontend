@@ -5,7 +5,7 @@ import { logoSmall } from "@/public/assets";
 
 const SideBar = () => {
 	return (
-		<div
+		<aside
 			className="relative flex max-h-full w-[50%] flex-col gap-3 bg-cyberaware-aeces-blue pt-[80px]
 				pb-5"
 		>
@@ -14,7 +14,7 @@ const SideBar = () => {
 			<span className="absolute top-[50%] right-2">
 				<Arrow />
 			</span>
-		</div>
+		</aside>
 	);
 };
 
