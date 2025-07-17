@@ -122,6 +122,7 @@ CyberAware uses a custom color palette defined in `tailwind.css`:
 ```
 
 These colors are used throughout the application for:
+
 - **AECES Blue**: Primary brand color, used for headings and important UI elements
 - **Unizik Orange**: Secondary brand color, used for buttons and accents
 - **Light Orange**: Used for backgrounds and subtle highlights
@@ -138,6 +139,7 @@ The application uses the Work Sans font family:
 ```
 
 Font weights used:
+
 - 400 (Regular)
 - 500 (Medium)
 - 600 (Semibold)
@@ -347,11 +349,13 @@ function SignupPage() {
 ## 🔄 Development Workflow
 
 1. **Starting Development**
+
    ```bash
    pnpm dev
    ```
 
 2. **Code Quality**
+
    ```bash
    # Run ESLint
    pnpm lint:eslint
@@ -364,6 +368,7 @@ function SignupPage() {
    ```
 
 3. **Building for Production**
+
    ```bash
    pnpm build
    pnpm start
