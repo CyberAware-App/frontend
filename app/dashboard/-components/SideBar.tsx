@@ -1,6 +1,5 @@
 import Image from "next/image";
-import { HamburgerIcon } from "@/components/icons";
-import { Arrow } from "@/components/icons/arrow";
+import { Arrow, HamburgerIcon } from "@/components/icons";
 import { logoSmall } from "@/public/assets";
 
 const SideBar = () => {

@@ -1,8 +1,9 @@
 import Image from "next/image";
 import { ForWithWrapper } from "@/components/common/for";
 import { NavLink } from "@/components/common/NavLink";
+import { Triangle } from "@/components/icons";
 import { Button } from "@/components/ui/button";
-import { tw } from "@/lib/utils/cn";
+import { cnJoin, tw } from "@/lib/utils/cn";
 import {
 	eyeShield,
 	modelOne,
@@ -34,6 +35,15 @@ const reasons = [
 		title: "Get Certified",
 		description: "Score 80% on a quiz and earn a shareable digital certificate.",
 		icon: { src: reasonFour, size: tw`max-w-[158px]` },
+	},
+];
+
+const howItWorks = [
+	{ title: "Sign Up", description: "Register with your email and get your welcome guide." },
+	{ title: "Learn Daily", description: "Access one cybersecurity module each day — just 10–15 mins." },
+	{
+		title: "Take the Quiz & Get Certified",
+		description: "On Day 10, pass the quiz and download your certificate.",
 	},
 ];
 
@@ -87,11 +97,9 @@ function HomePage() {
 			</section>
 
 			<section className="mt-12 flex px-4">
-				<div className="flex">
-					<span className="block w-[15px] shrink-0 bg-cyberaware-unizik-orange" />
-					<div>
-						<Image src={modelOne} alt="Model One" />
-					</div>
+				<span className="block w-[15px] shrink-0 bg-cyberaware-unizik-orange" />
+				<div>
+					<Image src={modelOne} alt="Model One" />
 				</div>
 			</section>
 
@@ -113,11 +121,59 @@ function HomePage() {
 				/>
 			</section>
 
-			<section className="mt-[84px] px-4">
+			<section className="mt-[84px] flex flex-col gap-[64px] px-4">
 				<h2 className="text-center text-[28px] font-semibold text-white">How CyberAware Works</h2>
+
+				<ForWithWrapper
+					className="relative grid grid-cols-[auto_auto_auto] items-center justify-center gap-x-7
+						gap-y-[75px]"
+					each={howItWorks}
+					render={(item, index) => {
+						const digit = index + 1;
+
+						const isEven = digit % 2 === 0;
+
+						return (
+							<li key={item.title} className="contents">
+								<hr className="absolute h-[110%] w-full max-w-1 justify-self-center bg-white" />
+
+								<p
+									className={cnJoin(
+										"w-fit justify-self-end text-[64px] font-semibold text-white",
+										isEven && "justify-self-start [grid-area:2/3]"
+									)}
+								>
+									{digit}
+								</p>
+
+								<span className="size-[45px] rounded-full bg-cyberaware-unizik-orange" />
+
+								<div
+									className={cnJoin(
+										"relative isolate flex w-[150px] shrink-0 flex-col gap-2.5 bg-white p-4",
+										isEven && "rotate-y-180 [grid-area:2/1]"
+									)}
+								>
+									<Triangle className={cnJoin("absolute top-[32%] -left-4 -z-1 size-[46px]")} />
+									<h4 className={cnJoin("text-cyberaware-aeces-blue", isEven && "rotate-y-180")}>
+										{item.title}
+									</h4>
+									<p
+										className={cnJoin(
+											"max-w-[120px] text-[12px] font-medium",
+											isEven && "rotate-y-180"
+										)}
+									>
+										{item.description}
+									</p>
+								</div>
+							</li>
+						);
+					}}
+				/>
 			</section>
 
-			<section className="mt-12 flex flex-col gap-7 bg-cyberaware-light-orange p-4">
+			<section className="mt-20 flex flex-col gap-7 bg-cyberaware-light-orange p-4">
 				<div className="flex">
 					<span className="block w-[15px] shrink-0 bg-cyberaware-unizik-orange" />
 					<div>
