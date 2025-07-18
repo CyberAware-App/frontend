@@ -14,7 +14,7 @@
 		"start": "next start"
 	},
 	"dependencies": {
-		"@ark-ui/react": "^5.16.1",
+		"@ark-ui/react": "^5.17.0",
 		"@bprogress/next": "^3.2.12",
 		"@hookform/resolvers": "^5.1.1",
 		"@iconify/react": "^6.0.0",
@@ -53,7 +53,7 @@
 		"@zayne-labs/prettier-config": "^0.9.7",
 		"@zayne-labs/tsconfig": "^0.9.7",
 		"eslint": "^9.31.0",
-		"eslint-plugin-better-tailwindcss": "^3.6.2",
+		"eslint-plugin-better-tailwindcss": "^3.6.3",
 		"eslint-plugin-react-hooks": "^5.2.0",
 		"eslint-plugin-react-refresh": "^0.4.20",
 		"husky": "^9.1.7",

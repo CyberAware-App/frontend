@@ -56,7 +56,7 @@ const linkItems = [
 	{
 		title: "Module",
 		icon: "ion:grid-sharp",
-		href: "/module",
+		href: "/dashboard/module",
 	},
 ];
 

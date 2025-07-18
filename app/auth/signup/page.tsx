@@ -28,15 +28,15 @@ function SignupPage() {
 	const onSubmit = form.handleSubmit((data) => console.info({ data }));
 
 	return (
-		<Main className="relative gap-13 px-4 py-[158px]">
+		<Main className="gap-13 px-4 pb-[158px]">
 			<header className="flex flex-col gap-5">
 				<h1 className="text-[36px] font-bold text-white">Create your Free Account </h1>
 				<p className="text-[14px] text-white">
 					Start learning how to stay safe online. It only takes a minute.
 				</p>
-				<p>
-					Already have an account?{" "}
-					<NavLink href="/auth/signin" className="text-white">
+				<p className="flex gap-1">
+					<span className="text-cyberaware-neutral-gray-light/50">Already have an account?</span>
+					<NavLink href="/auth/signin" className="text-cyberaware-primary-blue-light">
 						Login
 					</NavLink>
 				</p>

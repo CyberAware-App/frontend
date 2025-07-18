@@ -18,7 +18,7 @@ export const metadata: Metadata = {
 
 function RootLayout({ children }: { children: React.ReactNode }) {
 	return (
-		<html lang="en">
+		<html lang="en" data-scroll-behavior="smooth">
 			<body className={cnJoin(workSans.variable)}>
 				<Providers>{children}</Providers>
 			</body>
