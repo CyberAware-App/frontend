@@ -2,41 +2,59 @@
 
 import { zodResolver } from "@hookform/resolvers/zod";
 import { Form } from "@zayne-labs/ui-react/ui/form";
+import { useRouter } from "next/navigation";
 import { useForm } from "react-hook-form";
-import { z } from "zod";
 import { Main } from "@/app/-components";
 import { NavLink } from "@/components/common/NavLink";
 import { Button } from "@/components/ui/button";
+import { apiSchema, callBackendApi } from "@/lib/api/callBackendApi";
 
-const SignupSchema = z.object({
-	name: z.string().min(3, "Name must be at least 3 characters long"),
-	email: z.email("Invalid email address"),
-	password: z.string().min(8, "Password must be at least 8 characters long"),
-});
+const SignupSchema = apiSchema.routes["/register"].body;
 
 function SignupPage() {
 	const form = useForm({
 		defaultValues: {
-			name: "",
 			email: "",
+			first_name: "",
+			last_name: "",
 			password: "",
 		},
 		mode: "onTouched",
 		resolver: zodResolver(SignupSchema),
 	});
 
-	const onSubmit = form.handleSubmit((data) => console.info({ data }));
+	const router = useRouter();
+
+	const onSubmit = form.handleSubmit(async (data) => {
+		await callBackendApi("/register", {
+			body: data,
+
+			method: "POST",
+
+			onSuccess: (ctx) => {
+				localStorage.setItem("accessToken", ctx.data.data.access);
+				localStorage.setItem("refreshToken", ctx.data.data.refresh);
+
+				// queryClient.setQueryData(sessionQuery().queryKey, {
+				// 	...ctx.data,
+				// 	data: omitKeys(ctx.data.data, ["access", "refresh"]),
+				// });
+
+				router.push("/verify-account");
+			},
+		});
+	});
 
 	return (
-		<Main className="relative gap-13 px-4 py-[158px]">
+		<Main className="gap-13 px-4 pb-[158px]">
 			<header className="flex flex-col gap-5">
 				<h1 className="text-[36px] font-bold text-white">Create your Free Account </h1>
 				<p className="text-[14px] text-white">
 					Start learning how to stay safe online. It only takes a minute.
 				</p>
-				<p>
-					Already have an account?{" "}
-					<NavLink href="/auth/signin" className="text-white">
+				<p className="flex gap-1">
+					<span className="text-cyberaware-neutral-gray-light/50">Already have an account?</span>
+					<NavLink href="/auth/signin" className="text-cyberaware-primary-blue-light">
 						Login
 					</NavLink>
 				</p>
@@ -44,10 +62,21 @@ function SignupPage() {
 
 			<section>
 				<Form.Root methods={form} className="gap-6" onSubmit={(event) => void onSubmit(event)}>
-					<Form.Field control={form.control} name="name">
-						<Form.Label className="text-white">Full name</Form.Label>
+					<Form.Field control={form.control} name="first_name">
+						<Form.Label className="text-white">First name</Form.Label>
 						<Form.Input
-							placeholder="Enter full name"
+							placeholder="Enter first name"
+							className="h-[64px] border-2 border-cyberaware-neutral-gray-light px-8 text-base
+								text-white placeholder:text-white/50 data-invalid:border-red-600"
+						/>
+
+						<Form.ErrorMessage />
+					</Form.Field>
+
+					<Form.Field control={form.control} name="last_name">
+						<Form.Label className="text-white">Last name</Form.Label>
+						<Form.Input
+							placeholder="Enter last name"
 							className="h-[64px] border-2 border-cyberaware-neutral-gray-light px-8 text-base
 								text-white placeholder:text-white/50 data-invalid:border-red-600"
 						/>
@@ -72,9 +101,9 @@ function SignupPage() {
 							type="password"
 							placeholder="Enter password"
 							classNames={{
+								input: "text-base text-white placeholder:text-white/50",
 								inputGroup: `h-[64px] border-2 border-cyberaware-neutral-gray-light px-8 text-white
 								data-invalid:border-red-600`,
-								input: "text-base text-white placeholder:text-white/50",
 							}}
 						/>
 
@@ -82,7 +111,13 @@ function SignupPage() {
 					</Form.Field>
 
 					<Form.Submit asChild={true} className="mt-[42px]">
-						<Button className="h-[64px] max-w-[260px] self-end">Create Account</Button>
+						<Button
+							isLoading={form.formState.isSubmitting}
+							isDisabled={form.formState.isSubmitting}
+							className="h-[64px] max-w-[260px] self-end"
+						>
+							Create Account
+						</Button>
 					</Form.Submit>
 				</Form.Root>
 			</section>

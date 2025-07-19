@@ -9,6 +9,10 @@ const nextConfig: NextConfig = {
 		ignoreDuringBuilds: true,
 	},
 
+	experimental: {
+		devtoolSegmentExplorer: true,
+	},
+
 	typescript: {
 		ignoreBuildErrors: true,
 	},

@@ -13,17 +13,17 @@ import { cnMerge } from "@/lib/utils/cn";
 import { IconBox } from "../common/IconBox";
 
 type ContextValue = {
-	open: boolean;
-	setOpen: (open: boolean) => void;
 	onClose: () => void;
 	onOpen: () => void;
+	open: boolean;
+	setOpen: (open: boolean) => void;
 };
 
 const [DialogContextProvider, useDialogStateContext] = createCustomContext<ContextValue>();
 
 function DialogRoot(props: InferProps<typeof DialogPrimitive.Root>) {
 	// eslint-disable-next-line ts-eslint/unbound-method
-	const { open: openProp, onOpenChange: setOpenProp, defaultOpen, ...restOfProps } = props;
+	const { defaultOpen, onOpenChange: setOpenProp, open: openProp, ...restOfProps } = props;
 
 	const savedSetOpenProp = useCallbackRef(setOpenProp);
 
@@ -50,7 +50,7 @@ function DialogRoot(props: InferProps<typeof DialogPrimitive.Root>) {
 	const onOpen = useCallbackRef(() => setOpen(true));
 
 	const contextValue = useMemo(
-		() => ({ open, setOpen, onClose, onOpen }) satisfies ContextValue,
+		() => ({ onClose, onOpen, open, setOpen }) satisfies ContextValue,
 		[onClose, onOpen, open, setOpen]
 	);
 
@@ -99,7 +99,7 @@ function DialogClose(props: InferProps<typeof DialogPrimitive.Close>) {
 }
 
 function DialogContent(props: InferProps<typeof DialogPrimitive.Content> & { withCloseBtn?: boolean }) {
-	const { className, children, withCloseBtn = true, ...restOfProps } = props;
+	const { children, className, withCloseBtn = true, ...restOfProps } = props;
 
 	return (
 		<DialogPortal>

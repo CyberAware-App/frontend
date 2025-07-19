@@ -6,20 +6,20 @@ import { logoLarge } from "@/public/assets";
 
 const footerLinks = [
 	{
-		title: "Privacy policy",
 		href: "/privacy-policy",
+		title: "Privacy policy",
 	},
 	{
-		title: "Contact",
 		href: "/contact",
+		title: "Contact",
 	},
 	{
-		title: "Modules",
 		href: "/modules",
+		title: "Modules",
 	},
 	{
-		title: "Partners",
 		href: "/partners",
+		title: "Partners",
 	},
 ];
 

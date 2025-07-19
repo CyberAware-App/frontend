@@ -34,12 +34,12 @@ const SIDEBAR_WIDTH_ICON = "48px";
 const SIDEBAR_KEYBOARD_SHORTCUT = "b";
 
 type SidebarContextProps = {
-	state: "expanded" | "collapsed";
-	open: boolean;
-	setOpen: (open: boolean) => void;
-	openMobile: boolean;
-	setOpenMobile: (open: boolean) => void;
 	isMobile: boolean;
+	open: boolean;
+	openMobile: boolean;
+	setOpen: (open: boolean) => void;
+	setOpenMobile: (open: boolean) => void;
+	state: "collapsed" | "expanded";
 	toggleSidebar: () => void;
 };
 
@@ -56,20 +56,20 @@ export function useSidebarContext() {
 	return context;
 }
 
-function SidebarRootProvider(
+export function SidebarRootProvider(
 	props: InferProps<"div"> & {
 		defaultOpen?: boolean;
-		open?: boolean;
 		onOpenChange?: (open: boolean) => void;
+		open?: boolean;
 	}
 ) {
 	const {
-		defaultOpen = true,
-		open: openProp,
-		onOpenChange: setOpenProp,
-		className,
-		style,
 		children,
+		className,
+		defaultOpen = true,
+		onOpenChange: setOpenProp,
+		open: openProp,
+		style,
 		...restOfProps
 	} = props;
 
@@ -124,7 +124,7 @@ function SidebarRootProvider(
 	const sidebarState = open ? "expanded" : "collapsed";
 
 	const contextValue = useMemo<SidebarContextProps>(
-		() => ({ state: sidebarState, open, setOpen, isMobile, openMobile, setOpenMobile, toggleSidebar }),
+		() => ({ isMobile, open, openMobile, setOpen, setOpenMobile, state: sidebarState, toggleSidebar }),
 		[sidebarState, open, setOpen, isMobile, openMobile, setOpenMobile, toggleSidebar]
 	);
 
@@ -153,23 +153,23 @@ function SidebarRootProvider(
 	);
 }
 
-function SidebarRoot(
+export function SidebarRoot(
 	props: InferProps<"div"> & {
+		collapsible?: "icon" | "none" | "offcanvas";
 		side?: "left" | "right";
-		variant?: "sidebar" | "floating" | "inset";
-		collapsible?: "offcanvas" | "icon" | "none";
+		variant?: "floating" | "inset" | "sidebar";
 	}
 ) {
 	const {
+		children,
+		className,
+		collapsible = "offcanvas",
 		side = "left",
 		variant = "sidebar",
-		collapsible = "offcanvas",
-		className,
-		children,
 		...restOfProps
 	} = props;
 
-	const { isMobile, state, openMobile, setOpenMobile } = useSidebarContext();
+	const { isMobile, openMobile, setOpenMobile, state } = useSidebarContext();
 
 	if (collapsible === "none") {
 		return (
@@ -270,7 +270,7 @@ function SidebarRoot(
 	);
 }
 
-function SidebarTrigger({ className, onClick, ...props }: InferProps<typeof Button>) {
+export function SidebarTrigger({ className, onClick, ...props }: InferProps<typeof Button>) {
 	const { toggleSidebar } = useSidebarContext();
 
 	return (
@@ -292,10 +292,10 @@ function SidebarTrigger({ className, onClick, ...props }: InferProps<typeof Butt
 	);
 }
 
-function SidebarRail(props: InferProps<"button"> & { side?: "left" | "right" }) {
+export function SidebarRail(props: InferProps<"button"> & { side?: "left" | "right" }) {
 	const { className, side = "left", ...restOfProps } = props;
 
-	const { toggleSidebar, state } = useSidebarContext();
+	const { state, toggleSidebar } = useSidebarContext();
 
 	return (
 		<TooltipRoot>
@@ -358,7 +358,7 @@ function SidebarRail(props: InferProps<"button"> & { side?: "left" | "right" }) 
 	);
 }
 
-function SidebarInset(props: InferProps<"main">) {
+export function SidebarInset(props: InferProps<"main">) {
 	const { className, ...restOfProps } = props;
 
 	return (
@@ -376,7 +376,7 @@ function SidebarInset(props: InferProps<"main">) {
 	);
 }
 
-function SidebarInput(props: InferProps<typeof FormInput>) {
+export function SidebarInput(props: InferProps<typeof FormInput>) {
 	const { className, ...restOfProps } = props;
 
 	return (
@@ -389,7 +389,7 @@ function SidebarInput(props: InferProps<typeof FormInput>) {
 	);
 }
 
-function SidebarHeader(props: InferProps<"div">) {
+export function SidebarHeader(props: InferProps<"div">) {
 	const { className, ...restOfProps } = props;
 
 	return (
@@ -402,7 +402,7 @@ function SidebarHeader(props: InferProps<"div">) {
 	);
 }
 
-function SidebarFooter(props: InferProps<"div">) {
+export function SidebarFooter(props: InferProps<"div">) {
 	const { className, ...restOfProps } = props;
 
 	return (
@@ -415,7 +415,7 @@ function SidebarFooter(props: InferProps<"div">) {
 	);
 }
 
-function SidebarSeparator(props: InferProps<typeof SeparatorPrimitive>) {
+export function SidebarSeparator(props: InferProps<typeof SeparatorPrimitive>) {
 	const { className, ...restOfProps } = props;
 
 	return (
@@ -428,7 +428,7 @@ function SidebarSeparator(props: InferProps<typeof SeparatorPrimitive>) {
 	);
 }
 
-function SidebarContent(props: InferProps<"div">) {
+export function SidebarContent(props: InferProps<"div">) {
 	const { className, ...restOfProps } = props;
 	return (
 		<div
@@ -444,7 +444,7 @@ function SidebarContent(props: InferProps<"div">) {
 	);
 }
 
-function SidebarGroup(props: InferProps<"div">) {
+export function SidebarGroup(props: InferProps<"div">) {
 	const { className, ...restOfProps } = props;
 
 	return (
@@ -457,8 +457,8 @@ function SidebarGroup(props: InferProps<"div">) {
 	);
 }
 
-function SidebarGroupLabel(props: InferProps<"div"> & { asChild?: boolean }) {
-	const { className, asChild = false, ...restOfProps } = props;
+export function SidebarGroupLabel(props: InferProps<"div"> & { asChild?: boolean }) {
+	const { asChild = false, className, ...restOfProps } = props;
 
 	const Component = asChild ? Slot.Root : "div";
 
@@ -479,8 +479,8 @@ function SidebarGroupLabel(props: InferProps<"div"> & { asChild?: boolean }) {
 	);
 }
 
-function SidebarGroupAction(props: InferProps<"button"> & { asChild?: boolean }) {
-	const { className, asChild = false, ...restOfProps } = props;
+export function SidebarGroupAction(props: InferProps<"button"> & { asChild?: boolean }) {
+	const { asChild = false, className, ...restOfProps } = props;
 
 	const Component = asChild ? Slot.Root : "button";
 
@@ -503,7 +503,7 @@ function SidebarGroupAction(props: InferProps<"button"> & { asChild?: boolean })
 	);
 }
 
-function SidebarGroupContent(props: InferProps<"div">) {
+export function SidebarGroupContent(props: InferProps<"div">) {
 	const { className, ...restOfProps } = props;
 
 	return (
@@ -516,7 +516,7 @@ function SidebarGroupContent(props: InferProps<"div">) {
 	);
 }
 
-function SidebarMenu(props: InferProps<"ul">) {
+export function SidebarMenu(props: InferProps<"ul">) {
 	const { className, ...restOfProps } = props;
 
 	return (
@@ -529,7 +529,7 @@ function SidebarMenu(props: InferProps<"ul">) {
 	);
 }
 
-function SidebarMenuItem(props: InferProps<"li">) {
+export function SidebarMenuItem(props: InferProps<"li">) {
 	const { className, ...restOfProps } = props;
 
 	return (
@@ -555,39 +555,40 @@ const sidebarMenuButtonVariants = tv({
 	data-[state=open]:hover:text-shadcn-sidebar-accent-foreground [&>span:last-child]:truncate
 	[&>svg]:size-4 [&>svg]:shrink-0`,
 
+	defaultVariants: {
+		size: "default",
+		variant: "default",
+	},
 	variants: {
+		size: {
+			default: "h-8 text-sm",
+			lg: "h-12 text-sm group-data-[collapsible=icon]:p-0!",
+			sm: "h-7 text-xs",
+		},
 		variant: {
 			default: "hover:bg-shadcn-sidebar-accent hover:text-shadcn-sidebar-accent-foreground",
 			outline: `bg-shadcn-background shadow-[0_0_0_1px_hsl(var(--color-shadcn-sidebar-border))]
 			hover:bg-shadcn-sidebar-accent hover:text-shadcn-sidebar-accent-foreground
 			hover:shadow-[0_0_0_1px_hsl(var(--color-shadcn-sidebar-accent))]`,
 		},
-		size: {
-			default: "h-8 text-sm",
-			sm: "h-7 text-xs",
-			lg: "h-12 text-sm group-data-[collapsible=icon]:p-0!",
-		},
-	},
-	defaultVariants: {
-		variant: "default",
-		size: "default",
 	},
 });
 
-function SidebarMenuButton(
-	props: InferProps<"button"> & {
-		asChild?: boolean;
-		isActive?: boolean;
-		tooltip?: string | InferProps<typeof TooltipContent>;
-	} & VariantProps<typeof sidebarMenuButtonVariants>
+export function SidebarMenuButton(
+	props: InferProps<"button">
+		& VariantProps<typeof sidebarMenuButtonVariants> & {
+			asChild?: boolean;
+			isActive?: boolean;
+			tooltip?: string | InferProps<typeof TooltipContent>;
+		}
 ) {
 	let {
 		asChild = false,
+		className,
 		isActive = false,
-		variant = "default",
 		size = "default",
 		tooltip,
-		className,
+		variant = "default",
 		...restOfProps
 	} = props;
 	const Component = asChild ? Slot.Root : "button";
@@ -599,7 +600,7 @@ function SidebarMenuButton(
 			data-sidebar="menu-button"
 			data-size={size}
 			data-active={isActive}
-			className={cnMerge(sidebarMenuButtonVariants({ variant, size }), className)}
+			className={cnMerge(sidebarMenuButtonVariants({ size, variant }), className)}
 			{...restOfProps}
 		/>
 	);
@@ -628,13 +629,13 @@ function SidebarMenuButton(
 	);
 }
 
-function SidebarMenuAction(
+export function SidebarMenuAction(
 	props: InferProps<"button"> & {
 		asChild?: boolean;
 		showOnHover?: boolean;
 	}
 ) {
-	const { className, asChild = false, showOnHover = false, ...restOfProps } = props;
+	const { asChild = false, className, showOnHover = false, ...restOfProps } = props;
 
 	const Component = asChild ? Slot.Root : "button";
 
@@ -665,7 +666,7 @@ function SidebarMenuAction(
 	);
 }
 
-function SidebarMenuBadge({ className, ...props }: InferProps<"div">) {
+export function SidebarMenuBadge({ className, ...props }: InferProps<"div">) {
 	return (
 		<div
 			data-slot="sidebar-menu-badge"
@@ -686,7 +687,7 @@ function SidebarMenuBadge({ className, ...props }: InferProps<"div">) {
 	);
 }
 
-function SidebarMenuSkeleton({
+export function SidebarMenuSkeleton({
 	className,
 	showIcon = false,
 	...props
@@ -718,7 +719,7 @@ function SidebarMenuSkeleton({
 	);
 }
 
-function SidebarMenuSub({ className, ...props }: InferProps<"ul">) {
+export function SidebarMenuSub({ className, ...props }: InferProps<"ul">) {
 	return (
 		<ul
 			data-slot="sidebar-menu-sub"
@@ -734,7 +735,7 @@ function SidebarMenuSub({ className, ...props }: InferProps<"ul">) {
 	);
 }
 
-function SidebarMenuSubItem(props: InferProps<"li">) {
+export function SidebarMenuSubItem(props: InferProps<"li">) {
 	const { className, ...restOfProps } = props;
 
 	return (
@@ -747,14 +748,14 @@ function SidebarMenuSubItem(props: InferProps<"li">) {
 	);
 }
 
-function SidebarMenuSubButton(
+export function SidebarMenuSubButton(
 	props: InferProps<"a"> & {
 		asChild?: boolean;
-		size?: "sm" | "md";
 		isActive?: boolean;
+		size?: "md" | "sm";
 	}
 ) {
-	const { asChild = false, size = "md", isActive = false, className, ...restOfProps } = props;
+	const { asChild = false, className, isActive = false, size = "md", ...restOfProps } = props;
 
 	const Component = asChild ? Slot.Root : "a";
 

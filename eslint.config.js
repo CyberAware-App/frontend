@@ -6,7 +6,6 @@ export default zayne({
 		nextjs: true,
 	},
 	tailwindcssBetter: true,
-	perfectionist: false,
 	tanstack: {
 		query: true,
 	},

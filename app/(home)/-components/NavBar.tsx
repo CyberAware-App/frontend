@@ -44,19 +44,19 @@ type MobileNavProps = {
 
 const linkItems = [
 	{
-		title: "Home",
-		icon: "material-symbols:home",
 		href: "/",
+		icon: "material-symbols:home",
+		title: "Home",
 	},
 	{
-		title: "Contact",
-		icon: "material-symbols:call-sharp",
 		href: "/contact",
+		icon: "material-symbols:call-sharp",
+		title: "Contact",
 	},
 	{
-		title: "Module",
+		href: "/dashboard/module",
 		icon: "ion:grid-sharp",
-		href: "/module",
+		title: "Module",
 	},
 ];
 

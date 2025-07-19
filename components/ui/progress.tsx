@@ -9,7 +9,7 @@ function Progress(
 		classNames?: { base?: string; indicator?: string };
 	}
 ) {
-	const { className, value, classNames, ...restOfProps } = props;
+	const { className, classNames, value, ...restOfProps } = props;
 
 	return (
 		<ProgressPrimitive.Root

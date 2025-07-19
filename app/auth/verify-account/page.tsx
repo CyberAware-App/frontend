@@ -5,14 +5,12 @@ import { For } from "@zayne-labs/ui-react/common/for";
 import { Form } from "@zayne-labs/ui-react/ui/form";
 import { REGEXP_ONLY_DIGITS } from "input-otp";
 import { useForm } from "react-hook-form";
-import { z } from "zod";
 import { Main } from "@/app/-components";
 import { InputOTP } from "@/components/ui";
 import { Button } from "@/components/ui/button";
+import { apiSchema } from "@/lib/api/callBackendApi";
 
-const VerifyAccountSchema = z.object({
-	code: z.string().min(6, "Invalid code").regex(new RegExp(REGEXP_ONLY_DIGITS), "Invalid code"),
-});
+const VerifyAccountSchema = apiSchema.routes["/verify-otp"].body.pick({ code: true });
 
 function VerifyAccountPage() {
 	const form = useForm({
@@ -26,7 +24,7 @@ function VerifyAccountPage() {
 	const onSubmit = form.handleSubmit((data) => console.info({ data }));
 
 	return (
-		<Main className="relative gap-13 px-4 py-[158px]">
+		<Main className="gap-13 px-4 pb-[158px]">
 			<header className="flex flex-col gap-5">
 				<h1 className="text-[36px] font-bold text-white">Verify Your Account</h1>
 				<p className="text-[14px] text-white">Enter the 6-digit code sent to you@example.com.</p>
@@ -43,12 +41,6 @@ function VerifyAccountPage() {
 									autoFocus={true}
 									value={field.value}
 									onChange={field.onChange}
-									// classNames={
-									// 	{
-									// 		// container:
-									// 		// 	"[&>div]:text-[25px] [&>div]:[-webkit-text-security:disc]",
-									// 	}
-									// }
 								>
 									<InputOTP.Group className="w-full justify-between gap-4 text-white">
 										<For
@@ -57,9 +49,7 @@ function VerifyAccountPage() {
 												<InputOTP.Slot
 													key={item}
 													index={item}
-													classNames={{
-														base: "size-11 border-2 border-white",
-													}}
+													classNames={{ base: "size-11 border-2 border-white" }}
 												/>
 											)}
 										/>

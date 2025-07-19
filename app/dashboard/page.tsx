@@ -8,21 +8,21 @@ import { Afam } from "@/public/assets";
 
 const cardDetails = [
 	{
-		id: 1,
-		title: "Day 1: Cyber Security Foundation",
 		body: "Estimated time: 10mins",
 		buttonText: "Start Module",
+		id: 1,
 		isSub: false,
+		title: "Day 1: Cyber Security Foundation",
 	},
-	{ id: 4, body: "Day 2", title: <LockIcon />, buttonText: "", isSub: true },
-	{ id: 5, body: "Day 3", title: <LockIcon />, buttonText: "", isSub: true },
-	{ id: 2, title: "Quiz", body: "Complete day 10 to activate", buttonText: "Take Quiz", isSub: false },
+	{ body: "Day 2", buttonText: "", id: 4, isSub: true, title: <LockIcon /> },
+	{ body: "Day 3", buttonText: "", id: 5, isSub: true, title: <LockIcon /> },
+	{ body: "Complete day 10 to activate", buttonText: "Take Quiz", id: 2, isSub: false, title: "Quiz" },
 	{
-		id: 3,
-		title: "Certificate",
 		body: "A Certificate of completion would be sent to your E-mail If you pass the minimum mark of 80% in the quiz",
 		buttonText: "Download certificate",
+		id: 3,
 		isSub: false,
+		title: "Certificate",
 	},
 ];
 
@@ -57,7 +57,7 @@ const page = () => {
 			</section>
 
 			<section className="grid gap-x-3 gap-y-3.5">
-				{cardDetails.map(({ id, title, body, buttonText, isSub }) => {
+				{cardDetails.map(({ body, buttonText, id, isSub, title }) => {
 					return (
 						<div
 							key={id}

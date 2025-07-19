@@ -13,46 +13,47 @@ import {
 	reasonTwo,
 } from "@/public/assets/landing";
 import { Credits, Main } from "../-components";
+import { HowItWorksLadder } from "./-components";
 
 const reasons = [
 	{
-		title: "Real-World Cyber Protection",
 		description: "Learn to spot phishing, password hacks, and social engineering.",
-		icon: { src: reasonOne, size: tw`max-w-[92px]` },
+		icon: { size: tw`max-w-[92px]`, src: reasonOne },
+		title: "Real-World Cyber Protection",
 	},
 	{
-		title: "10 Easy-to-Digest Modules",
 		description: "Progress through one lesson per day — simple, fast, and practical.",
-		icon: { src: reasonTwo, size: tw`max-w-[70px]` },
+		icon: { size: tw`max-w-[70px]`, src: reasonTwo },
+		title: "10 Easy-to-Digest Modules",
 	},
 	{
-		title: "No Tech Background Needed",
 		description: "We keep it beginner-friendly with relatable examples.",
-		icon: { src: reasonThree, size: tw`max-w-[102px]` },
+		icon: { size: tw`max-w-[102px]`, src: reasonThree },
+		title: "No Tech Background Needed",
 	},
 	{
-		title: "Get Certified",
 		description: "Score 80% on a quiz and earn a shareable digital certificate.",
-		icon: { src: reasonFour, size: tw`max-w-[158px]` },
+		icon: { size: tw`max-w-[158px]`, src: reasonFour },
+		title: "Get Certified",
 	},
 ];
 
 const faqs = [
 	{
-		question: "1. Do I need technical skills to take this course?",
 		answer: "Ans: No. The content is made for everyone.",
+		question: "1. Do I need technical skills to take this course?",
 	},
 	{
-		question: "2. Is it really free?",
 		answer: "Ans: Yes! 100% free for all users.",
+		question: "2. Is it really free?",
 	},
 	{
-		question: "3. What happens if I miss a day?",
 		answer: "You can catch up anytime. You’re in control of your pace.",
+		question: "3. What happens if I miss a day?",
 	},
 	{
-		question: "4. Can I retake the quiz?",
 		answer: "Yes, you have up to 5 attempts to score 80% or above.",
+		question: "4. Can I retake the quiz?",
 	},
 ];
 
@@ -79,7 +80,7 @@ function HomePage() {
 					</Button>
 
 					<Button className="max-w-[175px]" asChild={true}>
-						<NavLink href="/auth/signup">Get Started</NavLink>
+						<NavLink href="/auth/signin">Get Started</NavLink>
 					</Button>
 				</div>
 
@@ -87,11 +88,9 @@ function HomePage() {
 			</section>
 
 			<section className="mt-12 flex px-4">
-				<div className="flex">
-					<span className="block w-[15px] shrink-0 bg-cyberaware-unizik-orange" />
-					<div>
-						<Image src={modelOne} alt="Model One" />
-					</div>
+				<span className="block w-[15px] shrink-0 bg-cyberaware-unizik-orange" />
+				<div>
+					<Image src={modelOne} alt="Model One" />
 				</div>
 			</section>
 
@@ -113,11 +112,13 @@ function HomePage() {
 				/>
 			</section>
 
-			<section className="mt-[84px] px-4">
+			<section className="mt-[84px] flex flex-col gap-[64px] px-4">
 				<h2 className="text-center text-[28px] font-semibold text-white">How CyberAware Works</h2>
+
+				<HowItWorksLadder />
 			</section>
 
-			<section className="mt-12 flex flex-col gap-7 bg-cyberaware-light-orange p-4">
+			<section className="mt-20 flex flex-col gap-7 bg-cyberaware-light-orange p-4">
 				<div className="flex">
 					<span className="block w-[15px] shrink-0 bg-cyberaware-unizik-orange" />
 					<div>
@@ -149,7 +150,7 @@ function HomePage() {
 					Join thousands of users becoming cyber smart in just 10 days.
 				</p>
 				<Button theme="white" className="mt-10 h-[72px] max-w-[314px]" asChild={true}>
-					<NavLink href="/auth/signup">Get Started</NavLink>
+					<NavLink href="/auth/signin">Get Started</NavLink>
 				</Button>
 			</section>
 

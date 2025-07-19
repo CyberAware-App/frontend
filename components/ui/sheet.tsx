@@ -39,10 +39,10 @@ function SheetOverlay(props: InferProps<typeof SheetPrimitive.Overlay>) {
 
 function SheetContent(
 	props: InferProps<typeof SheetPrimitive.Content> & {
-		side?: "top" | "right" | "bottom" | "left";
+		side?: "bottom" | "left" | "right" | "top";
 	}
 ) {
-	const { className, children, side = "right", ...restOfProps } = props;
+	const { children, className, side = "right", ...restOfProps } = props;
 
 	return (
 		<SheetPortal>
