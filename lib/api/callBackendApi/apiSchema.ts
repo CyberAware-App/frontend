@@ -34,7 +34,7 @@ const withBaseErrorResponse = <
 		errors: (errorSchema ?? BaseErrorResponseSchema.shape.errors) as NonNullable<TSchemaObject>,
 	});
 
-export const apiSchema = defineSchema(
+export const backendApiSchema = defineSchema(
 	{
 		"/login": {
 			body: z.object({
@@ -44,7 +44,7 @@ export const apiSchema = defineSchema(
 			data: withBaseSuccessResponse(
 				z.object({ access: z.jwt(), email: z.string(), first_login: z.boolean(), refresh: z.jwt() })
 			),
-			errorData: withBaseErrorResponse(z.string()),
+			errorData: withBaseErrorResponse(z.object({ email: z.string(), message: z.string() }).partial()),
 			method: z.literal("POST"),
 		},
 
@@ -57,12 +57,10 @@ export const apiSchema = defineSchema(
 			}),
 			data: withBaseSuccessResponse(
 				z.object({
-					access: z.jwt(),
 					email: z.string(),
 					first_name: z.string(),
 					last_name: z.string(),
 					otp_sent: z.boolean(),
-					refresh: z.jwt(),
 				})
 			),
 			errorData: withBaseErrorResponse(
@@ -80,7 +78,7 @@ export const apiSchema = defineSchema(
 
 		"/resend-otp": {
 			body: z.object({ email: z.email() }),
-			data: withBaseSuccessResponse(z.object({ email: z.string(), otp_sent: z.boolean() })),
+			data: withBaseSuccessResponse(z.object({ email: z.string(), otp_resent: z.boolean() })),
 			errorData: withBaseErrorResponse(z.null()),
 			method: z.literal("POST"),
 		},

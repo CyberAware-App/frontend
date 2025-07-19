@@ -1,18 +1,22 @@
 "use client";
 
 import { zodResolver } from "@hookform/resolvers/zod";
-import { useQuery } from "@tanstack/react-query";
+import { useQueryClient } from "@tanstack/react-query";
+import { pickKeys } from "@zayne-labs/toolkit-core";
+import { useStorageState } from "@zayne-labs/toolkit-react";
 import { For } from "@zayne-labs/ui-react/common/for";
 import { Form } from "@zayne-labs/ui-react/ui/form";
 import { REGEXP_ONLY_DIGITS } from "input-otp";
+import { useRouter } from "next/navigation";
 import { useForm } from "react-hook-form";
 import { Main } from "@/app/-components";
 import { InputOTP } from "@/components/ui";
 import { Button } from "@/components/ui/button";
-import { apiSchema, callBackendApi } from "@/lib/api/callBackendApi";
+import { backendApiSchema, callBackendApi } from "@/lib/api/callBackendApi";
 import { sessionQuery } from "@/lib/api/queryOptions/queryOptions";
+import { resendOtp } from "./utils";
 
-const VerifyAccountSchema = apiSchema.routes["/verify-otp"].body.pick({ code: true });
+const VerifyAccountSchema = backendApiSchema.routes["/verify-otp"].body.pick({ code: true });
 
 function VerifyAccountPage() {
 	const form = useForm({
@@ -23,9 +27,13 @@ function VerifyAccountPage() {
 		resolver: zodResolver(VerifyAccountSchema),
 	});
 
-	const sessionQueryResult = useQuery(sessionQuery());
+	const queryClient = useQueryClient();
 
-	const email = sessionQueryResult.data?.data.email ?? "";
+	const sessionQueryResult = queryClient.getQueryData(sessionQuery().queryKey);
+
+	const [email] = useStorageState("email", sessionQueryResult?.data.email);
+
+	const router = useRouter();
 
 	const onSubmit = form.handleSubmit(async (data) => {
 		await callBackendApi("/verify-otp", {
@@ -36,22 +44,29 @@ function VerifyAccountPage() {
 			onResponseError: (ctx) => {
 				form.setError("code", { message: ctx.error.errorData.errors.code });
 			},
+
+			onSuccess: (ctx) => {
+				localStorage.setItem("accessToken", ctx.data.data.access);
+				localStorage.setItem("refreshToken", ctx.data.data.refresh);
+
+				queryClient.setQueryData(sessionQuery().queryKey, (oldData) => ({
+					...(oldData as NonNullable<typeof oldData>),
+					data: {
+						...(oldData?.data as NonNullable<typeof oldData>["data"]),
+						...pickKeys(ctx.data.data, ["email", "first_name"]),
+					},
+				}));
+
+				router.push("/dashboard");
+			},
 		});
 	});
-
-	const resendOtp = async () => {
-		await callBackendApi("/resend-otp", {
-			body: { email },
-
-			method: "POST",
-		});
-	};
 
 	return (
 		<Main className="gap-13 px-4 pb-[158px]">
 			<header className="flex flex-col gap-5">
 				<h1 className="text-[36px] font-bold text-white">Verify Your Account</h1>
-				<p className="text-[14px] text-white">Enter the 6-digit code sent to you@example.com.</p>
+				<p className="truncate text-[14px] text-white">Enter the 6-digit code sent to {email}.</p>
 			</header>
 
 			<section>
@@ -90,7 +105,7 @@ function VerifyAccountPage() {
 						<Button
 							unstyled={true}
 							className="font-semibold text-white"
-							onClick={() => void resendOtp()}
+							onClick={() => void resendOtp(email)}
 						>
 							Request again
 						</Button>

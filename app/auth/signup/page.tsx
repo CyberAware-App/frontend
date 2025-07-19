@@ -9,10 +9,10 @@ import { useForm } from "react-hook-form";
 import { Main } from "@/app/-components";
 import { NavLink } from "@/components/common/NavLink";
 import { Button } from "@/components/ui/button";
-import { apiSchema, callBackendApi } from "@/lib/api/callBackendApi";
+import { backendApiSchema, callBackendApi } from "@/lib/api/callBackendApi";
 import { sessionQuery } from "@/lib/api/queryOptions/queryOptions";
 
-const SignupSchema = apiSchema.routes["/register"].body;
+const SignupSchema = backendApiSchema.routes["/register"].body;
 
 function SignupPage() {
 	const form = useForm({
@@ -30,36 +30,6 @@ function SignupPage() {
 
 	const queryClient = useQueryClient();
 
-	const onSubmit = form.handleSubmit(async (data) => {
-		await callBackendApi("/register", {
-			body: data,
-
-			method: "POST",
-
-			onSuccess: (ctx) => {
-				localStorage.setItem("accessToken", ctx.data.data.access);
-				localStorage.setItem("refreshToken", ctx.data.data.refresh);
-
-				queryClient.setQueryData(sessionQuery().queryKey, (oldData) => {
-					if (!oldData) return;
-
-					return {
-						...oldData,
-						data: {
-							...oldData.data,
-							...pickKeys(
-								ctx.data.data,
-								Object.keys(oldData.data) as Array<keyof typeof ctx.data.data>
-							),
-						},
-					};
-				});
-
-				router.push("/verify-account");
-			},
-		});
-	});
-
 	return (
 		<Main className="gap-13 px-4 pb-[158px]">
 			<header className="flex flex-col gap-5">
@@ -76,7 +46,38 @@ function SignupPage() {
 			</header>
 
 			<section>
-				<Form.Root methods={form} className="gap-6" onSubmit={(event) => void onSubmit(event)}>
+				<Form.Root
+					methods={form}
+					className="gap-6"
+					onSubmit={(event) =>
+						void form.handleSubmit(async (data) => {
+							await callBackendApi("/register", {
+								body: data,
+								method: "POST",
+
+								onResponseError: (ctx) => {
+									for (const [key, value] of Object.entries(ctx.error.errorData.errors)) {
+										form.setError(key as never, { message: value });
+									}
+								},
+
+								onSuccess: (ctx) => {
+									localStorage.setItem("email", data.email);
+
+									queryClient.setQueryData(sessionQuery().queryKey, (oldData) => ({
+										...(oldData as NonNullable<typeof oldData>),
+										data: {
+											...(oldData?.data as NonNullable<typeof oldData>["data"]),
+											...pickKeys(ctx.data.data, ["email", "first_name", "last_name"]),
+										},
+									}));
+
+									router.push("/auth/verify-account");
+								},
+							});
+						})(event)
+					}
+				>
 					<Form.Field control={form.control} name="first_name">
 						<Form.Label className="text-white">First name</Form.Label>
 						<Form.Input

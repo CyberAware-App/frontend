@@ -5,7 +5,7 @@ import {
 } from "@zayne-labs/callapi";
 import { isHTTPError } from "@zayne-labs/callapi/utils";
 import { hardNavigate } from "@zayne-labs/toolkit-core";
-import type { BaseApiErrorResponse } from "../schema";
+import type { BaseApiErrorResponse } from "../apiSchema";
 import { refreshUserSession } from "./utils/refreshUserSession";
 
 const routesExemptedFromAuthHeaderInclusion = new Set(["/signin", "/signup"]);

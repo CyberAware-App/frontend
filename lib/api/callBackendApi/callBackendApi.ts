@@ -5,7 +5,7 @@ import {
 	type ToastPluginMeta,
 	toastPlugin,
 } from "./plugins";
-import { apiSchema } from "./schema";
+import { backendApiSchema } from "./apiSchema";
 
 type GlobalMeta = AuthHeaderInclusionPluginMeta & ToastPluginMeta;
 
@@ -25,7 +25,7 @@ const sharedBaseCallApiConfig = ((instanceCtx) => ({
 	dedupeCacheScope: "global",
 	dedupeCacheScopeKey: BASE_API_URL,
 	plugins: [toastPlugin()],
-	schema: apiSchema,
+	schema: backendApiSchema,
 
 	skipAutoMergeFor: "options",
 

@@ -6,7 +6,7 @@ import {
 } from "@zayne-labs/callapi";
 import { isHTTPError } from "@zayne-labs/callapi/utils";
 import { toast } from "sonner";
-import type { BaseApiErrorResponse, BaseApiSuccessResponse } from "../schema";
+import type { BaseApiErrorResponse, BaseApiSuccessResponse } from "../apiSchema";
 
 export type ToastPluginMeta = {
 	toast?: {

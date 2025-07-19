@@ -9,10 +9,11 @@ import { useForm } from "react-hook-form";
 import { Main } from "@/app/-components";
 import { NavLink } from "@/components/common/NavLink";
 import { Button } from "@/components/ui/button";
-import { apiSchema, callBackendApi } from "@/lib/api/callBackendApi";
+import { backendApiSchema, callBackendApi } from "@/lib/api/callBackendApi";
 import { sessionQuery } from "@/lib/api/queryOptions/queryOptions";
+import { resendOtp } from "../verify-account/utils";
 
-const SigninSchema = apiSchema.routes["/login"].body;
+const SigninSchema = backendApiSchema.routes["/login"].body;
 
 function SigninPage() {
 	const form = useForm({
@@ -34,24 +35,38 @@ function SigninPage() {
 
 			method: "POST",
 
+			onResponseError: (ctx) => {
+				if (
+					ctx.error.errorData.errors.email
+					&& ctx.error.errorData.errors.email === "User is not verified."
+				) {
+					localStorage.setItem("email", data.email);
+
+					queryClient.setQueryData(sessionQuery().queryKey, (oldData) => ({
+						...(oldData as NonNullable<typeof oldData>),
+						data: {
+							...(oldData?.data as NonNullable<typeof oldData>["data"]),
+							email: data.email,
+						},
+					}));
+
+					void resendOtp(data.email);
+
+					router.push("/auth/verify-account");
+				}
+			},
+
 			onSuccess: (ctx) => {
 				localStorage.setItem("accessToken", ctx.data.data.access);
 				localStorage.setItem("refreshToken", ctx.data.data.refresh);
 
-				queryClient.setQueryData(sessionQuery().queryKey, (oldData) => {
-					if (!oldData) return;
-
-					return {
-						...oldData,
-						data: {
-							...oldData.data,
-							...pickKeys(
-								ctx.data.data,
-								Object.keys(oldData.data) as Array<keyof typeof ctx.data.data>
-							),
-						},
-					};
-				});
+				queryClient.setQueryData(sessionQuery().queryKey, (oldData) => ({
+					...(oldData as NonNullable<typeof oldData>),
+					data: {
+						...(oldData?.data as NonNullable<typeof oldData>["data"]),
+						...pickKeys(ctx.data.data, ["email"]),
+					},
+				}));
 
 				router.push("/dashboard");
 			},
