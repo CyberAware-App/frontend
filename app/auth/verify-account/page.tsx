@@ -1,6 +1,7 @@
 "use client";
 
 import { zodResolver } from "@hookform/resolvers/zod";
+import { useQuery } from "@tanstack/react-query";
 import { For } from "@zayne-labs/ui-react/common/for";
 import { Form } from "@zayne-labs/ui-react/ui/form";
 import { REGEXP_ONLY_DIGITS } from "input-otp";
@@ -8,7 +9,8 @@ import { useForm } from "react-hook-form";
 import { Main } from "@/app/-components";
 import { InputOTP } from "@/components/ui";
 import { Button } from "@/components/ui/button";
-import { apiSchema } from "@/lib/api/callBackendApi";
+import { apiSchema, callBackendApi } from "@/lib/api/callBackendApi";
+import { sessionQuery } from "@/lib/api/queryOptions/queryOptions";
 
 const VerifyAccountSchema = apiSchema.routes["/verify-otp"].body.pick({ code: true });
 
@@ -21,7 +23,29 @@ function VerifyAccountPage() {
 		resolver: zodResolver(VerifyAccountSchema),
 	});
 
-	const onSubmit = form.handleSubmit((data) => console.info({ data }));
+	const sessionQueryResult = useQuery(sessionQuery());
+
+	const email = sessionQueryResult.data?.data.email ?? "";
+
+	const onSubmit = form.handleSubmit(async (data) => {
+		await callBackendApi("/verify-otp", {
+			body: { code: data.code, email },
+
+			method: "POST",
+
+			onResponseError: (ctx) => {
+				form.setError("code", { message: ctx.error.errorData.errors.code });
+			},
+		});
+	});
+
+	const resendOtp = async () => {
+		await callBackendApi("/resend-otp", {
+			body: { email },
+
+			method: "POST",
+		});
+	};
 
 	return (
 		<Main className="gap-13 px-4 pb-[158px]">
@@ -57,11 +81,17 @@ function VerifyAccountPage() {
 								</InputOTP.Root>
 							)}
 						/>
+
+						<Form.ErrorMessage />
 					</Form.Field>
 
 					<p className="mt-[42px]">
 						Didn’t get a code?{" "}
-						<Button unstyled={true} className="font-semibold text-white">
+						<Button
+							unstyled={true}
+							className="font-semibold text-white"
+							onClick={() => void resendOtp()}
+						>
 							Request again
 						</Button>
 					</p>

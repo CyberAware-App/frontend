@@ -3,13 +3,13 @@ import { REGEXP_ONLY_DIGITS } from "input-otp";
 import { z } from "zod";
 
 const BaseSuccessResponseSchema = z.object({
-	// data: z.record(z.string(), z.unknown()),
+	data: z.record(z.string(), z.unknown()),
 	message: z.string(),
 	status: z.literal("success"),
 });
 
 const BaseErrorResponseSchema = z.object({
-	errors: z.union([z.string(), z.record(z.string(), z.string().or(z.array(z.string()))), z.null()]),
+	errors: z.record(z.string(), z.string()).nullable(),
 	message: z.string(),
 	status: z.literal("error"),
 });
@@ -18,28 +18,32 @@ export type BaseApiSuccessResponse = z.infer<typeof BaseSuccessResponseSchema>;
 
 export type BaseApiErrorResponse = z.infer<typeof BaseErrorResponseSchema>;
 
-const withBaseSuccessResponse = <const TSchemaObject extends z.ZodType>(dataSchema: TSchemaObject) =>
+const withBaseSuccessResponse = <TSchemaObject extends z.ZodType>(dataSchema: TSchemaObject) =>
 	z.object({
 		...BaseSuccessResponseSchema.shape,
 		data: dataSchema,
 	});
 
-const withBaseErrorResponse = <TSchemaObject extends z.ZodType>(errorSchema?: TSchemaObject) =>
+const withBaseErrorResponse = <
+	TSchemaObject extends z.ZodType = typeof BaseErrorResponseSchema.shape.errors,
+>(
+	errorSchema?: TSchemaObject
+) =>
 	z.object({
 		...BaseErrorResponseSchema.shape,
-		errors: errorSchema,
+		errors: (errorSchema ?? BaseErrorResponseSchema.shape.errors) as NonNullable<TSchemaObject>,
 	});
 
 export const apiSchema = defineSchema(
 	{
-		"/check-user-session": {},
-
 		"/login": {
 			body: z.object({
 				email: z.email("Invalid email address"),
 				password: z.string().min(8, "Password must be at least 8 characters long"),
 			}),
-			data: withBaseSuccessResponse(z.object({ access: z.jwt(), refresh: z.jwt() })),
+			data: withBaseSuccessResponse(
+				z.object({ access: z.jwt(), email: z.string(), first_login: z.boolean(), refresh: z.jwt() })
+			),
 			errorData: withBaseErrorResponse(z.string()),
 			method: z.literal("POST"),
 		},
@@ -74,16 +78,30 @@ export const apiSchema = defineSchema(
 			method: z.literal("POST"),
 		},
 
+		"/resend-otp": {
+			body: z.object({ email: z.email() }),
+			data: withBaseSuccessResponse(z.object({ email: z.string(), otp_sent: z.boolean() })),
+			errorData: withBaseErrorResponse(z.null()),
+			method: z.literal("POST"),
+		},
+
+		"/session": {
+			data: withBaseSuccessResponse(
+				z.object({
+					email: z.string(),
+					first_name: z.string(),
+					has_session: z.boolean(),
+					is_verified: z.boolean(),
+					last_name: z.string(),
+				})
+			),
+			errorData: withBaseErrorResponse(z.null()),
+		},
+
 		"/token-refresh": {
 			body: z.object({ refresh: z.jwt() }),
 			data: withBaseSuccessResponse(z.object({ access: z.jwt() })),
-			errorData: withBaseErrorResponse(
-				z
-					.object({
-						refresh: z.jwt(),
-					})
-					.partial()
-			),
+			errorData: withBaseErrorResponse(z.object({ refresh: z.jwt() })),
 			method: z.literal("POST"),
 		},
 
@@ -93,18 +111,20 @@ export const apiSchema = defineSchema(
 				email: z.email(),
 			}),
 			data: withBaseSuccessResponse(
-				z.object({ email: z.string(), first_name: z.string(), verified: z.boolean() })
+				z.object({
+					access: z.jwt(),
+					email: z.string(),
+					first_login: z.boolean(),
+					first_name: z.string(),
+					refresh: z.jwt(),
+					verified: z.boolean(),
+				})
 			),
-			errorData: withBaseErrorResponse(
-				z
-					.object({
-						code: z.string(),
-						email: z.string(),
-					})
-					.partial()
-			),
+			errorData: withBaseErrorResponse(z.object({ code: z.string() })),
 			method: z.literal("POST"),
 		},
 	},
-	{ strict: true }
+	{
+		strict: true,
+	}
 );

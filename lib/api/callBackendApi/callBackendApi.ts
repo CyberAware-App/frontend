@@ -1,5 +1,10 @@
 import { createFetchClient } from "@zayne-labs/callapi";
-import { type AuthHeaderInclusionPluginMeta, type ToastPluginMeta, toastPlugin } from "./plugins";
+import {
+	type AuthHeaderInclusionPluginMeta,
+	isAuthTokenRelatedError,
+	type ToastPluginMeta,
+	toastPlugin,
+} from "./plugins";
 import { apiSchema } from "./schema";
 
 type GlobalMeta = AuthHeaderInclusionPluginMeta & ToastPluginMeta;
@@ -29,10 +34,14 @@ const sharedBaseCallApiConfig = ((instanceCtx) => ({
 	meta: {
 		...instanceCtx.options.meta,
 		toast: {
+			endpointsToSkip: {
+				errorAndSuccess: ["/token-refresh"],
+				success: ["/session"],
+			},
 			error: true,
 			errorsToSkip: ["AbortError"],
+			errorsToSkipCondition: (error) => isAuthTokenRelatedError(error),
 			success: true,
-			// errorsToSkipCondition: (error) => isAuthTokenRelatedError(error),
 			...instanceCtx.options.meta?.toast,
 		},
 	},

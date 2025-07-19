@@ -1,1 +1,1 @@
-export { checkUserSession } from "./checkUserSession";
+export { checkAndRefreshUserSession } from "./checkAndRefreshUserSession";

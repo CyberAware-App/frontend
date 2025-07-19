@@ -1,6 +1,8 @@
 "use client";
 
 import { zodResolver } from "@hookform/resolvers/zod";
+import { useQueryClient } from "@tanstack/react-query";
+import { pickKeys } from "@zayne-labs/toolkit-core";
 import { Form } from "@zayne-labs/ui-react/ui/form";
 import { useRouter } from "next/navigation";
 import { useForm } from "react-hook-form";
@@ -8,6 +10,7 @@ import { Main } from "@/app/-components";
 import { NavLink } from "@/components/common/NavLink";
 import { Button } from "@/components/ui/button";
 import { apiSchema, callBackendApi } from "@/lib/api/callBackendApi";
+import { sessionQuery } from "@/lib/api/queryOptions/queryOptions";
 
 const SigninSchema = apiSchema.routes["/login"].body;
 
@@ -21,9 +24,9 @@ function SigninPage() {
 		resolver: zodResolver(SigninSchema),
 	});
 
-	// const queryClient = useQueryClient();
-
 	const router = useRouter();
+
+	const queryClient = useQueryClient();
 
 	const onSubmit = form.handleSubmit(async (data) => {
 		await callBackendApi("/login", {
@@ -35,10 +38,20 @@ function SigninPage() {
 				localStorage.setItem("accessToken", ctx.data.data.access);
 				localStorage.setItem("refreshToken", ctx.data.data.refresh);
 
-				// queryClient.setQueryData(sessionQuery().queryKey, {
-				// 	...ctx.data,
-				// 	data: omitKeys(ctx.data.data, ["access", "refresh"]),
-				// });
+				queryClient.setQueryData(sessionQuery().queryKey, (oldData) => {
+					if (!oldData) return;
+
+					return {
+						...oldData,
+						data: {
+							...oldData.data,
+							...pickKeys(
+								ctx.data.data,
+								Object.keys(oldData.data) as Array<keyof typeof ctx.data.data>
+							),
+						},
+					};
+				});
 
 				router.push("/dashboard");
 			},

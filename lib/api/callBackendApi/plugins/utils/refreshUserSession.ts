@@ -18,12 +18,6 @@ const refreshUserSession = async () => {
 
 	const result = await callBackendApi("/token-refresh", {
 		body: { refresh: refreshToken },
-		meta: {
-			toast: {
-				error: false,
-				success: false,
-			},
-		},
 		method: "POST",
 	});
 
