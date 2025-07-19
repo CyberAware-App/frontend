@@ -4,16 +4,16 @@ import { cnJoin } from "@/lib/utils/cn";
 
 const howItWorks = [
 	{
-		title: "Sign Up",
 		description: "Register with your email and get your welcome guide.",
+		title: "Sign Up",
 	},
 	{
-		title: "Learn Daily",
 		description: "Access one cybersecurity module each day — just 10–15 mins.",
+		title: "Learn Daily",
 	},
 	{
-		title: "Take the Quiz & Get Certified",
 		description: "On Day 10, pass the quiz and download your certificate.",
+		title: "Take the Quiz & Get Certified",
 	},
 ];
 

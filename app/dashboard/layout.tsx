@@ -1,14 +1,16 @@
+import { SidebarRootProvider } from "@/components/ui/sidebar";
 import { BaseLayout } from "../-components";
+import { DashboardSideBar } from "./-components/DashboardSideBar";
 
-// import { SideBar } from "./-components/SideBar";
-
-const layout = ({ children }: { children: React.ReactNode }) => {
+function DashboardLayout({ children }: { children: React.ReactNode }) {
 	return (
-		<BaseLayout className="relative bg-cyberaware-aeces-blue">
-			{/* <SideBar /> */}
-			{children}
+		<BaseLayout className="bg-cyberaware-aeces-blue">
+			<SidebarRootProvider className="w-fit">
+				<DashboardSideBar />
+				{children}
+			</SidebarRootProvider>
 		</BaseLayout>
 	);
-};
+}
 
-export default layout;
+export default DashboardLayout;

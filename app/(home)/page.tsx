@@ -17,43 +17,43 @@ import { HowItWorksLadder } from "./-components";
 
 const reasons = [
 	{
-		title: "Real-World Cyber Protection",
 		description: "Learn to spot phishing, password hacks, and social engineering.",
-		icon: { src: reasonOne, size: tw`max-w-[92px]` },
+		icon: { size: tw`max-w-[92px]`, src: reasonOne },
+		title: "Real-World Cyber Protection",
 	},
 	{
-		title: "10 Easy-to-Digest Modules",
 		description: "Progress through one lesson per day — simple, fast, and practical.",
-		icon: { src: reasonTwo, size: tw`max-w-[70px]` },
+		icon: { size: tw`max-w-[70px]`, src: reasonTwo },
+		title: "10 Easy-to-Digest Modules",
 	},
 	{
-		title: "No Tech Background Needed",
 		description: "We keep it beginner-friendly with relatable examples.",
-		icon: { src: reasonThree, size: tw`max-w-[102px]` },
+		icon: { size: tw`max-w-[102px]`, src: reasonThree },
+		title: "No Tech Background Needed",
 	},
 	{
-		title: "Get Certified",
 		description: "Score 80% on a quiz and earn a shareable digital certificate.",
-		icon: { src: reasonFour, size: tw`max-w-[158px]` },
+		icon: { size: tw`max-w-[158px]`, src: reasonFour },
+		title: "Get Certified",
 	},
 ];
 
 const faqs = [
 	{
-		question: "1. Do I need technical skills to take this course?",
 		answer: "Ans: No. The content is made for everyone.",
+		question: "1. Do I need technical skills to take this course?",
 	},
 	{
-		question: "2. Is it really free?",
 		answer: "Ans: Yes! 100% free for all users.",
+		question: "2. Is it really free?",
 	},
 	{
-		question: "3. What happens if I miss a day?",
 		answer: "You can catch up anytime. You’re in control of your pace.",
+		question: "3. What happens if I miss a day?",
 	},
 	{
-		question: "4. Can I retake the quiz?",
 		answer: "Yes, you have up to 5 attempts to score 80% or above.",
+		question: "4. Can I retake the quiz?",
 	},
 ];
 

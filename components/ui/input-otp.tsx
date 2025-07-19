@@ -7,7 +7,7 @@ import { IconBox } from "../common/IconBox";
 function InputOTPRoot(
 	props: InferProps<typeof OTPInput> & { classNames?: { container?: string; input?: string } }
 ) {
-	const { containerClassName, className, classNames, ...restOfProps } = props;
+	const { className, classNames, containerClassName, ...restOfProps } = props;
 
 	return (
 		<OTPInput
@@ -36,9 +36,9 @@ function InputOTPGroup(props: InferProps<"div">) {
 }
 
 function InputOTPSlot(
-	props: InferProps<"div"> & { index: number; classNames?: { base?: string; isActive?: string } }
+	props: InferProps<"div"> & { classNames?: { base?: string; isActive?: string }; index: number; }
 ) {
-	const { index, className, classNames, ...restOfProps } = props;
+	const { className, classNames, index, ...restOfProps } = props;
 
 	const inputOTPContext = use(OTPInputContext);
 

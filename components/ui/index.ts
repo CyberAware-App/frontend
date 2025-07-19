@@ -1,3 +1,5 @@
+"use client";
+
 export * as Accordion from "./accordion";
 export * as Dialog from "./dialog";
 export * as InputOTP from "./input-otp";

@@ -31,7 +31,7 @@ function TooltipTrigger(props: InferProps<typeof TooltipPrimitive.Trigger>) {
 }
 
 function TooltipContent(props: InferProps<typeof TooltipPrimitive.Content>) {
-	const { className, sideOffset = 0, children, ...restOfProps } = props;
+	const { children, className, sideOffset = 0, ...restOfProps } = props;
 
 	return (
 		<TooltipPrimitive.Portal>

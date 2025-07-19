@@ -6,40 +6,40 @@ import { tv, type VariantProps } from "tailwind-variants";
 import { Slot } from "../common/slot";
 import { SpinnerIcon } from "../icons";
 
-export type ButtonProps = Prettify<
-	{
-		isLoading?: boolean;
-		asChild?: boolean;
-		unstyled?: boolean;
-	} & VariantProps<typeof buttonVariants>
->
-	& InferProps<"button">;
+export type ButtonProps = InferProps<"button">
+	& Prettify<
+		VariantProps<typeof buttonVariants> & {
+			asChild?: boolean;
+			isLoading?: boolean;
+			unstyled?: boolean;
+		}
+	>;
 
 const buttonVariants = tv({
 	base: "flex h-[52px] w-full min-w-fit items-center justify-center p-3.5 text-base font-medium",
 
+	defaultVariants: {
+		theme: "orange",
+	},
+
 	variants: {
-		theme: {
-			orange: "bg-cyberaware-unizik-orange text-white",
-			white: "bg-white text-cyberaware-aeces-blue",
-			"blue-ghost": "border-2 border-cyberaware-aeces-blue bg-transparent",
+		disabled: {
+			true: "cursor-not-allowed bg-cyberaware-neutral-gray-light",
+		},
+
+		isDisabled: {
+			true: "cursor-not-allowed opacity-60",
 		},
 
 		isLoading: {
 			true: "grid",
 		},
 
-		disabled: {
-			true: "cursor-not-allowed bg-cyberaware-neutral-gray-light",
+		theme: {
+			"blue-ghost": "border-2 border-cyberaware-aeces-blue bg-transparent",
+			orange: "bg-cyberaware-unizik-orange text-white",
+			white: "bg-white text-cyberaware-aeces-blue",
 		},
-
-		isDisabled: {
-			true: "",
-		},
-	},
-
-	defaultVariants: {
-		theme: "orange",
 	},
 });
 
@@ -48,15 +48,15 @@ function Button<TElement extends React.ElementType = "button">(
 ) {
 	const {
 		as: Element = "button",
-		disabled,
 		asChild,
-		isLoading = false,
-		isDisabled = disabled,
 		children,
-		unstyled,
 		className,
-		type = "button",
+		disabled,
+		isDisabled = disabled,
+		isLoading = false,
 		theme,
+		type = "button",
+		unstyled,
 		...extraButtonProps
 	} = props;
 
@@ -87,7 +87,12 @@ function Button<TElement extends React.ElementType = "button">(
 
 	// == This technique helps prevents content shift when replacing children with spinner icon
 	return (
-		<Component type={type} className={BTN_CLASSES} disabled={disabled} {...extraButtonProps}>
+		<Component
+			type={type}
+			className={BTN_CLASSES}
+			disabled={disabled ?? isDisabled}
+			{...extraButtonProps}
+		>
 			{isLoading ? withIcon : children}
 		</Component>
 	);
