@@ -36,7 +36,7 @@ function InputOTPGroup(props: InferProps<"div">) {
 }
 
 function InputOTPSlot(
-	props: InferProps<"div"> & { classNames?: { base?: string; isActive?: string }; index: number; }
+	props: InferProps<"div"> & { classNames?: { base?: string; isActive?: string }; index: number }
 ) {
 	const { className, classNames, index, ...restOfProps } = props;
 

@@ -575,11 +575,12 @@ const sidebarMenuButtonVariants = tv({
 });
 
 export function SidebarMenuButton(
-	props: InferProps<"button"> & VariantProps<typeof sidebarMenuButtonVariants> & {
-		asChild?: boolean;
-		isActive?: boolean;
-		tooltip?: string | InferProps<typeof TooltipContent>;
-	}
+	props: InferProps<"button">
+		& VariantProps<typeof sidebarMenuButtonVariants> & {
+			asChild?: boolean;
+			isActive?: boolean;
+			tooltip?: string | InferProps<typeof TooltipContent>;
+		}
 ) {
 	let {
 		asChild = false,
