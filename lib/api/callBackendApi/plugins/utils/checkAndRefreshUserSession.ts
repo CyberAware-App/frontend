@@ -2,10 +2,8 @@ import { isHTTPError } from "@zayne-labs/callapi/utils";
 import { callBackendApi, callBackendApiForQuery } from "../../callBackendApi";
 import { refreshUserSession } from "./refreshUserSession";
 
-const checkUserSession = async () => {
-	const result = await callBackendApi("/check-user-session", {
-		dedupeStrategy: "defer",
-	});
+const checkAndRefreshUserSession = async () => {
+	const result = await callBackendApi("/session", { dedupeStrategy: "defer" });
 
 	if (result.data) {
 		return result.data;
@@ -14,12 +12,10 @@ const checkUserSession = async () => {
 	if (isHTTPError(result.error)) {
 		await refreshUserSession();
 
-		return callBackendApiForQuery("/check-user-session");
+		return callBackendApiForQuery("/session");
 	}
-
-	if (!result.error) return;
 
 	throw result.error.originalError;
 };
 
-export { checkUserSession };
+export { checkAndRefreshUserSession };

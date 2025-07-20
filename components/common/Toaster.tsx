@@ -14,7 +14,7 @@ function SonnerToaster(props: InferProps<typeof Sonner>) {
 			className="toaster group"
 			richColors={true}
 			position="bottom-right"
-			duration={3000}
+			duration={4000}
 			closeButton={true}
 			toastOptions={{
 				classNames: {

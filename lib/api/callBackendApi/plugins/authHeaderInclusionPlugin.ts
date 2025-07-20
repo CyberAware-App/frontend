@@ -5,10 +5,10 @@ import {
 } from "@zayne-labs/callapi";
 import { isHTTPError } from "@zayne-labs/callapi/utils";
 import { hardNavigate } from "@zayne-labs/toolkit-core";
-import type { BaseApiErrorResponse } from "../schema";
+import type { BaseApiErrorResponse } from "../apiSchema";
 import { refreshUserSession } from "./utils/refreshUserSession";
 
-const routesExemptedFromAuthHeader = new Set(["/login", "/register", "/token-refresh"]);
+const routesExemptedFromAuthHeaderInclusion = new Set(["/signin", "/signup"]);
 
 export type AuthHeaderInclusionPluginMeta = {
 	authTokenToAdd?: "accessToken" | "refreshToken";
@@ -17,16 +17,15 @@ export type AuthHeaderInclusionPluginMeta = {
 };
 
 export const authHeaderInclusionPlugin = definePlugin(() => ({
-	/* eslint-disable perfectionist/sort-objects */
 	id: "auth-header-inclusion",
 	name: "authHeaderInclusionPlugin",
 
+	/* eslint-disable perfectionist/sort-objects */
 	hooks: {
 		/* eslint-enable perfectionist/sort-objects */
-
 		onRequest: (ctx) => {
 			const shouldSkipAuthHeaderAddition =
-				routesExemptedFromAuthHeader.has(window.location.pathname)
+				routesExemptedFromAuthHeaderInclusion.has(window.location.pathname)
 				|| ctx.options.meta?.skipAuthHeaderAddition;
 
 			if (shouldSkipAuthHeaderAddition) return;
@@ -36,7 +35,7 @@ export const authHeaderInclusionPlugin = definePlugin(() => ({
 			if (!refreshToken) {
 				const message = "Session is missing! Redirecting to login...";
 
-				setTimeout(() => hardNavigate("/login"), 2100);
+				setTimeout(() => hardNavigate("/signin"), 2100);
 
 				throw new Error(message);
 			}
@@ -61,12 +60,12 @@ export const authHeaderInclusionPlugin = definePlugin(() => ({
 			}
 		},
 
-		// == Method 2: Only call refreshUserSession on auth token related errors, and remake the request
+		// NOTE: Only call refreshUserSession on auth token related errors, and remake the request
 		onResponseError: async (ctx: ResponseErrorContext<BaseApiErrorResponse>) => {
 			if (
 				ctx.response.status === 401
 				&& isAuthTokenRelatedError(ctx.error)
-				&& !ctx.options.fullURL?.endsWith("/check-user-session")
+				&& ctx.options.initURLNormalized === "/session"
 			) {
 				await refreshUserSession();
 

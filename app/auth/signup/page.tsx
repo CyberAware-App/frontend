@@ -1,15 +1,18 @@
 "use client";
 
 import { zodResolver } from "@hookform/resolvers/zod";
+import { useQueryClient } from "@tanstack/react-query";
+import { pickKeys } from "@zayne-labs/toolkit-core";
 import { Form } from "@zayne-labs/ui-react/ui/form";
 import { useRouter } from "next/navigation";
 import { useForm } from "react-hook-form";
 import { Main } from "@/app/-components";
 import { NavLink } from "@/components/common/NavLink";
 import { Button } from "@/components/ui/button";
-import { apiSchema, callBackendApi } from "@/lib/api/callBackendApi";
+import { backendApiSchema, callBackendApi } from "@/lib/api/callBackendApi";
+import { sessionQuery } from "@/lib/api/queryOptions/queryOptions";
 
-const SignupSchema = apiSchema.routes["/register"].body;
+const SignupSchema = backendApiSchema.routes["/register"].body;
 
 function SignupPage() {
 	const form = useForm({
@@ -25,25 +28,7 @@ function SignupPage() {
 
 	const router = useRouter();
 
-	const onSubmit = form.handleSubmit(async (data) => {
-		await callBackendApi("/register", {
-			body: data,
-
-			method: "POST",
-
-			onSuccess: (ctx) => {
-				localStorage.setItem("accessToken", ctx.data.data.access);
-				localStorage.setItem("refreshToken", ctx.data.data.refresh);
-
-				// queryClient.setQueryData(sessionQuery().queryKey, {
-				// 	...ctx.data,
-				// 	data: omitKeys(ctx.data.data, ["access", "refresh"]),
-				// });
-
-				router.push("/verify-account");
-			},
-		});
-	});
+	const queryClient = useQueryClient();
 
 	return (
 		<Main className="gap-13 px-4 pb-[158px]">
@@ -61,7 +46,38 @@ function SignupPage() {
 			</header>
 
 			<section>
-				<Form.Root methods={form} className="gap-6" onSubmit={(event) => void onSubmit(event)}>
+				<Form.Root
+					methods={form}
+					className="gap-6"
+					onSubmit={(event) =>
+						void form.handleSubmit(async (data) => {
+							await callBackendApi("/register", {
+								body: data,
+								method: "POST",
+
+								onResponseError: (ctx) => {
+									for (const [key, value] of Object.entries(ctx.error.errorData.errors)) {
+										form.setError(key as never, { message: value });
+									}
+								},
+
+								onSuccess: (ctx) => {
+									localStorage.setItem("email", data.email);
+
+									queryClient.setQueryData(sessionQuery().queryKey, (oldData) => ({
+										...(oldData as NonNullable<typeof oldData>),
+										data: {
+											...(oldData?.data as NonNullable<typeof oldData>["data"]),
+											...pickKeys(ctx.data.data, ["email", "first_name", "last_name"]),
+										},
+									}));
+
+									router.push("/auth/verify-account");
+								},
+							});
+						})(event)
+					}
+				>
 					<Form.Field control={form.control} name="first_name">
 						<Form.Label className="text-white">First name</Form.Label>
 						<Form.Input
