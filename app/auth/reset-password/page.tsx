@@ -52,13 +52,17 @@ function ResetPasswordPage() {
 	return (
 		<Main className="gap-13 px-4 pb-[158px]">
 			<header className="flex flex-col gap-5">
-				<h1 className="text-[36px] font-bold text-white">Forgot Password</h1>
-				<p className="text-[14px] text-white">Enter your email to reset your password</p>
+				<h1 className="text-[36px] font-bold text-white">Reset Password</h1>
+				<p className="text-[14px] text-white">
+					Enter the 6-digit code sent to {email} and your new password.
+				</p>
 			</header>
 
 			<section>
 				<Form.Root methods={form} className="gap-6" onSubmit={(event) => void onSubmit(event)}>
 					<Form.Field control={form.control} name="code">
+						<Form.Label className="text-white">Code</Form.Label>
+
 						<Form.FieldController
 							render={({ field }) => (
 								<InputOTP.Root
@@ -87,8 +91,9 @@ function ResetPasswordPage() {
 						<Form.ErrorMessage />
 					</Form.Field>
 
-					<Form.Field control={form.control} name="new_password">
+					<Form.Field control={form.control} name="new_password" className="mt-6">
 						<Form.Label className="text-white">New Password</Form.Label>
+
 						<Form.Input
 							placeholder="Enter new password"
 							className="h-[64px] border-2 border-cyberaware-neutral-gray-light px-8 text-base
