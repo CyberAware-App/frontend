@@ -1,5 +1,5 @@
 import { queryOptions } from "@tanstack/react-query";
-import { callBackendApiForQuery } from "../callBackendApi";
+import { callBackendApiForQuery } from "./callBackendApi";
 
 export const sessionQuery = () => {
 	return queryOptions({

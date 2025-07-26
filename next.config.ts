@@ -10,6 +10,7 @@ const nextConfig: NextConfig = {
 	},
 
 	experimental: {
+		devtoolNewPanelUI: true,
 		devtoolSegmentExplorer: true,
 	},
 

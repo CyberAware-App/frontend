@@ -1,26 +1,53 @@
 "use client";
 
+import { useRouter } from "@bprogress/next";
 import { zodResolver } from "@hookform/resolvers/zod";
+import { useQueryClient } from "@tanstack/react-query";
+import { useStorageState } from "@zayne-labs/toolkit-react";
 import { Form } from "@zayne-labs/ui-react/ui/form";
+import { REGEXP_ONLY_DIGITS } from "input-otp";
 import { useForm } from "react-hook-form";
-import { z } from "zod";
 import { Main } from "@/app/-components";
+import { For } from "@/components/common/for";
+import { InputOTP } from "@/components/ui";
 import { Button } from "@/components/ui/button";
+import { backendApiSchema, callBackendApi } from "@/lib/api/callBackendApi";
+import { sessionQuery } from "@/lib/api/queryOptions";
 
-const ForgotPasswordSchema = z.object({
-	email: z.email("Invalid email address"),
-});
+const ResetPasswordSchema = backendApiSchema.routes["/reset-password"].body.omit({ email: true });
 
-function ForgotPasswordPage() {
+function ResetPasswordPage() {
 	const form = useForm({
 		defaultValues: {
-			email: "",
+			code: "",
+			new_password: "",
 		},
 		mode: "onTouched",
-		resolver: zodResolver(ForgotPasswordSchema),
+		resolver: zodResolver(ResetPasswordSchema),
 	});
 
-	const onSubmit = form.handleSubmit((data) => console.info({ data }));
+	const queryClient = useQueryClient();
+
+	const sessionQueryResult = queryClient.getQueryData(sessionQuery().queryKey);
+
+	const [email] = useStorageState("email", sessionQueryResult?.data.email);
+
+	const router = useRouter();
+
+	const onSubmit = form.handleSubmit(async (data) => {
+		await callBackendApi("/reset-password", {
+			body: { ...data, email },
+			method: "POST",
+
+			onResponseError: (ctx) => {
+				form.setError("code", { message: ctx.error.message });
+			},
+
+			onSuccess: () => {
+				router.push("/dashboard");
+			},
+		});
+	});
 
 	return (
 		<Main className="gap-13 px-4 pb-[158px]">
@@ -31,10 +58,39 @@ function ForgotPasswordPage() {
 
 			<section>
 				<Form.Root methods={form} className="gap-6" onSubmit={(event) => void onSubmit(event)}>
-					<Form.Field control={form.control} name="email">
-						<Form.Label className="text-white">Email address</Form.Label>
+					<Form.Field control={form.control} name="code">
+						<Form.FieldController
+							render={({ field }) => (
+								<InputOTP.Root
+									pattern={REGEXP_ONLY_DIGITS}
+									maxLength={6}
+									autoFocus={true}
+									value={field.value}
+									onChange={field.onChange}
+								>
+									<InputOTP.Group className="w-full justify-between gap-4 text-white">
+										<For
+											each={6}
+											render={(item) => (
+												<InputOTP.Slot
+													key={item}
+													index={item}
+													classNames={{ base: "size-11 border-2 border-white" }}
+												/>
+											)}
+										/>
+									</InputOTP.Group>
+								</InputOTP.Root>
+							)}
+						/>
+
+						<Form.ErrorMessage />
+					</Form.Field>
+
+					<Form.Field control={form.control} name="new_password">
+						<Form.Label className="text-white">New Password</Form.Label>
 						<Form.Input
-							placeholder="Enter email address"
+							placeholder="Enter new password"
 							className="h-[64px] border-2 border-cyberaware-neutral-gray-light px-8 text-base
 								text-white placeholder:text-white/50 data-invalid:border-red-600"
 						/>
@@ -51,4 +107,4 @@ function ForgotPasswordPage() {
 	);
 }
 
-export default ForgotPasswordPage;
+export default ResetPasswordPage;

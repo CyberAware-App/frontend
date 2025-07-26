@@ -22,15 +22,8 @@ const buttonVariants = tv({
 		theme: "orange",
 	},
 
+	/* eslint-disable perfectionist/sort-objects */
 	variants: {
-		disabled: {
-			true: "cursor-not-allowed bg-cyberaware-neutral-gray-light",
-		},
-
-		isDisabled: {
-			true: "cursor-not-allowed opacity-60",
-		},
-
 		isLoading: {
 			true: "grid",
 		},
@@ -40,7 +33,16 @@ const buttonVariants = tv({
 			orange: "bg-cyberaware-unizik-orange text-white",
 			white: "bg-white text-cyberaware-aeces-blue",
 		},
+
+		disabled: {
+			true: "cursor-not-allowed bg-cyberaware-neutral-gray-light",
+		},
+
+		isDisabled: {
+			true: "cursor-not-allowed opacity-60",
+		},
 	},
+	/* eslint-enable perfectionist/sort-objects */
 });
 
 function Button<TElement extends React.ElementType = "button">(
