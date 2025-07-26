@@ -1,16 +1,16 @@
 "use client";
 
+import { useRouter } from "@bprogress/next";
 import { zodResolver } from "@hookform/resolvers/zod";
 import { useQueryClient } from "@tanstack/react-query";
 import { pickKeys } from "@zayne-labs/toolkit-core";
 import { Form } from "@zayne-labs/ui-react/ui/form";
-import { useRouter } from "next/navigation";
 import { useForm } from "react-hook-form";
 import { Main } from "@/app/-components";
 import { NavLink } from "@/components/common/NavLink";
 import { Button } from "@/components/ui/button";
 import { backendApiSchema, callBackendApi } from "@/lib/api/callBackendApi";
-import { sessionQuery } from "@/lib/api/queryOptions/queryOptions";
+import { sessionQuery } from "@/lib/api/queryOptions";
 
 const SignupSchema = backendApiSchema.routes["/register"].body;
 

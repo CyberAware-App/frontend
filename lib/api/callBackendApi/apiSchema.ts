@@ -34,12 +34,21 @@ const withBaseErrorResponse = <
 		errors: (errorSchema ?? BaseErrorResponseSchema.shape.errors) as NonNullable<TSchemaObject>,
 	});
 
+const CodeSchema = z.string().min(6, "Invalid code").regex(new RegExp(REGEXP_ONLY_DIGITS), "Invalid code");
+
 export const backendApiSchema = defineSchema(
 	{
+		"/forgot-password": {
+			body: z.object({ email: z.email() }),
+			data: withBaseSuccessResponse(z.object({ email: z.string(), otp_resent: z.boolean() })),
+			errorData: withBaseErrorResponse(z.null()),
+			method: z.literal("POST"),
+		},
+
 		"/login": {
 			body: z.object({
-				email: z.email("Invalid email address"),
-				password: z.string().min(8, "Password must be at least 8 characters long"),
+				email: z.email(),
+				password: z.string(),
 			}),
 			data: withBaseSuccessResponse(
 				z.object({ access: z.jwt(), email: z.string(), first_login: z.boolean(), refresh: z.jwt() })
@@ -50,7 +59,7 @@ export const backendApiSchema = defineSchema(
 
 		"/register": {
 			body: z.object({
-				email: z.email("Invalid email address"),
+				email: z.email(),
 				first_name: z.string().min(3, "First name must be at least 3 characters long"),
 				last_name: z.string().min(3, "Last name must be at least 3 characters long"),
 				password: z.string().min(8, "Password must be at least 8 characters long"),
@@ -83,6 +92,17 @@ export const backendApiSchema = defineSchema(
 			method: z.literal("POST"),
 		},
 
+		"/reset-password": {
+			body: z.object({
+				code: CodeSchema,
+				email: z.email(),
+				new_password: z.string().min(8, "Password must be at least 8 characters long"),
+			}),
+			data: withBaseSuccessResponse(z.object({ email: z.string(), otp_resent: z.boolean() })),
+			errorData: withBaseErrorResponse(z.null()),
+			method: z.literal("POST"),
+		},
+
 		"/session": {
 			data: withBaseSuccessResponse(
 				z.object({
@@ -105,7 +125,7 @@ export const backendApiSchema = defineSchema(
 
 		"/verify-otp": {
 			body: z.object({
-				code: z.string().min(6, "Invalid code").regex(new RegExp(REGEXP_ONLY_DIGITS), "Invalid code"),
+				code: CodeSchema,
 				email: z.email(),
 			}),
 			data: withBaseSuccessResponse(

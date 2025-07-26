@@ -1,11 +1,11 @@
-import { createFetchClient } from "@zayne-labs/callapi";
+import { createFetchClient, defineBaseConfig } from "@zayne-labs/callapi";
+import { backendApiSchema } from "./apiSchema";
 import {
 	type AuthHeaderInclusionPluginMeta,
 	isAuthTokenRelatedError,
 	type ToastPluginMeta,
 	toastPlugin,
 } from "./plugins";
-import { backendApiSchema } from "./apiSchema";
 
 type GlobalMeta = AuthHeaderInclusionPluginMeta & ToastPluginMeta;
 
@@ -16,11 +16,14 @@ declare module "@zayne-labs/callapi" {
 	}
 }
 
-const BACKEND_HOST = "https://cyberaware-api-mx7u.onrender.com";
+const BACKEND_HOST =
+	process.env.NODE_ENV === "development" ?
+		"http://127.0.0.1:8000"
+	:	"https://cyberaware-api-mx7u.onrender.com";
 
 const BASE_API_URL = `${BACKEND_HOST}/api`;
 
-const sharedBaseCallApiConfig = ((instanceCtx) => ({
+const sharedBaseCallApiConfig = defineBaseConfig((instanceCtx) => ({
 	baseURL: BASE_API_URL,
 	dedupeCacheScope: "global",
 	dedupeCacheScopeKey: BASE_API_URL,
@@ -34,10 +37,7 @@ const sharedBaseCallApiConfig = ((instanceCtx) => ({
 	meta: {
 		...instanceCtx.options.meta,
 		toast: {
-			endpointsToSkip: {
-				errorAndSuccess: ["/token-refresh"],
-				success: ["/session"],
-			},
+			endpointsToSkip: { errorAndSuccess: ["/token-refresh"], success: ["/session"] },
 			error: true,
 			errorsToSkip: ["AbortError"],
 			errorsToSkipCondition: (error) => isAuthTokenRelatedError(error),
@@ -45,7 +45,7 @@ const sharedBaseCallApiConfig = ((instanceCtx) => ({
 			...instanceCtx.options.meta?.toast,
 		},
 	},
-})) satisfies Parameters<typeof createFetchClient>[0];
+}));
 
 export const callBackendApi = createFetchClient(sharedBaseCallApiConfig);
 
