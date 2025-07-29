@@ -12,11 +12,11 @@ import { useForm } from "react-hook-form";
 import { Main } from "@/app/-components";
 import { InputOTP } from "@/components/ui";
 import { Button } from "@/components/ui/button";
-import { backendApiSchema, callBackendApi } from "@/lib/api/callBackendApi";
+import { apiSchema, callBackendApi } from "@/lib/api/callBackendApi";
 import { sessionQuery } from "@/lib/api/queryOptions";
 import { resendOtp } from "./utils";
 
-const VerifyAccountSchema = backendApiSchema.routes["/verify-otp"].body.pick({ code: true });
+const VerifyAccountSchema = apiSchema.routes["/verify-otp"].body.pick({ code: true });
 
 function VerifyAccountPage() {
 	const form = useForm({
@@ -37,7 +37,10 @@ function VerifyAccountPage() {
 
 	const onSubmit = form.handleSubmit(async (data) => {
 		await callBackendApi("/verify-otp", {
-			body: { code: data.code, email },
+			body: {
+				code: data.code,
+				email,
+			},
 
 			method: "POST",
 

@@ -22,13 +22,13 @@ const buttonVariants = tv({
 		theme: "orange",
 	},
 
-	/* eslint-disable perfectionist/sort-objects */
 	variants: {
 		isLoading: {
 			true: "grid",
 		},
 
 		theme: {
+			"blue-light": "bg-cyberaware-aeces-blue-light text-white",
 			"blue-ghost": "border-2 border-cyberaware-aeces-blue bg-transparent",
 			orange: "bg-cyberaware-unizik-orange text-white",
 			white: "bg-white text-cyberaware-aeces-blue",
@@ -42,7 +42,6 @@ const buttonVariants = tv({
 			true: "cursor-not-allowed opacity-60",
 		},
 	},
-	/* eslint-enable perfectionist/sort-objects */
 });
 
 function Button<TElement extends React.ElementType = "button">(

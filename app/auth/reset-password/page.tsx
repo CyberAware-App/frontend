@@ -11,10 +11,10 @@ import { Main } from "@/app/-components";
 import { For } from "@/components/common/for";
 import { InputOTP } from "@/components/ui";
 import { Button } from "@/components/ui/button";
-import { backendApiSchema, callBackendApi } from "@/lib/api/callBackendApi";
+import { apiSchema, callBackendApi } from "@/lib/api/callBackendApi";
 import { sessionQuery } from "@/lib/api/queryOptions";
 
-const ResetPasswordSchema = backendApiSchema.routes["/reset-password"].body.omit({ email: true });
+const ResetPasswordSchema = apiSchema.routes["/reset-password"].body.omit({ email: true });
 
 function ResetPasswordPage() {
 	const form = useForm({

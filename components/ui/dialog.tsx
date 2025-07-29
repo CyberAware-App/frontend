@@ -13,13 +13,13 @@ import { cnMerge } from "@/lib/utils/cn";
 import { IconBox } from "../common/IconBox";
 
 type ContextValue = {
+	isOpen: boolean;
 	onClose: () => void;
 	onOpen: () => void;
-	open: boolean;
 	setOpen: (open: boolean) => void;
 };
 
-const [DialogContextProvider, useDialogStateContext] = createCustomContext<ContextValue>();
+const [DialogContextProvider, useDialogContext] = createCustomContext<ContextValue>();
 
 function DialogRoot(props: InferProps<typeof DialogPrimitive.Root>) {
 	// eslint-disable-next-line ts-eslint/unbound-method
@@ -31,11 +31,11 @@ function DialogRoot(props: InferProps<typeof DialogPrimitive.Root>) {
 
 	// == Use the open prop if it is provided
 	// == Otherwise, use the internal open state
-	const open = openProp ?? internalOpen;
+	const isOpen = openProp ?? internalOpen;
 
 	const setOpen = useCallback(
 		(value: boolean | ((value: boolean) => boolean)) => {
-			const resolvedValue = isFunction(value) ? value(open) : value;
+			const resolvedValue = isFunction(value) ? value(isOpen) : value;
 
 			// == Call the onOpenChange prop if the openProp is provided
 			// == Otherwise, toggle the internal open state
@@ -43,15 +43,15 @@ function DialogRoot(props: InferProps<typeof DialogPrimitive.Root>) {
 
 			selectedOpenChange(resolvedValue);
 		},
-		[open, openProp, savedSetOpenProp, toggleInternalOpen]
+		[isOpen, openProp, savedSetOpenProp, toggleInternalOpen]
 	);
 
 	const onClose = useCallbackRef(() => setOpen(false));
 	const onOpen = useCallbackRef(() => setOpen(true));
 
 	const contextValue = useMemo(
-		() => ({ onClose, onOpen, open, setOpen }) satisfies ContextValue,
-		[onClose, onOpen, open, setOpen]
+		() => ({ isOpen, onClose, onOpen, setOpen }) satisfies ContextValue,
+		[onClose, onOpen, isOpen, setOpen]
 	);
 
 	return (
@@ -59,7 +59,7 @@ function DialogRoot(props: InferProps<typeof DialogPrimitive.Root>) {
 			<DialogPrimitive.Root
 				{...restOfProps}
 				data-slot="dialog-root"
-				open={open}
+				open={isOpen}
 				onOpenChange={setOpen}
 			/>
 		</DialogContextProvider>
@@ -70,7 +70,7 @@ type RenderFn = (props: ContextValue) => React.ReactNode;
 
 function DialogContext(props: DiscriminatedRenderProps<RenderFn>) {
 	const { children, render } = props;
-	const dialogCtx = useDialogStateContext();
+	const dialogCtx = useDialogContext();
 
 	if (typeof children === "function") {
 		return children(dialogCtx);
@@ -178,7 +178,7 @@ function DialogTitle(props: InferProps<typeof DialogPrimitive.Title>) {
 
 function DialogTrigger(props: InferProps<typeof DialogPrimitive.Trigger>) {
 	const { onClick, ...restOfProps } = props;
-	const { onOpen } = useDialogStateContext();
+	const { onOpen } = useDialogContext();
 
 	return (
 		<DialogPrimitive.Trigger
@@ -224,4 +224,4 @@ export const Title = DialogTitle;
 export const Trigger = DialogTrigger;
 
 // eslint-disable-next-line react-refresh/only-export-components
-export { useDialogStateContext };
+export { useDialogContext };

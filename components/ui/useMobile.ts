@@ -1,9 +1,19 @@
 import { useEffect, useState } from "react";
 
-const useIsMobile = (mobileBreakpoint = 768) => {
+const useIsMobile = ({
+	mobileBreakpoint = 768,
+	enable = true,
+}: {
+	mobileBreakpoint?: number;
+	enable?: boolean;
+} = {}) => {
 	const [isMobile, setIsMobile] = useState<boolean | undefined>();
 
 	useEffect(() => {
+		if (!enable) {
+			return;
+		}
+
 		const mql = window.matchMedia(`(max-width: ${mobileBreakpoint - 1}px)`);
 
 		const abortController = new AbortController();
@@ -16,7 +26,7 @@ const useIsMobile = (mobileBreakpoint = 768) => {
 		setIsMobile(window.innerWidth < mobileBreakpoint);
 
 		return () => abortController.abort();
-	}, [mobileBreakpoint]);
+	}, [mobileBreakpoint, enable]);
 
 	return Boolean(isMobile);
 };

@@ -10,4 +10,8 @@ export default zayne({
 		query: true,
 	},
 	typescript: true,
+}).overrides({
+	"zayne/perfectionist/rules": {
+		files: ["./lib/api/callBackendApi/**.ts"],
+	},
 });

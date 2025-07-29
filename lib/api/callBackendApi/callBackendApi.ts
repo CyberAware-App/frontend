@@ -1,5 +1,5 @@
-import { createFetchClient, defineBaseConfig } from "@zayne-labs/callapi";
-import { backendApiSchema } from "./apiSchema";
+import { callApi, createFetchClient, defineBaseConfig } from "@zayne-labs/callapi";
+import { apiSchema } from "./apiSchema";
 import {
 	type AuthHeaderInclusionPluginMeta,
 	isAuthTokenRelatedError,
@@ -27,8 +27,9 @@ const sharedBaseCallApiConfig = defineBaseConfig((instanceCtx) => ({
 	baseURL: BASE_API_URL,
 	dedupeCacheScope: "global",
 	dedupeCacheScopeKey: BASE_API_URL,
+
 	plugins: [toastPlugin()],
-	schema: backendApiSchema,
+	schema: apiSchema,
 
 	skipAutoMergeFor: "options",
 
@@ -37,7 +38,10 @@ const sharedBaseCallApiConfig = defineBaseConfig((instanceCtx) => ({
 	meta: {
 		...instanceCtx.options.meta,
 		toast: {
-			endpointsToSkip: { errorAndSuccess: ["/token-refresh"], success: ["/session"] },
+			endpointsToSkip: {
+				errorAndSuccess: ["/token-refresh"],
+				success: ["/session"],
+			},
 			error: true,
 			errorsToSkip: ["AbortError"],
 			errorsToSkipCondition: (error) => isAuthTokenRelatedError(error),
@@ -54,3 +58,5 @@ export const callBackendApiForQuery = createFetchClient((instanceCtx) => ({
 	resultMode: "onlySuccessWithException",
 	throwOnError: true,
 }));
+
+void callApi("@delete/user/:id");

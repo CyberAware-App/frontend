@@ -9,11 +9,11 @@ import { useForm } from "react-hook-form";
 import { Main } from "@/app/-components";
 import { NavLink } from "@/components/common/NavLink";
 import { Button } from "@/components/ui/button";
-import { backendApiSchema, callBackendApi } from "@/lib/api/callBackendApi";
+import { apiSchema, callBackendApi } from "@/lib/api/callBackendApi";
 import { sessionQuery } from "@/lib/api/queryOptions";
 import { resendOtp } from "../verify-account/utils";
 
-const SigninSchema = backendApiSchema.routes["/login"].body;
+const SigninSchema = apiSchema.routes["/login"].body;
 
 function SigninPage() {
 	const form = useForm({

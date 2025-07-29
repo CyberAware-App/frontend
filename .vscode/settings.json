@@ -12,7 +12,7 @@
 	// Optional
 	"editor.codeActionsOnSave": {
 		"source.addMissingImports": "never",
-		"source.fixAll.eslint": "explicit",
+		// "source.fixAll.eslint": "explicit",
 		"source.organizeImports.biome": "explicit"
 	},
 	"cSpell.words": ["aeces", "bprogress", "cyberaware", "unizik"]

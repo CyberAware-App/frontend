@@ -29,9 +29,7 @@ export const toastPlugin = definePlugin(() => ({
 	id: "toast-plugin",
 	name: "toastPlugin",
 
-	/* eslint-disable perfectionist/sort-objects */
 	hooks: {
-		/* eslint-enable perfectionist/sort-objects */
 		onError: (ctx: ErrorContext<BaseApiErrorResponse>) => {
 			const toastMeta = ctx.options.meta?.toast;
 

@@ -36,7 +36,7 @@ const withBaseErrorResponse = <
 
 const CodeSchema = z.string().min(6, "Invalid code").regex(new RegExp(REGEXP_ONLY_DIGITS), "Invalid code");
 
-export const backendApiSchema = defineSchema(
+export const apiSchema = defineSchema(
 	{
 		"/forgot-password": {
 			body: z.object({ email: z.email() }),
