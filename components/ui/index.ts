@@ -1,6 +1,7 @@
 "use client";
 
 export * as Accordion from "./accordion";
+export * as CollapsibleAnimated from "./collapsible-animated";
 export * as Dialog from "./dialog";
 export * as InputOTP from "./input-otp";
 export * as Select from "./select";

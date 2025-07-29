@@ -20,9 +20,7 @@ export const authHeaderInclusionPlugin = definePlugin(() => ({
 	id: "auth-header-inclusion",
 	name: "authHeaderInclusionPlugin",
 
-	/* eslint-disable perfectionist/sort-objects */
 	hooks: {
-		/* eslint-enable perfectionist/sort-objects */
 		onRequest: (ctx) => {
 			const shouldSkipAuthHeaderAddition =
 				routesExemptedFromAuthHeaderInclusion.has(window.location.pathname)

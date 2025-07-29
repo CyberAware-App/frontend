@@ -8,10 +8,10 @@ import { useForm } from "react-hook-form";
 import { Main } from "@/app/-components";
 import { Button } from "@/components/ui/button";
 import { callBackendApi } from "@/lib/api/callBackendApi";
-import { backendApiSchema } from "@/lib/api/callBackendApi/apiSchema";
+import { apiSchema } from "@/lib/api/callBackendApi/apiSchema";
 import { sessionQuery } from "@/lib/api/queryOptions";
 
-const ForgotPasswordSchema = backendApiSchema.routes["/forgot-password"].body.pick({ email: true });
+const ForgotPasswordSchema = apiSchema.routes["/forgot-password"].body.pick({ email: true });
 
 function ForgotPasswordPage() {
 	const form = useForm({

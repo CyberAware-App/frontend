@@ -18,7 +18,8 @@ const makeQueryClient = () => {
 	});
 };
 
-const getQueryClient = cache(() => makeQueryClient());
+// eslint-disable-next-line react-refresh/only-export-components
+export const getQueryClient = cache(() => makeQueryClient());
 
 type ProvidersProps = {
 	children: React.ReactNode;

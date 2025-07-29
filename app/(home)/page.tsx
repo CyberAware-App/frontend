@@ -70,8 +70,8 @@ function HomePage() {
 				</h1>
 
 				<p className="text-center text-[16px] text-cyberaware-body-color">
-					Learn how to protect your digital world in just 10 days. Designed for lecturers, staff, and
-					students.
+					Learn how to protect your digital world within just 10 modules. Designed for lecturers,
+					staff, and students.
 				</p>
 
 				<div className="flex items-center justify-center gap-3.5">

@@ -9,10 +9,10 @@ import { useForm } from "react-hook-form";
 import { Main } from "@/app/-components";
 import { NavLink } from "@/components/common/NavLink";
 import { Button } from "@/components/ui/button";
-import { backendApiSchema, callBackendApi } from "@/lib/api/callBackendApi";
+import { apiSchema, callBackendApi } from "@/lib/api/callBackendApi";
 import { sessionQuery } from "@/lib/api/queryOptions";
 
-const SignupSchema = backendApiSchema.routes["/register"].body;
+const SignupSchema = apiSchema.routes["/register"].body;
 
 function SignupPage() {
 	const form = useForm({

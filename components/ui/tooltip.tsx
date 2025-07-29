@@ -4,13 +4,13 @@ import type { InferProps } from "@zayne-labs/toolkit-react/utils";
 import { Tooltip as TooltipPrimitive } from "radix-ui";
 import { cnMerge } from "@/lib/utils/cn";
 
-function TooltipRootProvider(props: InferProps<typeof TooltipPrimitive.Provider>) {
+function TooltipContextProvider(props: InferProps<typeof TooltipPrimitive.Provider>) {
 	const { delayDuration = 0, ...restOfProps } = props;
 
-	const TooltipPrimitiveRootProvider = TooltipPrimitive.Provider;
+	const TooltipPrimitiveContextProvider = TooltipPrimitive.Provider;
 
 	return (
-		<TooltipPrimitiveRootProvider
+		<TooltipPrimitiveContextProvider
 			data-slot="tooltip-provider"
 			delayDuration={delayDuration}
 			{...restOfProps}
@@ -20,9 +20,9 @@ function TooltipRootProvider(props: InferProps<typeof TooltipPrimitive.Provider>
 
 function TooltipRoot(props: InferProps<typeof TooltipPrimitive.Root>) {
 	return (
-		<TooltipRootProvider>
+		<TooltipContextProvider>
 			<TooltipPrimitive.Root data-slot="tooltip" {...props} />
-		</TooltipRootProvider>
+		</TooltipContextProvider>
 	);
 }
 
@@ -62,4 +62,4 @@ function TooltipContent(props: InferProps<typeof TooltipPrimitive.Content>) {
 export const Root = TooltipRoot;
 export const Trigger = TooltipTrigger;
 export const Content = TooltipContent;
-export const RootProvider = TooltipRootProvider;
+export const ContextProvider = TooltipContextProvider;

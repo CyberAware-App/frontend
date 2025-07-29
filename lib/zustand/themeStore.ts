@@ -27,7 +27,6 @@ const themeStoreObjectFn: StateCreator<ThemeStore> = (set, get) => ({
 
 	theme: "system",
 
-	// eslint-disable-next-line perfectionist/sort-objects
 	actions: {
 		initThemeOnLoad: () => {
 			const { systemTheme, theme: persistedTheme } = get();
