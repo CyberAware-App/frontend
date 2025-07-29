@@ -142,6 +142,7 @@ This project is developed by students for educational purposes. For contribution
 
 ## 📄 License
 
+
 This project is developed as part of an academic initiative by AECES 2025 Set - Computer Option.
 
 ---
