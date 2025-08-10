@@ -19,8 +19,8 @@ CyberAware is an educational platform that makes cybersecurity accessible to eve
 ## 🏗️ Architecture & Tech Stack
 
 ### Frontend Framework
-- **Next.js 15.4.1** - React framework with App Router
-- **React 19.1.0** - Latest React with concurrent features
+- **Next.js 15.4.6** - React framework with App Router
+- **React 19.1.1** - Latest React with concurrent features
 - **TypeScript** - Type-safe development
 
 ### Styling & UI
@@ -29,35 +29,43 @@ CyberAware is an educational platform that makes cybersecurity accessible to eve
 - **Responsive Design** - Mobile-first approach
 
 ### State Management & Data Fetching
-- **Zustand** - Lightweight state management
+- **Zustand** - Lightweight state management with theme persistence
 - **TanStack Query** - Server state management and caching
 - **React Hook Form** - Form handling with validation
+- **@zayne-labs/callapi** - Type-safe API client with schema validation and plugin architecture
 
 ### Development Tools
 - **ESLint** - Code linting with custom configuration
 - **Prettier** - Code formatting
 - **Husky** - Git hooks for code quality
 - **TypeScript** - Static type checking
+- **Zod** - Runtime schema validation for API responses
 
 ## 📁 Project Structure
 
 ```
 ├── app/                          # Next.js App Router
 │   ├── (home)/                   # Landing page route group
+│   ├── (protected)/              # Protected routes requiring authentication
+│   │   └── dashboard/            # User dashboard
 │   ├── auth/                     # Authentication pages
 │   │   ├── signin/               # User login
 │   │   ├── signup/               # User registration
+│   │   ├── forgot-password/      # Password recovery
 │   │   ├── reset-password/       # Password reset
 │   │   └── verify-account/       # Account verification
-│   ├── dashboard/                # User dashboard
 │   ├── -components/              # Shared app components
 │   ├── layout.tsx                # Root layout
 │   └── Providers.tsx             # App providers setup
 ├── components/                   # Reusable UI components
-│   ├── common/                   # Common utilities
+│   ├── common/                   # Common utilities & toast notifications
 │   ├── icons/                    # Icon components
 │   └── ui/                       # UI component library
 ├── lib/                          # Utility functions
+│   ├── api/                      # Backend API integration
+│   ├── react-query/              # Query client and options
+│   ├── utils/                    # Utility functions
+│   └── zustand/                  # State management stores
 ├── public/                       # Static assets
 └── tailwind.css                  # Global styles
 ```
