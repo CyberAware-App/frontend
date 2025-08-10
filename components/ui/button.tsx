@@ -3,6 +3,7 @@
 import type { InferProps, PolymorphicProps } from "@zayne-labs/toolkit-react/utils";
 import type { Prettify } from "@zayne-labs/toolkit-type-helpers";
 import { tv, type VariantProps } from "tailwind-variants";
+import { cnMerge } from "@/lib/utils/cn";
 import { Slot } from "../common/slot";
 import { SpinnerIcon } from "../icons";
 
@@ -66,7 +67,6 @@ function Button<TElement extends React.ElementType = "button">(
 	const BTN_CLASSES =
 		!unstyled ?
 			buttonVariants({
-				className,
 				disabled,
 				isDisabled,
 				isLoading,
@@ -90,7 +90,7 @@ function Button<TElement extends React.ElementType = "button">(
 	return (
 		<Component
 			type={type}
-			className={BTN_CLASSES}
+			className={cnMerge(BTN_CLASSES, className)}
 			disabled={disabled ?? isDisabled}
 			{...extraButtonProps}
 		>

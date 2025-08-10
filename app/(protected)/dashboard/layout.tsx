@@ -1,4 +1,4 @@
-import { BaseLayout } from "../-components";
+import { BaseLayout } from "@/app/-components";
 
 function DashboardLayout({ children }: { children: React.ReactNode }) {
 	return <BaseLayout className="bg-cyberaware-aeces-blue">{children}</BaseLayout>;

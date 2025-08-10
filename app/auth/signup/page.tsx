@@ -10,9 +10,9 @@ import { Main } from "@/app/-components";
 import { NavLink } from "@/components/common/NavLink";
 import { Button } from "@/components/ui/button";
 import { apiSchema, callBackendApi } from "@/lib/api/callBackendApi";
-import { sessionQuery } from "@/lib/api/queryOptions";
+import { sessionQuery } from "@/lib/react-query/queryOptions";
 
-const SignupSchema = apiSchema.routes["/register"].body;
+const SignupSchema = apiSchema.routes["@post/register"].body;
 
 function SignupPage() {
 	const form = useForm({
@@ -51,9 +51,8 @@ function SignupPage() {
 					className="gap-6"
 					onSubmit={(event) =>
 						void form.handleSubmit(async (data) => {
-							await callBackendApi("/register", {
+							await callBackendApi("@post/register", {
 								body: data,
-								method: "POST",
 
 								onResponseError: (ctx) => {
 									for (const [key, value] of Object.entries(ctx.error.errorData.errors)) {

@@ -1,11 +1,15 @@
+"use client";
+
 import Image from "next/image";
-import { Credits, Main } from "@/app/-components";
+import { Credits, ProtectedMain } from "@/app/-components";
 import { LockIcon } from "@/components/icons/LockIcon";
 import { Button } from "@/components/ui/button";
 import { Progress } from "@/components/ui/progress-animated";
 import { cnJoin, cnMerge } from "@/lib/utils/cn";
-import { Afam } from "@/public/assets";
 import { DashboardSideBar } from "./-components/DashboardSideBar";
+import { useQuery } from "@tanstack/react-query";
+import { dashboardQuery, sessionQuery } from "@/lib/react-query/queryOptions";
+import { Afam } from "@/public/assets";
 
 const cardDetails = [
 	{
@@ -27,19 +31,25 @@ const cardDetails = [
 	},
 ];
 
-const DashboardPage = () => {
-	return (
-		<Main className="flex-row">
-			<DashboardSideBar />
+function DashboardPage() {
+	const sessionQueryResult = useQuery(sessionQuery());
+	const dashboardQueryResult = useQuery(dashboardQuery());
 
-			<div className="gap-8 bg-white px-4 pt-[80px]">
+	return (
+		<ProtectedMain className="flex-row">
+			<DashboardSideBar dashboardQueryData={dashboardQueryResult.data} />
+
+			<div className="flex flex-col gap-8 bg-white px-4 pt-[80px]">
 				<section className="flex flex-col gap-5">
 					<article className="flex items-center justify-between gap-5">
 						<div className="flex flex-col gap-1">
 							<p className="text-[28px] font-semibold text-cyberaware-aeces-blue">
-								Hello, Aniekwe!
+								Hello, {sessionQueryResult.data?.data.first_name}!
 							</p>
-							<p className="text-[14px]">You’re on Day 1 of 10</p>
+							<p className="text-[14px]">
+								You’re on Module {(dashboardQueryResult.data?.data.completed_modules ?? 0) + 1} of{" "}
+								{dashboardQueryResult.data?.data.total_modules}
+							</p>
 						</div>
 
 						<Image
@@ -52,13 +62,15 @@ const DashboardPage = () => {
 
 					<article className="flex flex-col gap-3">
 						<Progress
-							value={10}
+							value={dashboardQueryResult.data?.data.percentage_completed}
 							classNames={{
 								base: "h-3 rounded-[20px] bg-[hsl(0,0%,85%)]",
 								indicator: "rounded-[20px] bg-cyberaware-unizik-orange",
 							}}
 						/>
-						<p className="text-cyberaware-aeces-blue">10% complete</p>
+						<p className="text-cyberaware-aeces-blue">
+							{dashboardQueryResult.data?.data.percentage_completed}% complete
+						</p>
 					</article>
 				</section>
 
@@ -106,8 +118,8 @@ const DashboardPage = () => {
 					<Credits />
 				</footer>
 			</div>
-		</Main>
+		</ProtectedMain>
 	);
-};
+}
 
 export default DashboardPage;

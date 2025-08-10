@@ -1,8 +1,3 @@
 import { callBackendApi } from "@/lib/api/callBackendApi";
 
-export const resendOtp = async (email: string) => {
-	await callBackendApi("/resend-otp", {
-		body: { email },
-		method: "POST",
-	});
-};
+export const resendOtp = (email: string) => void callBackendApi("@post/resend-otp", { body: { email } });

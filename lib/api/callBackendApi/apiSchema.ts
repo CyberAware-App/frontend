@@ -38,14 +38,13 @@ const CodeSchema = z.string().min(6, "Invalid code").regex(new RegExp(REGEXP_ONL
 
 export const apiSchema = defineSchema(
 	{
-		"/forgot-password": {
+		"@post/forgot-password": {
 			body: z.object({ email: z.email() }),
 			data: withBaseSuccessResponse(z.object({ email: z.string(), otp_resent: z.boolean() })),
 			errorData: withBaseErrorResponse(z.null()),
-			method: z.literal("POST"),
 		},
 
-		"/login": {
+		"@post/login": {
 			body: z.object({
 				email: z.email(),
 				password: z.string(),
@@ -54,10 +53,9 @@ export const apiSchema = defineSchema(
 				z.object({ access: z.jwt(), email: z.string(), first_login: z.boolean(), refresh: z.jwt() })
 			),
 			errorData: withBaseErrorResponse(z.object({ email: z.string(), message: z.string() }).partial()),
-			method: z.literal("POST"),
 		},
 
-		"/register": {
+		"@post/register": {
 			body: z.object({
 				email: z.email(),
 				first_name: z.string().min(3, "First name must be at least 3 characters long"),
@@ -82,17 +80,15 @@ export const apiSchema = defineSchema(
 					})
 					.partial()
 			),
-			method: z.literal("POST"),
 		},
 
-		"/resend-otp": {
+		"@post/resend-otp": {
 			body: z.object({ email: z.email() }),
 			data: withBaseSuccessResponse(z.object({ email: z.string(), otp_resent: z.boolean() })),
 			errorData: withBaseErrorResponse(z.null()),
-			method: z.literal("POST"),
 		},
 
-		"/reset-password": {
+		"@post/reset-password": {
 			body: z.object({
 				code: CodeSchema,
 				email: z.email(),
@@ -100,30 +96,15 @@ export const apiSchema = defineSchema(
 			}),
 			data: withBaseSuccessResponse(z.object({ email: z.string(), otp_resent: z.boolean() })),
 			errorData: withBaseErrorResponse(z.null()),
-			method: z.literal("POST"),
 		},
 
-		"/session": {
-			data: withBaseSuccessResponse(
-				z.object({
-					email: z.string(),
-					first_name: z.string(),
-					has_session: z.boolean(),
-					is_verified: z.boolean(),
-					last_name: z.string(),
-				})
-			),
-			errorData: withBaseErrorResponse(z.null()),
-		},
-
-		"/token-refresh": {
+		"@post/token-refresh": {
 			body: z.object({ refresh: z.jwt() }),
 			data: withBaseSuccessResponse(z.object({ access: z.jwt() })),
 			errorData: withBaseErrorResponse(z.object({ refresh: z.jwt() })),
-			method: z.literal("POST"),
 		},
 
-		"/verify-otp": {
+		"@post/verify-otp": {
 			body: z.object({
 				code: CodeSchema,
 				email: z.email(),
@@ -139,10 +120,38 @@ export const apiSchema = defineSchema(
 				})
 			),
 			errorData: withBaseErrorResponse(z.object({ code: z.string() })),
-			method: z.literal("POST"),
+		},
+
+		"/dashboard": {
+			data: withBaseSuccessResponse(
+				z.object({
+					completed_modules: z.int().nonnegative(),
+					modules: z.array(
+						z.object({
+							description: z.string(),
+							file_url: z.url(),
+							id: z.number(),
+							module_type: z.string(),
+							name: z.string(),
+						})
+					),
+					percentage_completed: z.number().min(0).max(100),
+					total_modules: z.int().nonnegative(),
+				})
+			),
+		},
+
+		"/session": {
+			data: withBaseSuccessResponse(
+				z.object({
+					email: z.string(),
+					first_name: z.string(),
+					has_session: z.boolean(),
+					is_verified: z.boolean(),
+					last_name: z.string(),
+				})
+			),
 		},
 	},
-	{
-		strict: true,
-	}
+	{ strict: true }
 );

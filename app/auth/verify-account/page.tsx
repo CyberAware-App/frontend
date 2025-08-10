@@ -13,10 +13,10 @@ import { Main } from "@/app/-components";
 import { InputOTP } from "@/components/ui";
 import { Button } from "@/components/ui/button";
 import { apiSchema, callBackendApi } from "@/lib/api/callBackendApi";
-import { sessionQuery } from "@/lib/api/queryOptions";
+import { sessionQuery } from "@/lib/react-query/queryOptions";
 import { resendOtp } from "./utils";
 
-const VerifyAccountSchema = apiSchema.routes["/verify-otp"].body.pick({ code: true });
+const VerifyAccountSchema = apiSchema.routes["@post/verify-otp"].body.pick({ code: true });
 
 function VerifyAccountPage() {
 	const form = useForm({
@@ -36,13 +36,11 @@ function VerifyAccountPage() {
 	const router = useRouter();
 
 	const onSubmit = form.handleSubmit(async (data) => {
-		await callBackendApi("/verify-otp", {
+		await callBackendApi("@post/verify-otp", {
 			body: {
 				code: data.code,
 				email,
 			},
-
-			method: "POST",
 
 			onResponseError: (ctx) => {
 				form.setError("code", { message: ctx.error.errorData.errors.code });
@@ -69,7 +67,7 @@ function VerifyAccountPage() {
 		<Main className="gap-13 px-4 pb-[158px]">
 			<header className="flex flex-col gap-5">
 				<h1 className="text-[36px] font-bold text-white">Verify Your Account</h1>
-				<p className="truncate text-[14px] text-white">Enter the 6-digit code sent to {email}.</p>
+				<p className="truncate text-[14px] text-white">Enter the 6-digit code sent to your email.</p>
 			</header>
 
 			<section>
@@ -91,7 +89,10 @@ function VerifyAccountPage() {
 												<InputOTP.Slot
 													key={item}
 													index={item}
-													classNames={{ base: "size-11 border-2 border-white" }}
+													classNames={{
+														base: "size-11 border-2 border-white",
+														isActive: "ring-cyberaware-unizik-orange",
+													}}
 												/>
 											)}
 										/>
@@ -108,7 +109,7 @@ function VerifyAccountPage() {
 						<Button
 							unstyled={true}
 							className="font-semibold text-white"
-							onClick={() => void resendOtp(email)}
+							onClick={() => resendOtp(email)}
 						>
 							Request again
 						</Button>

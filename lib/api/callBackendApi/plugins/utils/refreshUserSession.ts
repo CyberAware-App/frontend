@@ -11,14 +11,15 @@ const refreshUserSession = async () => {
 
 		toast.error(message);
 
-		setTimeout(() => hardNavigate("/signin"), 1500);
+		setTimeout(() => hardNavigate("/auth/signin"), 1500);
 
 		throw new Error(message);
 	}
 
-	const result = await callBackendApi("/token-refresh", {
+	const result = await callBackendApi("@post/token-refresh", {
 		body: { refresh: refreshToken },
-		method: "POST",
+		dedupeStrategy: "defer",
+		meta: { skipAuthHeaderAddition: true },
 	});
 
 	if (isHTTPError(result.error)) {
@@ -26,7 +27,7 @@ const refreshUserSession = async () => {
 
 		toast.error(message);
 
-		setTimeout(() => hardNavigate("/signin"), 1500);
+		setTimeout(() => hardNavigate("/auth/signin"), 1500);
 
 		throw new Error(message);
 	}

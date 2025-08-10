@@ -2,16 +2,11 @@ import type { NextConfig } from "next";
 
 const nextConfig: NextConfig = {
 	devIndicators: {
-		position: "bottom-left",
+		position: "bottom-right",
 	},
 
 	eslint: {
 		ignoreDuringBuilds: true,
-	},
-
-	experimental: {
-		devtoolNewPanelUI: true,
-		devtoolSegmentExplorer: true,
 	},
 
 	typescript: {

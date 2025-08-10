@@ -12,9 +12,9 @@ import { For } from "@/components/common/for";
 import { InputOTP } from "@/components/ui";
 import { Button } from "@/components/ui/button";
 import { apiSchema, callBackendApi } from "@/lib/api/callBackendApi";
-import { sessionQuery } from "@/lib/api/queryOptions";
+import { sessionQuery } from "@/lib/react-query/queryOptions";
 
-const ResetPasswordSchema = apiSchema.routes["/reset-password"].body.omit({ email: true });
+const ResetPasswordSchema = apiSchema.routes["@post/reset-password"].body.omit({ email: true });
 
 function ResetPasswordPage() {
 	const form = useForm({
@@ -35,9 +35,8 @@ function ResetPasswordPage() {
 	const router = useRouter();
 
 	const onSubmit = form.handleSubmit(async (data) => {
-		await callBackendApi("/reset-password", {
+		await callBackendApi("@post/reset-password", {
 			body: { ...data, email },
-			method: "POST",
 
 			onResponseError: (ctx) => {
 				form.setError("code", { message: ctx.error.message });
@@ -54,7 +53,7 @@ function ResetPasswordPage() {
 			<header className="flex flex-col gap-5">
 				<h1 className="text-[36px] font-bold text-white">Reset Password</h1>
 				<p className="text-[14px] text-white">
-					Enter the 6-digit code sent to {email} and your new password.
+					Enter the 6-digit code sent to your email, as well your new password.
 				</p>
 			</header>
 
@@ -79,7 +78,10 @@ function ResetPasswordPage() {
 												<InputOTP.Slot
 													key={item}
 													index={item}
-													classNames={{ base: "size-11 border-2 border-white" }}
+													classNames={{
+														base: "size-11 border-2 border-white",
+														isActive: "ring-cyberaware-unizik-orange",
+													}}
 												/>
 											)}
 										/>

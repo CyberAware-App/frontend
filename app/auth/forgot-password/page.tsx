@@ -9,9 +9,9 @@ import { Main } from "@/app/-components";
 import { Button } from "@/components/ui/button";
 import { callBackendApi } from "@/lib/api/callBackendApi";
 import { apiSchema } from "@/lib/api/callBackendApi/apiSchema";
-import { sessionQuery } from "@/lib/api/queryOptions";
+import { sessionQuery } from "@/lib/react-query/queryOptions";
 
-const ForgotPasswordSchema = apiSchema.routes["/forgot-password"].body.pick({ email: true });
+const ForgotPasswordSchema = apiSchema.routes["@post/forgot-password"].body.pick({ email: true });
 
 function ForgotPasswordPage() {
 	const form = useForm({
@@ -27,9 +27,8 @@ function ForgotPasswordPage() {
 	const router = useRouter();
 
 	const onSubmit = form.handleSubmit(async (data) => {
-		await callBackendApi("/forgot-password", {
+		await callBackendApi("@post/forgot-password", {
 			body: data,
-			method: "POST",
 
 			onResponseError: (ctx) => {
 				form.setError("email", { message: ctx.error.message });

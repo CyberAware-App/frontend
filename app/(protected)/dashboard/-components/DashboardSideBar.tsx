@@ -1,6 +1,5 @@
 "use client";
 
-import Image from "next/image";
 import { For } from "@/components/common/for";
 import { IconBox } from "@/components/common/IconBox";
 import { NavLink } from "@/components/common/NavLink";
@@ -8,77 +7,46 @@ import { Switch } from "@/components/common/switch";
 import { HamburgerIcon } from "@/components/icons";
 import { CollapsibleAnimated, Sidebar } from "@/components/ui";
 import { Button } from "@/components/ui/button";
+import type { apiSchema } from "@/lib/api/callBackendApi";
 import { logoSmall } from "@/public/assets";
+import Image from "next/image";
+import type { z } from "zod";
 
-const data = [
-	{
-		status: "complete",
-		items: [
-			{
-				title: "History",
-				url: "#",
-			},
-			{
-				title: "Starred",
-				url: "#",
-			},
-			{
-				title: "Settings",
-				url: "#",
-			},
-		],
-		title: "Day 1",
-		url: "#",
-	},
-	{
-		status: "ongoing",
-		items: [
-			{
-				title: "Genesis",
-				url: "#",
-			},
-			{
-				title: "Explorer",
-				url: "#",
-			},
-			{
-				title: "Quantum",
-				url: "#",
-			},
-		],
-		title: "Day 2",
-		url: "#",
-	},
-	{
-		status: "locked",
-		items: [
-			{
-				title: "Introduction",
-				url: "#",
-			},
-			{
-				title: "Get Started",
-				url: "#",
-			},
-			{
-				title: "Tutorials",
-				url: "#",
-			},
-			{
-				title: "Changelog",
-				url: "#",
-			},
-		],
-		title: "Day 3",
-		url: "#",
-	},
-] as const;
+type SideBarProps = {
+	dashboardQueryData: z.infer<(typeof apiSchema)["routes"]["/dashboard"]["data"]> | undefined;
+};
 
-function DashboardSideBar() {
+const computeStatus = (
+	moduleId: number,
+	completedModules: number | undefined = 0
+): "complete" | "ongoing" | "locked" => {
+	if (moduleId === completedModules + 1) {
+		return "ongoing";
+	}
+
+	if (moduleId > completedModules + 1) {
+		return "locked";
+	}
+
+	return "complete";
+};
+
+function DashboardSideBar(props: SideBarProps) {
+	const { dashboardQueryData } = props;
+
+	const completedModules = dashboardQueryData?.data.completed_modules ?? 0;
+
+	const sidebarData =
+		dashboardQueryData?.data.modules.map((module) => ({
+			...module,
+			title: `Module ${module.id}`,
+			status: computeStatus(module.id, completedModules),
+		})) ?? [];
+
 	return (
 		<Sidebar.ContextProvider
 			defaultOpen={false}
-			sidebarWidth="245px"
+			sidebarWidth="250px"
 			sidebarWidthIcon="70px"
 			withMobileBreakpoint={false}
 			className="w-[70px] shrink-0"
@@ -105,7 +73,7 @@ function DashboardSideBar() {
 				</Sidebar.Header>
 
 				<Sidebar.Content className="custom-scrollbar">
-					<Sidebar.Group className="gap-6.5 p-4">
+					<Sidebar.Group className="gap-6.5 py-4 pt-4 pb-8">
 						<Sidebar.GroupLabel
 							className="px-0 text-[22px] font-semibold text-white duration-500 ease-initial"
 						>
@@ -114,11 +82,11 @@ function DashboardSideBar() {
 
 						<Sidebar.Menu className="gap-5 in-data-[state=collapsed]:hidden">
 							<For
-								each={data}
+								each={sidebarData}
 								render={(sidebarItem) => (
-									<Sidebar.MenuItem key={sidebarItem.title}>
+									<Sidebar.MenuItem key={sidebarItem.id}>
 										<CollapsibleAnimated.Root
-											key={sidebarItem.title}
+											key={sidebarItem.id}
 											disabled={sidebarItem.status === "locked"}
 											className="group/collapsible"
 										>
@@ -151,16 +119,18 @@ function DashboardSideBar() {
 
 											<Sidebar.MenuSub className="border-none">
 												<CollapsibleAnimated.Content>
-													<For
-														each={sidebarItem.items}
-														render={(subItem) => (
-															<Sidebar.MenuSubItem key={subItem.title}>
-																<NavLink href={subItem.url}>
-																	<span>{subItem.title}</span>
-																</NavLink>
-															</Sidebar.MenuSubItem>
-														)}
-													/>
+													<Sidebar.MenuSubItem className="group/menu-item">
+														<NavLink
+															href={sidebarItem.file_url}
+															className="flex items-center gap-3 px-4 py-2.5 text-[14px]"
+														>
+															{sidebarItem.module_type === "video" ?
+																<IconBox icon="ri:play-circle-line" className="size-5" />
+															:	<IconBox icon="ri:file-text-line" className="size-5" />}
+
+															<span className="line-clamp-1">{sidebarItem.name}</span>
+														</NavLink>
+													</Sidebar.MenuSubItem>
 												</CollapsibleAnimated.Content>
 											</Sidebar.MenuSub>
 										</CollapsibleAnimated.Root>

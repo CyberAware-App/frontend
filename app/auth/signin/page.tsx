@@ -10,10 +10,10 @@ import { Main } from "@/app/-components";
 import { NavLink } from "@/components/common/NavLink";
 import { Button } from "@/components/ui/button";
 import { apiSchema, callBackendApi } from "@/lib/api/callBackendApi";
-import { sessionQuery } from "@/lib/api/queryOptions";
+import { sessionQuery } from "@/lib/react-query/queryOptions";
 import { resendOtp } from "../verify-account/utils";
 
-const SigninSchema = apiSchema.routes["/login"].body;
+const SigninSchema = apiSchema.routes["@post/login"].body;
 
 function SigninPage() {
 	const form = useForm({
@@ -30,10 +30,8 @@ function SigninPage() {
 	const queryClient = useQueryClient();
 
 	const onSubmit = form.handleSubmit(async (data) => {
-		await callBackendApi("/login", {
+		await callBackendApi("@post/login", {
 			body: data,
-
-			method: "POST",
 
 			onResponseError: (ctx) => {
 				if (
@@ -50,7 +48,7 @@ function SigninPage() {
 						},
 					}));
 
-					void resendOtp(data.email);
+					resendOtp(data.email);
 
 					router.push("/auth/verify-account");
 				}
@@ -125,11 +123,12 @@ function SigninPage() {
 						</NavLink>
 					</Form.Field>
 
-					<Form.Submit asChild={true} className="mt-[42px]">
+					<Form.Submit asChild={true}>
 						<Button
+							type="submit"
 							isLoading={form.formState.isSubmitting}
 							isDisabled={form.formState.isSubmitting}
-							className="h-[64px] max-w-[260px] self-end"
+							className="mt-[42px] h-[64px] max-w-[260px] self-end"
 						>
 							Log In
 						</Button>

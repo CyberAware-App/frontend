@@ -1,11 +1,12 @@
-import { callApi, createFetchClient, defineBaseConfig } from "@zayne-labs/callapi";
+import { createFetchClient, defineBaseConfig } from "@zayne-labs/callapi";
 import { apiSchema } from "./apiSchema";
 import {
 	type AuthHeaderInclusionPluginMeta,
-	isAuthTokenRelatedError,
+	authHeaderInclusionPlugin,
 	type ToastPluginMeta,
 	toastPlugin,
 } from "./plugins";
+import { isAuthTokenRelatedError } from "./plugins/utils";
 
 type GlobalMeta = AuthHeaderInclusionPluginMeta & ToastPluginMeta;
 
@@ -28,7 +29,7 @@ const sharedBaseCallApiConfig = defineBaseConfig((instanceCtx) => ({
 	dedupeCacheScope: "global",
 	dedupeCacheScopeKey: BASE_API_URL,
 
-	plugins: [toastPlugin()],
+	plugins: [authHeaderInclusionPlugin(), toastPlugin()],
 	schema: apiSchema,
 
 	skipAutoMergeFor: "options",
@@ -58,5 +59,3 @@ export const callBackendApiForQuery = createFetchClient((instanceCtx) => ({
 	resultMode: "onlySuccessWithException",
 	throwOnError: true,
 }));
-
-void callApi("@delete/user/:id");

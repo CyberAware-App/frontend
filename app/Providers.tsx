@@ -1,25 +1,9 @@
 "use client";
 
 import { ProgressProvider } from "@bprogress/next/app";
-import { QueryClient, QueryClientProvider } from "@tanstack/react-query";
+import { QueryClientProvider } from "@tanstack/react-query";
 import { ReactQueryDevtools } from "@tanstack/react-query-devtools";
-import { cache } from "react";
-
-const makeQueryClient = () => {
-	return new QueryClient({
-		defaultOptions: {
-			queries: {
-				retry: 1,
-				// With SSR, we usually want to set some default staleTime
-				// above 0 to avoid refetching immediately on the client
-				staleTime: 1 * 60 * 1000,
-			},
-		},
-	});
-};
-
-// eslint-disable-next-line react-refresh/only-export-components
-export const getQueryClient = cache(() => makeQueryClient());
+import { getQueryClient } from "@/lib/react-query/queryClient";
 
 type ProvidersProps = {
 	children: React.ReactNode;

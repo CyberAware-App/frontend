@@ -1,14 +1,10 @@
-import {
-	type CallApiResultErrorVariant,
-	definePlugin,
-	type ResponseErrorContext,
-} from "@zayne-labs/callapi";
-import { isHTTPError } from "@zayne-labs/callapi/utils";
+import { definePlugin, type ResponseErrorContext } from "@zayne-labs/callapi";
 import { hardNavigate } from "@zayne-labs/toolkit-core";
 import type { BaseApiErrorResponse } from "../apiSchema";
+import { isAuthTokenRelatedError } from "./utils";
 import { refreshUserSession } from "./utils/refreshUserSession";
 
-const routesExemptedFromAuthHeaderInclusion = new Set(["/signin", "/signup"]);
+const routesExemptedFromAuthHeaderInclusion = new Set(["/auth/signin", "/auth/signup"]);
 
 export type AuthHeaderInclusionPluginMeta = {
 	authTokenToAdd?: "accessToken" | "refreshToken";
@@ -33,15 +29,16 @@ export const authHeaderInclusionPlugin = definePlugin(() => ({
 			if (!refreshToken) {
 				const message = "Session is missing! Redirecting to login...";
 
-				setTimeout(() => hardNavigate("/signin"), 2100);
+				setTimeout(() => hardNavigate("/auth/signin"), 2100);
 
 				throw new Error(message);
 			}
 
 			const accessToken = localStorage.getItem("accessToken");
 
-			const authTokenToAdd: AuthHeaderInclusionPluginMeta["authTokenToAdd"] =
-				ctx.options.meta?.authTokenToAdd ?? "accessToken";
+			const authTokenToAdd =
+				ctx.options.meta?.authTokenToAdd
+				?? ("accessToken" satisfies AuthHeaderInclusionPluginMeta["authTokenToAdd"]);
 
 			switch (authTokenToAdd) {
 				case "accessToken": {
@@ -63,7 +60,7 @@ export const authHeaderInclusionPlugin = definePlugin(() => ({
 			if (
 				ctx.response.status === 401
 				&& isAuthTokenRelatedError(ctx.error)
-				&& ctx.options.initURLNormalized === "/session"
+				&& !ctx.options.fullURL?.endsWith("/session")
 			) {
 				await refreshUserSession();
 
@@ -73,20 +70,3 @@ export const authHeaderInclusionPlugin = definePlugin(() => ({
 		},
 	},
 }));
-
-type ErrorDataWithCodeAndDetail = { code: string; detail: string } | { code?: never; detail: string };
-
-export const isAuthTokenRelatedError = (
-	error: CallApiResultErrorVariant<BaseApiErrorResponse>["error"]
-): error is { errorData: ErrorDataWithCodeAndDetail } & typeof error => {
-	if (!isHTTPError(error)) {
-		return false;
-	}
-
-	const errorData = error.errorData;
-
-	return (
-		("code" in errorData && errorData.code === "token_not_valid")
-		|| ("detail" in errorData && errorData.detail === "Authentication credentials were not provided.")
-	);
-};

@@ -50,12 +50,11 @@ function InputOTPSlot(
 			data-active={isActive}
 			className={cnMerge(
 				`relative flex size-9 items-center justify-center border border-shadcn-input text-sm shadow-xs
-				transition-all outline-none aria-invalid:border-shadcn-destructive data-[active=true]:z-10
-				data-[active=true]:border-shadcn-ring data-[active=true]:ring-[3px]
-				data-[active=true]:ring-shadcn-ring/50
-				data-[active=true]:aria-invalid:border-shadcn-destructive
-				data-[active=true]:aria-invalid:ring-shadcn-destructive/20 dark:bg-shadcn-input/30
-				dark:data-[active=true]:aria-invalid:ring-shadcn-destructive/40`,
+				transition-all outline-none aria-invalid:border-shadcn-destructive`,
+				isActive
+					&& `z-10 border-shadcn-ring ring-[3px] ring-shadcn-ring/50
+					aria-invalid:border-shadcn-destructive aria-invalid:ring-shadcn-destructive/20
+					dark:bg-shadcn-input/30 dark:aria-invalid:ring-shadcn-destructive/40`,
 				isActive && classNames?.isActive,
 				className,
 				classNames?.base
