@@ -1,5 +1,7 @@
 "use client";
 
+import { useQuery } from "@tanstack/react-query";
+import Image from "next/image";
 import { For } from "@/components/common/for";
 import { IconBox } from "@/components/common/IconBox";
 import { NavLink } from "@/components/common/NavLink";
@@ -7,41 +9,11 @@ import { Switch } from "@/components/common/switch";
 import { HamburgerIcon } from "@/components/icons";
 import { CollapsibleAnimated, Sidebar } from "@/components/ui";
 import { Button } from "@/components/ui/button";
-import type { apiSchema } from "@/lib/api/callBackendApi";
+import { dashboardQuery } from "@/lib/react-query/queryOptions";
 import { logoSmall } from "@/public/assets";
-import Image from "next/image";
-import type { z } from "zod";
 
-type SideBarProps = {
-	dashboardQueryData: z.infer<(typeof apiSchema)["routes"]["/dashboard"]["data"]> | undefined;
-};
-
-const computeStatus = (
-	moduleId: number,
-	completedModules: number | undefined = 0
-): "complete" | "ongoing" | "locked" => {
-	if (moduleId === completedModules + 1) {
-		return "ongoing";
-	}
-
-	if (moduleId > completedModules + 1) {
-		return "locked";
-	}
-
-	return "complete";
-};
-
-function DashboardSideBar(props: SideBarProps) {
-	const { dashboardQueryData } = props;
-
-	const completedModules = dashboardQueryData?.data.completed_modules ?? 0;
-
-	const sidebarData =
-		dashboardQueryData?.data.modules.map((module) => ({
-			...module,
-			title: `Module ${module.id}`,
-			status: computeStatus(module.id, completedModules),
-		})) ?? [];
+function DashboardSideBar() {
+	const dashboardQueryResult = useQuery(dashboardQuery());
 
 	return (
 		<Sidebar.ContextProvider
@@ -74,15 +46,13 @@ function DashboardSideBar(props: SideBarProps) {
 
 				<Sidebar.Content className="custom-scrollbar">
 					<Sidebar.Group className="gap-6.5 py-4 pt-4 pb-8">
-						<Sidebar.GroupLabel
-							className="px-0 text-[22px] font-semibold text-white duration-500 ease-initial"
-						>
+						<Sidebar.GroupLabel className="px-0 text-[22px] font-semibold text-white duration-500">
 							Your Progress
 						</Sidebar.GroupLabel>
 
 						<Sidebar.Menu className="gap-5 in-data-[state=collapsed]:hidden">
 							<For
-								each={sidebarData}
+								each={dashboardQueryResult.data?.modules ?? []}
 								render={(sidebarItem) => (
 									<Sidebar.MenuItem key={sidebarItem.id}>
 										<CollapsibleAnimated.Root
@@ -121,7 +91,7 @@ function DashboardSideBar(props: SideBarProps) {
 												<CollapsibleAnimated.Content>
 													<Sidebar.MenuSubItem className="group/menu-item">
 														<NavLink
-															href={sidebarItem.file_url}
+															href={`/module/${sidebarItem.id}`}
 															className="flex items-center gap-3 px-4 py-2.5 text-[14px]"
 														>
 															{sidebarItem.module_type === "video" ?

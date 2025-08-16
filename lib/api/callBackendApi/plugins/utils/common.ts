@@ -2,11 +2,13 @@ import type { CallApiResultErrorVariant } from "@zayne-labs/callapi";
 import { isHTTPError } from "@zayne-labs/callapi/utils";
 import type { BaseApiErrorResponse } from "../../apiSchema";
 
-type ErrorDataWithCodeAndDetail = { code: string; detail: string } | { code?: never; detail: string };
+type ErrorWithCodeAndDetail = CallApiResultErrorVariant<BaseApiErrorResponse>["error"] & {
+	errorData: { code: string; detail: string } | { code?: never; detail: string };
+};
 
 export const isAuthTokenRelatedError = (
-	error: CallApiResultErrorVariant<BaseApiErrorResponse>["error"]
-): error is { errorData: ErrorDataWithCodeAndDetail } & typeof error => {
+	error: CallApiResultErrorVariant<Record<string, unknown>>["error"]
+): error is ErrorWithCodeAndDetail => {
 	if (!isHTTPError(error)) {
 		return false;
 	}

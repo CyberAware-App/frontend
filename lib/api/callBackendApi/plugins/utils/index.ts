@@ -1,2 +1,2 @@
-export { checkAndRefreshUserSession } from "./checkAndRefreshUserSession";
+export { checkAndRefreshUserSession } from "./checkUserSession";
 export * from "./common";

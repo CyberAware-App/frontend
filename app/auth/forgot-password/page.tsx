@@ -2,14 +2,12 @@
 
 import { useRouter } from "@bprogress/next";
 import { zodResolver } from "@hookform/resolvers/zod";
-import { useQueryClient } from "@tanstack/react-query";
 import { Form } from "@zayne-labs/ui-react/ui/form";
 import { useForm } from "react-hook-form";
 import { Main } from "@/app/-components";
 import { Button } from "@/components/ui/button";
 import { callBackendApi } from "@/lib/api/callBackendApi";
 import { apiSchema } from "@/lib/api/callBackendApi/apiSchema";
-import { sessionQuery } from "@/lib/react-query/queryOptions";
 
 const ForgotPasswordSchema = apiSchema.routes["@post/forgot-password"].body.pick({ email: true });
 
@@ -22,8 +20,6 @@ function ForgotPasswordPage() {
 		resolver: zodResolver(ForgotPasswordSchema),
 	});
 
-	const queryClient = useQueryClient();
-
 	const router = useRouter();
 
 	const onSubmit = form.handleSubmit(async (data) => {
@@ -35,14 +31,6 @@ function ForgotPasswordPage() {
 			},
 
 			onSuccess: (ctx) => {
-				queryClient.setQueryData(sessionQuery().queryKey, (oldData) => ({
-					...(oldData as NonNullable<typeof oldData>),
-					data: {
-						...(oldData?.data as NonNullable<typeof oldData>["data"]),
-						email: ctx.data.data.email,
-					},
-				}));
-
 				localStorage.setItem("email", ctx.data.data.email);
 
 				router.push("/auth/reset-password");

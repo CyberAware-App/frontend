@@ -12,9 +12,31 @@ export const sessionQuery = () => {
 	});
 };
 
+type ModuleStatus = "complete" | "ongoing" | "locked";
+
+const computeModuleStatus = (moduleId: number, completedModules: number | undefined = 0): ModuleStatus => {
+	if (moduleId === completedModules + 1) {
+		return "ongoing";
+	}
+
+	if (moduleId > completedModules + 1) {
+		return "locked";
+	}
+
+	return "complete";
+};
+
 export const dashboardQuery = () => {
 	return queryOptions({
-		queryFn: () => callBackendApiForQuery("/dashboard", { meta: { toast: { success: false } } }),
+		queryFn: () => callBackendApiForQuery("@get/dashboard", { meta: { toast: { success: false } } }),
+		select: (data) => ({
+			...data.data,
+			modules: data.data.modules.map((module) => ({
+				...module,
+				title: `Module ${module.id}`,
+				status: computeModuleStatus(module.id, data.data.completed_modules),
+			})),
+		}),
 		queryKey: ["dashboard"],
 		staleTime: Infinity,
 	});

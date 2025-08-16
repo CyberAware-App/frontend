@@ -2,15 +2,12 @@
 
 import { useRouter } from "@bprogress/next";
 import { zodResolver } from "@hookform/resolvers/zod";
-import { useQueryClient } from "@tanstack/react-query";
-import { pickKeys } from "@zayne-labs/toolkit-core";
 import { Form } from "@zayne-labs/ui-react/ui/form";
 import { useForm } from "react-hook-form";
 import { Main } from "@/app/-components";
 import { NavLink } from "@/components/common/NavLink";
 import { Button } from "@/components/ui/button";
 import { apiSchema, callBackendApi } from "@/lib/api/callBackendApi";
-import { sessionQuery } from "@/lib/react-query/queryOptions";
 
 const SignupSchema = apiSchema.routes["@post/register"].body;
 
@@ -27,8 +24,6 @@ function SignupPage() {
 	});
 
 	const router = useRouter();
-
-	const queryClient = useQueryClient();
 
 	return (
 		<Main className="gap-13 px-4 pb-[158px]">
@@ -55,21 +50,13 @@ function SignupPage() {
 								body: data,
 
 								onResponseError: (ctx) => {
-									for (const [key, value] of Object.entries(ctx.error.errorData.errors)) {
+									for (const [key, value] of Object.entries(ctx.error.errorData.errors ?? {})) {
 										form.setError(key as never, { message: value });
 									}
 								},
 
-								onSuccess: (ctx) => {
+								onSuccess: () => {
 									localStorage.setItem("email", data.email);
-
-									queryClient.setQueryData(sessionQuery().queryKey, (oldData) => ({
-										...(oldData as NonNullable<typeof oldData>),
-										data: {
-											...(oldData?.data as NonNullable<typeof oldData>["data"]),
-											...pickKeys(ctx.data.data, ["email", "first_name", "last_name"]),
-										},
-									}));
 
 									router.push("/auth/verify-account");
 								},

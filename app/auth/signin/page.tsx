@@ -2,15 +2,12 @@
 
 import { useRouter } from "@bprogress/next";
 import { zodResolver } from "@hookform/resolvers/zod";
-import { useQueryClient } from "@tanstack/react-query";
-import { pickKeys } from "@zayne-labs/toolkit-core";
 import { Form } from "@zayne-labs/ui-react/ui/form";
 import { useForm } from "react-hook-form";
 import { Main } from "@/app/-components";
 import { NavLink } from "@/components/common/NavLink";
 import { Button } from "@/components/ui/button";
 import { apiSchema, callBackendApi } from "@/lib/api/callBackendApi";
-import { sessionQuery } from "@/lib/react-query/queryOptions";
 import { resendOtp } from "../verify-account/utils";
 
 const SigninSchema = apiSchema.routes["@post/login"].body;
@@ -27,26 +24,16 @@ function SigninPage() {
 
 	const router = useRouter();
 
-	const queryClient = useQueryClient();
-
 	const onSubmit = form.handleSubmit(async (data) => {
 		await callBackendApi("@post/login", {
 			body: data,
 
 			onResponseError: (ctx) => {
 				if (
-					ctx.error.errorData.errors.email
+					ctx.error.errorData.errors?.email
 					&& ctx.error.errorData.errors.email === "User is not verified."
 				) {
 					localStorage.setItem("email", data.email);
-
-					queryClient.setQueryData(sessionQuery().queryKey, (oldData) => ({
-						...(oldData as NonNullable<typeof oldData>),
-						data: {
-							...(oldData?.data as NonNullable<typeof oldData>["data"]),
-							email: data.email,
-						},
-					}));
 
 					resendOtp(data.email);
 
@@ -57,14 +44,6 @@ function SigninPage() {
 			onSuccess: (ctx) => {
 				localStorage.setItem("accessToken", ctx.data.data.access);
 				localStorage.setItem("refreshToken", ctx.data.data.refresh);
-
-				queryClient.setQueryData(sessionQuery().queryKey, (oldData) => ({
-					...(oldData as NonNullable<typeof oldData>),
-					data: {
-						...(oldData?.data as NonNullable<typeof oldData>["data"]),
-						...pickKeys(ctx.data.data, ["email"]),
-					},
-				}));
 
 				router.push("/dashboard");
 			},

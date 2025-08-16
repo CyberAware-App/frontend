@@ -1,2 +1,2 @@
-export * from "./authHeaderInclusionPlugin";
+export * from "./authPlugin";
 export * from "./toastPlugin";

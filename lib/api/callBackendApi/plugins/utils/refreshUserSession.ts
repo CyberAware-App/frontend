@@ -19,7 +19,7 @@ const refreshUserSession = async () => {
 	const result = await callBackendApi("@post/token-refresh", {
 		body: { refresh: refreshToken },
 		dedupeStrategy: "defer",
-		meta: { skipAuthHeaderAddition: true },
+		meta: { auth: { skipHeaderAddition: true } },
 	});
 
 	if (isHTTPError(result.error)) {

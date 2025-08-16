@@ -37,7 +37,7 @@ function DashboardPage() {
 
 	return (
 		<ProtectedMain className="flex-row">
-			<DashboardSideBar dashboardQueryData={dashboardQueryResult.data} />
+			<DashboardSideBar />
 
 			<div className="flex flex-col gap-8 bg-white px-4 pt-[80px]">
 				<section className="flex flex-col gap-5">
@@ -47,8 +47,8 @@ function DashboardPage() {
 								Hello, {sessionQueryResult.data?.data.first_name}!
 							</p>
 							<p className="text-[14px]">
-								You’re on Module {(dashboardQueryResult.data?.data.completed_modules ?? 0) + 1} of{" "}
-								{dashboardQueryResult.data?.data.total_modules}
+								You’re on Module {(dashboardQueryResult.data?.completed_modules ?? 0) + 1} of{" "}
+								{dashboardQueryResult.data?.total_modules}
 							</p>
 						</div>
 
@@ -62,14 +62,14 @@ function DashboardPage() {
 
 					<article className="flex flex-col gap-3">
 						<Progress
-							value={dashboardQueryResult.data?.data.percentage_completed}
+							value={dashboardQueryResult.data?.percentage_completed}
 							classNames={{
 								base: "h-3 rounded-[20px] bg-[hsl(0,0%,85%)]",
 								indicator: "rounded-[20px] bg-cyberaware-unizik-orange",
 							}}
 						/>
 						<p className="text-cyberaware-aeces-blue">
-							{dashboardQueryResult.data?.data.percentage_completed}% complete
+							{dashboardQueryResult.data?.percentage_completed}% complete
 						</p>
 					</article>
 				</section>

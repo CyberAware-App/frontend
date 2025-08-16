@@ -518,8 +518,8 @@ function SidebarGroupLabel(props: InferProps<"h4"> & { asChild?: boolean }) {
 			className={cnMerge(
 				`flex h-8 shrink-0 items-center rounded-md px-2 text-xs font-medium
 				text-shadcn-sidebar-foreground/70 ring-shadcn-sidebar-ring outline-hidden
-				transition-[margin,opacity] duration-300 focus-visible:ring-2 [&>svg]:size-4 [&>svg]:shrink-0`,
-				"group-data-[collapsible=icon]:-mt-8 group-data-[collapsible=icon]:opacity-0",
+				transition-[margin,scale] duration-300 focus-visible:ring-2 [&>svg]:size-4 [&>svg]:shrink-0`,
+				"group-data-[collapsible=icon]:-mt-8 group-data-[collapsible=icon]:scale-0",
 				className
 			)}
 			{...restOfProps}
