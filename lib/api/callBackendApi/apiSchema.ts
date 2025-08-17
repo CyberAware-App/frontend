@@ -1,4 +1,4 @@
-import { defineSchema } from "@zayne-labs/callapi";
+import { defineSchema, fallBackRouteSchemaKey } from "@zayne-labs/callapi";
 import { REGEXP_ONLY_DIGITS } from "input-otp";
 import { z } from "zod";
 
@@ -36,12 +36,95 @@ const withBaseErrorResponse = <
 
 const CodeSchema = z.string().min(6, "Invalid code").regex(new RegExp(REGEXP_ONLY_DIGITS), "Invalid code");
 
+const ModuleObjectSchema = z.object({
+	description: z.string(),
+	file_url: z.url(),
+	id: z.number(),
+	module_type: z.string(),
+	name: z.string(),
+});
 export const apiSchema = defineSchema(
 	{
+		/* eslint-disable perfectionist/sort-objects */
+		[fallBackRouteSchemaKey]: {
+			errorData: withBaseErrorResponse(),
+		},
+
+		"@get/certificate": {
+			/* eslint-enable perfectionist/sort-objects */
+			data: withBaseSuccessResponse(
+				z.object({
+					certificate_id: z.string(),
+					certificate_url: z.url(),
+					is_valid: z.boolean(),
+					issued_date: z.string(),
+					score: z.number().int().nonnegative(),
+					user_email: z.string(),
+					user_name: z.string(),
+				})
+			),
+		},
+
+		"@get/certificate/:id/download": {},
+
+		"@get/dashboard": {
+			data: withBaseSuccessResponse(
+				z.object({
+					completed_modules: z.int().nonnegative(),
+					modules: z.array(ModuleObjectSchema),
+					percentage_completed: z.number().min(0).max(100),
+					total_modules: z.int().nonnegative(),
+				})
+			),
+		},
+
+		"@get/module/:id": {
+			data: withBaseSuccessResponse(z.object({ module: ModuleObjectSchema })),
+		},
+
+		"@get/module/:id/quiz": {
+			data: withBaseSuccessResponse(
+				z.array(
+					z.object({
+						correct_answer: z.string(),
+						id: z.number(),
+						module: z.int().positive(),
+						options: z.array(z.string()),
+						question: z.string(),
+					})
+				)
+			),
+		},
+
+		"@get/quiz": {
+			data: withBaseSuccessResponse(
+				z.array(z.object({ options: z.array(z.string()), question: z.string() }))
+			),
+		},
+
+		"@get/session": {
+			data: withBaseSuccessResponse(
+				z.object({
+					email: z.string(),
+					first_name: z.string(),
+					has_session: z.boolean(),
+					is_verified: z.boolean(),
+					last_name: z.string(),
+				})
+			),
+		},
+
+		"@post/change-password": {
+			body: z.object({
+				new_password: z.string().min(8, "Password must be at least 8 characters long"),
+				old_password: z.string().min(8, "Password must be at least 8 characters long"),
+			}),
+			data: withBaseSuccessResponse(z.object({ email: z.string(), password_changed: z.boolean() })),
+		},
+
 		"@post/forgot-password": {
 			body: z.object({ email: z.email() }),
 			data: withBaseSuccessResponse(z.object({ email: z.string(), otp_resent: z.boolean() })),
-			errorData: withBaseErrorResponse(z.null()),
 		},
 
 		"@post/login": {
@@ -52,7 +135,28 @@ export const apiSchema = defineSchema(
 			data: withBaseSuccessResponse(
 				z.object({ access: z.jwt(), email: z.string(), first_login: z.boolean(), refresh: z.jwt() })
 			),
-			errorData: withBaseErrorResponse(z.object({ email: z.string(), message: z.string() }).partial()),
+		},
+
+		"@post/module/:id/complete": {
+			data: withBaseSuccessResponse(z.object({ completed: z.boolean(), module: ModuleObjectSchema })),
+		},
+
+		"@post/quiz": {
+			body: z.array(
+				z.object({
+					question: z.string(),
+					selected_option: z.string(),
+				})
+			),
+			data: withBaseSuccessResponse(
+				z.object({
+					attempt_number: z.number().int().positive(),
+					correct_answers: z.number().int().nonnegative(),
+					passed: z.boolean(),
+					score: z.union([z.string(), z.number()]),
+					total_questions: z.number().int().positive(),
+				})
+			),
 		},
 
 		"@post/register": {
@@ -70,22 +174,11 @@ export const apiSchema = defineSchema(
 					otp_sent: z.boolean(),
 				})
 			),
-			errorData: withBaseErrorResponse(
-				z
-					.object({
-						email: z.string(),
-						first_name: z.string(),
-						last_name: z.string(),
-						password: z.string(),
-					})
-					.partial()
-			),
 		},
 
 		"@post/resend-otp": {
 			body: z.object({ email: z.email() }),
 			data: withBaseSuccessResponse(z.object({ email: z.string(), otp_resent: z.boolean() })),
-			errorData: withBaseErrorResponse(z.null()),
 		},
 
 		"@post/reset-password": {
@@ -95,20 +188,15 @@ export const apiSchema = defineSchema(
 				new_password: z.string().min(8, "Password must be at least 8 characters long"),
 			}),
 			data: withBaseSuccessResponse(z.object({ email: z.string(), otp_resent: z.boolean() })),
-			errorData: withBaseErrorResponse(z.null()),
 		},
 
 		"@post/token-refresh": {
 			body: z.object({ refresh: z.jwt() }),
 			data: withBaseSuccessResponse(z.object({ access: z.jwt() })),
-			errorData: withBaseErrorResponse(z.object({ refresh: z.jwt() })),
 		},
 
 		"@post/verify-otp": {
-			body: z.object({
-				code: CodeSchema,
-				email: z.email(),
-			}),
+			body: z.object({ code: CodeSchema, email: z.email() }),
 			data: withBaseSuccessResponse(
 				z.object({
 					access: z.jwt(),
@@ -117,38 +205,6 @@ export const apiSchema = defineSchema(
 					first_name: z.string(),
 					refresh: z.jwt(),
 					verified: z.boolean(),
-				})
-			),
-			errorData: withBaseErrorResponse(z.object({ code: z.string() })),
-		},
-
-		"/dashboard": {
-			data: withBaseSuccessResponse(
-				z.object({
-					completed_modules: z.int().nonnegative(),
-					modules: z.array(
-						z.object({
-							description: z.string(),
-							file_url: z.url(),
-							id: z.number(),
-							module_type: z.string(),
-							name: z.string(),
-						})
-					),
-					percentage_completed: z.number().min(0).max(100),
-					total_modules: z.int().nonnegative(),
-				})
-			),
-		},
-
-		"/session": {
-			data: withBaseSuccessResponse(
-				z.object({
-					email: z.string(),
-					first_name: z.string(),
-					has_session: z.boolean(),
-					is_verified: z.boolean(),
-					last_name: z.string(),
 				})
 			),
 		},

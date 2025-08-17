@@ -2,17 +2,17 @@
 
 import { useRouter } from "@bprogress/next";
 import { zodResolver } from "@hookform/resolvers/zod";
-import { useQueryClient } from "@tanstack/react-query";
 import { useStorageState } from "@zayne-labs/toolkit-react";
 import { Form } from "@zayne-labs/ui-react/ui/form";
 import { REGEXP_ONLY_DIGITS } from "input-otp";
+import { useEffect } from "react";
 import { useForm } from "react-hook-form";
+import { toast } from "sonner";
 import { Main } from "@/app/-components";
 import { For } from "@/components/common/for";
 import { InputOTP } from "@/components/ui";
 import { Button } from "@/components/ui/button";
 import { apiSchema, callBackendApi } from "@/lib/api/callBackendApi";
-import { sessionQuery } from "@/lib/react-query/queryOptions";
 
 const ResetPasswordSchema = apiSchema.routes["@post/reset-password"].body.omit({ email: true });
 
@@ -26,13 +26,20 @@ function ResetPasswordPage() {
 		resolver: zodResolver(ResetPasswordSchema),
 	});
 
-	const queryClient = useQueryClient();
-
-	const sessionQueryResult = queryClient.getQueryData(sessionQuery().queryKey);
-
-	const [email] = useStorageState("email", sessionQueryResult?.data.email);
-
 	const router = useRouter();
+
+	const [email] = useStorageState<string | null>("email", null);
+
+	useEffect(() => {
+		if (!email) {
+			toast.error("Email not provided");
+			router.push("/auth/forgot-password");
+		}
+	}, [email, router]);
+
+	if (!email) {
+		return null;
+	}
 
 	const onSubmit = form.handleSubmit(async (data) => {
 		await callBackendApi("@post/reset-password", {
