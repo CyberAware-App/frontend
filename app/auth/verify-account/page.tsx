@@ -6,6 +6,7 @@ import { useStorageState } from "@zayne-labs/toolkit-react";
 import { For } from "@zayne-labs/ui-react/common/for";
 import { Form } from "@zayne-labs/ui-react/ui/form";
 import { REGEXP_ONLY_DIGITS } from "input-otp";
+import { useEffect } from "react";
 import { useForm } from "react-hook-form";
 import { toast } from "sonner";
 import { Main } from "@/app/-components";
@@ -29,9 +30,14 @@ function VerifyAccountPage() {
 
 	const [email] = useStorageState<string | null>("email", null);
 
+	useEffect(() => {
+		if (!email) {
+			toast.error("Email not provided");
+			router.push("/auth/signin");
+		}
+	}, [email, router]);
+
 	if (!email) {
-		toast.error("Email not provided");
-		router.push("/auth/signin");
 		return null;
 	}
 
