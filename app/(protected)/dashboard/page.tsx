@@ -1,39 +1,60 @@
 "use client";
 
+import { useQuery } from "@tanstack/react-query";
 import Image from "next/image";
 import { Credits, ProtectedMain } from "@/app/-components";
+import { NavLink } from "@/components/common/NavLink";
 import { LockIcon } from "@/components/icons/LockIcon";
 import { Button } from "@/components/ui/button";
 import { Progress } from "@/components/ui/progress-animated";
-import { cnJoin, cnMerge } from "@/lib/utils/cn";
-import { DashboardSideBar } from "./-components/DashboardSideBar";
-import { useQuery } from "@tanstack/react-query";
 import { dashboardQuery, sessionQuery } from "@/lib/react-query/queryOptions";
+import { cnJoin, cnMerge } from "@/lib/utils/cn";
 import { Afam } from "@/public/assets";
-
-const cardDetails = [
-	{
-		body: "Estimated time: 10mins",
-		buttonText: "Start Module",
-		id: 1,
-		isSub: false,
-		title: "Day 1: Cyber Security Foundation",
-	},
-	{ body: "Day 2", buttonText: "", id: 4, isSub: true, title: <LockIcon /> },
-	{ body: "Day 3", buttonText: "", id: 5, isSub: true, title: <LockIcon /> },
-	{ body: "Complete day 10 to activate", buttonText: "Take Quiz", id: 2, isSub: false, title: "Quiz" },
-	{
-		body: "A Certificate of completion would be sent to your E-mail If you pass the minimum mark of 80% in the quiz",
-		buttonText: "Download certificate",
-		id: 3,
-		isSub: false,
-		title: "Certificate",
-	},
-];
+import { DashboardSideBar } from "./-components/DashboardSideBar";
 
 function DashboardPage() {
 	const sessionQueryResult = useQuery(sessionQuery());
 	const dashboardQueryResult = useQuery(dashboardQuery());
+
+	const ongoingModule = dashboardQueryResult.data?.modules.find((module) => module.status === "ongoing");
+
+	const cardDetails = [
+		{
+			body: "Estimated time: 10mins",
+			button: (
+				<Button theme="orange" className="max-w-[150px] self-end" asChild={true}>
+					<NavLink href={`/dashboard/module/${ongoingModule?.id}`}>Start Module</NavLink>
+				</Button>
+			),
+			id: 1,
+			isSub: false,
+			title: `${ongoingModule?.title}: ${ongoingModule?.name}`,
+		},
+		{ body: "Day 2", button: null, id: 2, isSub: true, title: <LockIcon /> },
+		{ body: "Day 3", button: null, id: 3, isSub: true, title: <LockIcon /> },
+		{
+			body: "Complete module 10 to activate",
+			button: (
+				<Button theme="orange" disabled={true} className="max-w-[150px] self-end">
+					Take Quiz
+				</Button>
+			),
+			id: 4,
+			isSub: false,
+			title: "Quiz",
+		},
+		{
+			body: "A Certificate of completion would be sent to your E-mail If you pass the minimum mark of 80% in the quiz",
+			button: (
+				<Button theme="orange" disabled={true} className={cnMerge("max-w-[150px] self-end")}>
+					Download certificate
+				</Button>
+			),
+			id: 5,
+			isSub: false,
+			title: "Certificate",
+		},
+	];
 
 	return (
 		<ProtectedMain className="flex-row">
@@ -75,7 +96,7 @@ function DashboardPage() {
 				</section>
 
 				<section className="grid gap-x-3 gap-y-3.5">
-					{cardDetails.map(({ body, buttonText, id, isSub, title }) => {
+					{cardDetails.map(({ body, button, id, isSub, title }) => {
 						return (
 							<div
 								key={id}
@@ -100,15 +121,7 @@ function DashboardPage() {
 									</p>
 								</div>
 
-								{!isSub && (
-									<Button
-										theme="orange"
-										disabled={id !== 1}
-										className={cnMerge("max-w-[150px] self-end")}
-									>
-										{buttonText}
-									</Button>
-								)}
+								{button}
 							</div>
 						);
 					})}

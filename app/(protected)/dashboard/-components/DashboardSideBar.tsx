@@ -91,7 +91,7 @@ function DashboardSideBar() {
 												<CollapsibleAnimated.Content>
 													<Sidebar.MenuSubItem className="group/menu-item">
 														<NavLink
-															href={`/module/${sidebarItem.id}`}
+															href={`/dashboard/module/${sidebarItem.id}`}
 															className="flex items-center gap-3 px-4 py-2.5 text-[14px]"
 														>
 															{sidebarItem.module_type === "video" ?
