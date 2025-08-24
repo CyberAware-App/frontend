@@ -23,7 +23,7 @@ function HowItWorksLadder() {
 			className="relative isolate grid grid-cols-[auto_auto_auto] items-center justify-center gap-x-7
 				gap-y-[75px]"
 			each={howItWorks}
-			render={(step, index) => {
+			renderItem={(step, index) => {
 				const digit = index + 1;
 				const isDigitEven = digit % 2 === 0;
 

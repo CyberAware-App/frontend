@@ -42,8 +42,8 @@ importers:
         specifier: ^0.10.8
         version: 0.10.8
       '@zayne-labs/ui-react':
-        specifier: ^0.9.21
-        version: 0.9.21(@types/react@19.1.11)(react-dom@19.1.1(react@19.1.1))(react-hook-form@7.62.0(react@19.1.1))(react@19.1.1)(tailwind-merge@3.3.1)(tailwindcss@4.1.12)(zustand@5.0.8(@types/react@19.1.11)(react@19.1.1)(use-sync-external-store@1.5.0(react@19.1.1)))
+        specifier: ^0.10.0
+        version: 0.10.0(@types/react@19.1.11)(react-dom@19.1.1(react@19.1.1))(react-hook-form@7.62.0(react@19.1.1))(react@19.1.1)(tailwind-merge@3.3.1)(tailwindcss@4.1.12)(zustand@5.0.8(@types/react@19.1.11)(react@19.1.1)(use-sync-external-store@1.5.0(react@19.1.1)))
       input-otp:
         specifier: ^1.4.2
         version: 1.4.2(react-dom@19.1.1(react@19.1.1))(react@19.1.1)
@@ -1979,27 +1979,8 @@ packages:
     resolution: {integrity: sha512-duMFKPftz/9VYCcbJaTp8wYd7X/sUBq76iaxiNd7r6h4r3g+c1/eQy85k0MbO+F7i5nKoRINRxr997AQh6/z4Q==}
     engines: {node: '>=18.x'}
 
-  '@zayne-labs/toolkit-core@0.9.48':
-    resolution: {integrity: sha512-+d4/CWoNDghMtutgyT3eOgP+JMUgCywPbK7dYdddaAvo36AzT8SrcQnjiukpLmWfroeF/6jGkSojDkdR6SnIsA==}
-    engines: {node: '>=18.x'}
-
   '@zayne-labs/toolkit-react@0.10.8':
     resolution: {integrity: sha512-jM6BJzsNiOj5GAOdvNsMicA3L1xz4abq/Sm8TOAM8LKTD/4qf07DUi2PkzSIUf6q2W4eVfRqJ6Ws3uPFQQg+7g==}
-    engines: {node: '>=18.x'}
-    peerDependencies:
-      '@types/react': '>=19.0.0'
-      react: '>=19.0.0'
-      zustand: '>=5.0.0'
-    peerDependenciesMeta:
-      '@types/react':
-        optional: true
-      react:
-        optional: true
-      zustand:
-        optional: true
-
-  '@zayne-labs/toolkit-react@0.9.48':
-    resolution: {integrity: sha512-f0CW5rX9eVOXxtgsNcqgzhCe93NNum6Keom06+umbqPSItyXnazrIqFyhvtywEZP2KT8ngdX1OKLZeinjl7vjg==}
     engines: {node: '>=18.x'}
     peerDependencies:
       '@types/react': '>=19.0.0'
@@ -2021,15 +2002,11 @@ packages:
     resolution: {integrity: sha512-MLf287jcbfALrVEndms6p5VHkQBBqzjMiNjzzs+7Vr4JSGRdlEHRWtvKqfaL7Zdqk/TyxeWxc4iY1XfDahhkmg==}
     engines: {node: '>=18.x'}
 
-  '@zayne-labs/toolkit-type-helpers@0.9.48':
-    resolution: {integrity: sha512-usC7bbfXafp/l1uLodh/HGYC0Afj/B67xWwhTxoSr2daiUb6pPLyAbLeCvJxeL+ejhqTyyTfeeJfiXn/P5AgLw==}
-    engines: {node: '>=18.x'}
-
   '@zayne-labs/tsconfig@0.9.10':
     resolution: {integrity: sha512-7nJiQRR3kyI7Ud31pwRAa6tNL/eqwgyT7HJMQy5zCiQ+k7BoSamL8iRg7HFJjR1Js1YcnjT5JV/LQYI8DQOtYg==}
 
-  '@zayne-labs/ui-react@0.9.21':
-    resolution: {integrity: sha512-egLHPsb4V9i1T+7wvrpoXXANjwYOTTmXNDWneyckPuoj6eDm5fBNbc2jGpOaDWKq1NjRwwgDR//S+z1PzVTzEg==}
+  '@zayne-labs/ui-react@0.10.0':
+    resolution: {integrity: sha512-zsQEIUOY7Aa7GUlu+cdZNSnPvwbiOGXaHShc5jOcqmH5bhfCP+TIbM2Bj2cqOx+fRscmh7JMbb6E4cRNXE+KVA==}
     engines: {node: '>=18.x'}
     peerDependencies:
       react: 19.x.x
@@ -5915,10 +5892,6 @@ snapshots:
     dependencies:
       '@zayne-labs/toolkit-type-helpers': 0.10.8
 
-  '@zayne-labs/toolkit-core@0.9.48':
-    dependencies:
-      '@zayne-labs/toolkit-type-helpers': 0.9.48
-
   '@zayne-labs/toolkit-react@0.10.8(@types/react@19.1.11)(react@19.1.1)(zustand@5.0.8(@types/react@19.1.11)(react@19.1.1)(use-sync-external-store@1.5.0(react@19.1.1)))':
     dependencies:
       '@zayne-labs/toolkit-core': 0.10.8
@@ -5928,28 +5901,17 @@ snapshots:
       react: 19.1.1
       zustand: 5.0.8(@types/react@19.1.11)(react@19.1.1)(use-sync-external-store@1.5.0(react@19.1.1))
 
-  '@zayne-labs/toolkit-react@0.9.48(@types/react@19.1.11)(react@19.1.1)(zustand@5.0.8(@types/react@19.1.11)(react@19.1.1)(use-sync-external-store@1.5.0(react@19.1.1)))':
-    dependencies:
-      '@zayne-labs/toolkit-core': 0.9.48
-      '@zayne-labs/toolkit-type-helpers': 0.9.48
-    optionalDependencies:
-      '@types/react': 19.1.11
-      react: 19.1.1
-      zustand: 5.0.8(@types/react@19.1.11)(react@19.1.1)(use-sync-external-store@1.5.0(react@19.1.1))
-
   '@zayne-labs/toolkit-type-helpers@0.10.6': {}
 
   '@zayne-labs/toolkit-type-helpers@0.10.8': {}
 
-  '@zayne-labs/toolkit-type-helpers@0.9.48': {}
-
   '@zayne-labs/tsconfig@0.9.10': {}
 
-  '@zayne-labs/ui-react@0.9.21(@types/react@19.1.11)(react-dom@19.1.1(react@19.1.1))(react-hook-form@7.62.0(react@19.1.1))(react@19.1.1)(tailwind-merge@3.3.1)(tailwindcss@4.1.12)(zustand@5.0.8(@types/react@19.1.11)(react@19.1.1)(use-sync-external-store@1.5.0(react@19.1.1)))':
+  '@zayne-labs/ui-react@0.10.0(@types/react@19.1.11)(react-dom@19.1.1(react@19.1.1))(react-hook-form@7.62.0(react@19.1.1))(react@19.1.1)(tailwind-merge@3.3.1)(tailwindcss@4.1.12)(zustand@5.0.8(@types/react@19.1.11)(react@19.1.1)(use-sync-external-store@1.5.0(react@19.1.1)))':
     dependencies:
-      '@zayne-labs/toolkit-core': 0.9.48
-      '@zayne-labs/toolkit-react': 0.9.48(@types/react@19.1.11)(react@19.1.1)(zustand@5.0.8(@types/react@19.1.11)(react@19.1.1)(use-sync-external-store@1.5.0(react@19.1.1)))
-      '@zayne-labs/toolkit-type-helpers': 0.9.48
+      '@zayne-labs/toolkit-core': 0.10.8
+      '@zayne-labs/toolkit-react': 0.10.8(@types/react@19.1.11)(react@19.1.1)(zustand@5.0.8(@types/react@19.1.11)(react@19.1.1)(use-sync-external-store@1.5.0(react@19.1.1)))
+      '@zayne-labs/toolkit-type-helpers': 0.10.8
       react: 19.1.1
       react-dom: 19.1.1(react@19.1.1)
       tailwind-merge: 3.3.1

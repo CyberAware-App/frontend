@@ -7,6 +7,8 @@ const nextConfig: NextConfig = {
 		position: "bottom-right",
 	},
 
+	typedRoutes: true,
+
 	turbopack: {
 		root: path.dirname(fileURLToPath(import.meta.url)),
 	},

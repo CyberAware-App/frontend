@@ -10,7 +10,7 @@ import { Progress } from "@/components/ui/progress-animated";
 import { dashboardQuery, sessionQuery } from "@/lib/react-query/queryOptions";
 import { cnJoin, cnMerge } from "@/lib/utils/cn";
 import { Afam } from "@/public/assets";
-import { DashboardSideBar } from "./-components/DashboardSideBar";
+import { DashboardSideBar } from "./DashboardSideBar";
 
 function DashboardPage() {
 	const sessionQueryResult = useQuery(sessionQuery());

@@ -102,7 +102,7 @@ function HomePage() {
 				<ForWithWrapper
 					className="flex flex-col gap-5"
 					each={reasons}
-					render={(item) => (
+					renderItem={(item) => (
 						<li key={item.title} className="flex flex-col gap-3 bg-white px-6 py-4">
 							<Image src={item.icon.src} alt={item.title} className={item.icon.size} />
 							<h4 className="text-[22px] font-semibold text-cyberaware-aeces-blue">{item.title}</h4>
@@ -134,7 +134,7 @@ function HomePage() {
 					<ForWithWrapper
 						className="flex flex-col gap-5"
 						each={faqs}
-						render={(item) => (
+						renderItem={(item) => (
 							<li key={item.question} className="flex flex-col gap-3 bg-white p-4 font-medium">
 								<h4 className="text-cyberaware-aeces-blue">{item.question}</h4>
 								<p className="text-[12px]">{item.answer}</p>

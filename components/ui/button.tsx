@@ -30,7 +30,7 @@ const buttonVariants = tv({
 
 		theme: {
 			"blue-light": "bg-cyberaware-aeces-blue-light text-white",
-			"blue-ghost": "border-2 border-cyberaware-aeces-blue bg-transparent",
+			"blue-ghost": "border-2 border-cyberaware-aeces-blue bg-transparent text-cyberaware-aeces-blue",
 			orange: "bg-cyberaware-unizik-orange text-white",
 			white: "bg-white text-cyberaware-aeces-blue",
 		},

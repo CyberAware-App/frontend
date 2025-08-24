@@ -80,7 +80,7 @@ function VerifyAccountPage() {
 									<InputOTP.Group className="w-full justify-between gap-4 text-white">
 										<For
 											each={6}
-											render={(item) => (
+											renderItem={(item) => (
 												<InputOTP.Slot
 													key={item}
 													index={item}

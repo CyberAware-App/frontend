@@ -94,7 +94,7 @@ export const apiSchema = defineSchema(
 						correct_answer: z.string(),
 						id: z.number(),
 						module: z.int().positive(),
-						options: z.array(z.string()),
+						options: z.record(z.literal(["A", "B", "C", "D"]), z.string()),
 						question: z.string(),
 					})
 				)
@@ -175,7 +175,7 @@ export const apiSchema = defineSchema(
 			body: z.array(
 				z.object({
 					question: z.string(),
-					selected_option: z.string(),
+					selected_option: z.string("At least one option must be selected"),
 				})
 			),
 			data: withBaseSuccessResponse(

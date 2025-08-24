@@ -41,3 +41,15 @@ export const dashboardQuery = () => {
 		staleTime: Infinity,
 	});
 };
+
+export const moduleQuizQuery = (moduleId: string) => {
+	return queryOptions({
+		queryFn: () =>
+			callBackendApiForQuery("@get/module/:id/quiz", {
+				params: { id: moduleId },
+				meta: { toast: { success: false } },
+			}),
+		queryKey: ["module-quiz", moduleId],
+		staleTime: Infinity,
+	});
+};
