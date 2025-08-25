@@ -32,12 +32,12 @@ function DashboardSideBar() {
 					className="mt-[80px] items-center justify-between gap-8 overflow-hidden px-4 py-0
 						in-data-[state=expanded]:flex-row in-data-[state=expanded]:gap-8"
 				>
-					<div className="flex items-center">
+					<NavLink href="/" className="flex items-center">
 						<Image src={logoSmall} alt="Logo" className="max-w-10" />
 						<h3 className="w-0 font-medium text-white in-data-[state=collapsed]:opacity-0">
 							CyberAware
 						</h3>
-					</div>
+					</NavLink>
 
 					<Sidebar.Trigger className="size-6">
 						<HamburgerIcon />
