@@ -36,7 +36,7 @@ const sharedBaseCallApiConfig = defineBaseConfig((instanceCtx) => ({
 		...instanceCtx.options.meta,
 
 		auth: {
-			routesToExemptFromHeaderAddition: ["/signin", "/signup"],
+			routesToExemptFromHeaderAddition: ["/auth"],
 			...instanceCtx.options.meta?.auth,
 		},
 
