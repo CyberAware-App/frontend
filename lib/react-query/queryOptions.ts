@@ -41,3 +41,23 @@ export const dashboardQuery = () => {
 		staleTime: Infinity,
 	});
 };
+
+export type SelectedModule = Awaited<
+	ReturnType<NonNullable<ReturnType<typeof dashboardQuery>["select"]>>
+>["modules"][number];
+
+export const moduleQuizQuery = (moduleId: string) => {
+	return queryOptions({
+		queryFn: () =>
+			callBackendApiForQuery("@get/module/:id/quiz", {
+				params: { id: moduleId },
+				meta: { toast: { success: false } },
+			}),
+		queryKey: ["module-quiz", moduleId],
+		staleTime: Infinity,
+	});
+};
+
+export type SelectedQuizzes = Awaited<
+	ReturnType<NonNullable<ReturnType<typeof moduleQuizQuery>["select"]>>
+>["data"];

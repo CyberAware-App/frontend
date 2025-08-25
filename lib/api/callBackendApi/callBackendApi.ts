@@ -12,12 +12,12 @@ declare module "@zayne-labs/callapi" {
 	}
 }
 
-// const BACKEND_HOST =
-// 	process.env.NODE_ENV === "development" ?
-// 		"http://127.0.0.1:8000"
-// 	:	"https://cyberaware-api-mx7u.onrender.com";
+const BACKEND_HOST =
+	process.env.NODE_ENV === "development" ?
+		"http://127.0.0.1:8000"
+	:	"https://cyberaware-api-mx7u.onrender.com";
 
-const BACKEND_HOST = "https://cyberaware-api-mx7u.onrender.com";
+// const BACKEND_HOST = "https://cyberaware-api-mx7u.onrender.com";
 
 const BASE_API_URL = `${BACKEND_HOST}/api`;
 

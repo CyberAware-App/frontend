@@ -94,7 +94,7 @@ function MobileNavigation(props: MobileNavProps) {
 						as="nav"
 						className="flex flex-col gap-5 font-medium text-nowrap"
 						each={linkItems}
-						render={(linkItem) => (
+						renderItem={(linkItem) => (
 							<NavLink
 								key={linkItem.title}
 								href={linkItem.href}

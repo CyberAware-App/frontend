@@ -35,7 +35,7 @@ function Footer() {
 				<ForWithWrapper
 					className="flex flex-col gap-1.5 px-4.5 text-[14px]"
 					each={footerLinks}
-					render={(item) => (
+					renderItem={(item) => (
 						<li key={item.title}>
 							<NavLink href={item.href}>{item.title}</NavLink>
 						</li>

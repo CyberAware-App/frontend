@@ -53,7 +53,7 @@ function DashboardSideBar() {
 						<Sidebar.Menu className="gap-5 in-data-[state=collapsed]:hidden">
 							<For
 								each={dashboardQueryResult.data?.modules ?? []}
-								render={(sidebarItem) => (
+								renderItem={(sidebarItem) => (
 									<Sidebar.MenuItem key={sidebarItem.id}>
 										<CollapsibleAnimated.Root
 											key={sidebarItem.id}
@@ -91,14 +91,21 @@ function DashboardSideBar() {
 												<CollapsibleAnimated.Content>
 													<Sidebar.MenuSubItem className="group/menu-item">
 														<NavLink
-															href={`/module/${sidebarItem.id}`}
+															href={`/dashboard/module/${sidebarItem.id}`}
 															className="flex items-center gap-3 px-4 py-2.5 text-[14px]"
 														>
 															{sidebarItem.module_type === "video" ?
-																<IconBox icon="ri:play-circle-line" className="size-5" />
-															:	<IconBox icon="ri:file-text-line" className="size-5" />}
+																<IconBox
+																	icon="ri:play-circle-line"
+																	className="size-4 shrink-0"
+																/>
+															:	<IconBox
+																	icon="ri:file-text-line"
+																	className="size-4 shrink-0"
+																/>
+															}
 
-															<span className="line-clamp-1">{sidebarItem.name}</span>
+															<span className="line-clamp-2">{sidebarItem.name}</span>
 														</NavLink>
 													</Sidebar.MenuSubItem>
 												</CollapsibleAnimated.Content>

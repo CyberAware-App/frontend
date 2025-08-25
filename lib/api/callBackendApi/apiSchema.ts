@@ -38,11 +38,18 @@ const CodeSchema = z.string().min(6, "Invalid code").regex(new RegExp(REGEXP_ONL
 
 const ModuleObjectSchema = z.object({
 	description: z.string(),
-	file_url: z.url(),
 	id: z.number(),
 	module_type: z.string(),
+	mux_playback: z.string(),
+	mux_playback_url: z.url(),
 	name: z.string(),
 });
+
+export const QuizOptionUnionSchema = z.literal(
+	["A", "B", "C", "D"],
+	"At least one option must be selected"
+);
+
 export const apiSchema = defineSchema(
 	{
 		/* eslint-disable perfectionist/sort-objects */
@@ -79,17 +86,21 @@ export const apiSchema = defineSchema(
 		},
 
 		"@get/module/:id": {
-			data: withBaseSuccessResponse(z.object({ module: ModuleObjectSchema })),
+			data: withBaseSuccessResponse(
+				z.object({
+					module: ModuleObjectSchema,
+				})
+			),
 		},
 
 		"@get/module/:id/quiz": {
 			data: withBaseSuccessResponse(
 				z.array(
 					z.object({
-						correct_answer: z.string(),
+						correct_answer: QuizOptionUnionSchema,
 						id: z.number(),
 						module: z.int().positive(),
-						options: z.array(z.string()),
+						options: z.record(QuizOptionUnionSchema, z.string()),
 						question: z.string(),
 					})
 				)
@@ -98,7 +109,12 @@ export const apiSchema = defineSchema(
 
 		"@get/quiz": {
 			data: withBaseSuccessResponse(
-				z.array(z.object({ options: z.array(z.string()), question: z.string() }))
+				z.array(
+					z.object({
+						options: z.array(QuizOptionUnionSchema),
+						question: z.string(),
+					})
+				)
 			),
 		},
 
@@ -119,12 +135,22 @@ export const apiSchema = defineSchema(
 				new_password: z.string().min(8, "Password must be at least 8 characters long"),
 				old_password: z.string().min(8, "Password must be at least 8 characters long"),
 			}),
-			data: withBaseSuccessResponse(z.object({ email: z.string(), password_changed: z.boolean() })),
+			data: withBaseSuccessResponse(
+				z.object({
+					email: z.string(),
+					password_changed: z.boolean(),
+				})
+			),
 		},
 
 		"@post/forgot-password": {
 			body: z.object({ email: z.email() }),
-			data: withBaseSuccessResponse(z.object({ email: z.string(), otp_resent: z.boolean() })),
+			data: withBaseSuccessResponse(
+				z.object({
+					email: z.string(),
+					otp_resent: z.boolean(),
+				})
+			),
 		},
 
 		"@post/login": {
@@ -133,19 +159,29 @@ export const apiSchema = defineSchema(
 				password: z.string(),
 			}),
 			data: withBaseSuccessResponse(
-				z.object({ access: z.jwt(), email: z.string(), first_login: z.boolean(), refresh: z.jwt() })
+				z.object({
+					access: z.jwt(),
+					email: z.string(),
+					first_login: z.boolean(),
+					refresh: z.jwt(),
+				})
 			),
 		},
 
 		"@post/module/:id/complete": {
-			data: withBaseSuccessResponse(z.object({ completed: z.boolean(), module: ModuleObjectSchema })),
+			data: withBaseSuccessResponse(
+				z.object({
+					completed: z.boolean(),
+					module: ModuleObjectSchema,
+				})
+			),
 		},
 
 		"@post/quiz": {
 			body: z.array(
 				z.object({
 					question: z.string(),
-					selected_option: z.string(),
+					selected_option: QuizOptionUnionSchema,
 				})
 			),
 			data: withBaseSuccessResponse(
@@ -178,7 +214,12 @@ export const apiSchema = defineSchema(
 
 		"@post/resend-otp": {
 			body: z.object({ email: z.email() }),
-			data: withBaseSuccessResponse(z.object({ email: z.string(), otp_resent: z.boolean() })),
+			data: withBaseSuccessResponse(
+				z.object({
+					email: z.string(),
+					otp_resent: z.boolean(),
+				})
+			),
 		},
 
 		"@post/reset-password": {
@@ -187,12 +228,21 @@ export const apiSchema = defineSchema(
 				email: z.email(),
 				new_password: z.string().min(8, "Password must be at least 8 characters long"),
 			}),
-			data: withBaseSuccessResponse(z.object({ email: z.string(), otp_resent: z.boolean() })),
+			data: withBaseSuccessResponse(
+				z.object({
+					email: z.string(),
+					otp_resent: z.boolean(),
+				})
+			),
 		},
 
 		"@post/token-refresh": {
 			body: z.object({ refresh: z.jwt() }),
-			data: withBaseSuccessResponse(z.object({ access: z.jwt() })),
+			data: withBaseSuccessResponse(
+				z.object({
+					access: z.jwt(),
+				})
+			),
 		},
 
 		"@post/verify-otp": {
