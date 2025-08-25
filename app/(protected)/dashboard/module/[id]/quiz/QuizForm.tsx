@@ -134,6 +134,8 @@ function QuizForm(props: QuizFormProps) {
 						</DialogAnimated.Title>
 					</DialogAnimated.Header>
 
+					<DialogAnimated.Description className="sr-only" />
+
 					<DialogAnimated.Footer className="flex-row gap-4">
 						<DialogAnimated.Close asChild={true}>
 							<Button theme="blue-ghost">Cancel</Button>
