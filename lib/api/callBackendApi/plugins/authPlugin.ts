@@ -23,7 +23,7 @@ export const authPlugin = definePlugin(() => ({
 
 			const shouldSkipAuthHeaderAddition =
 				authMeta?.routesToExemptFromHeaderAddition?.some(
-					(route) => window.location.pathname.endsWith(route)
+					(route) => window.location.pathname.includes(route)
 					// eslint-disable-next-line ts-eslint/prefer-nullish-coalescing
 				) || authMeta?.skipHeaderAddition;
 

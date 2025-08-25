@@ -64,7 +64,8 @@ function QuizPage({ params }: PageProps<"/dashboard/module/[id]/quiz">) {
 	const selectedQuizzes = useMemo(() => {
 		form.reset();
 		return shuffle(moduleQuizQueryResult.data?.data)?.slice(0, 5);
-	}, [form, moduleQuizQueryResult.data?.data]);
+		// eslint-disable-next-line react-hooks/exhaustive-deps
+	}, [form, moduleQuizQueryResult.data?.data, result]);
 
 	if (!selectedModule || isModuleLocked || !selectedQuizzes) {
 		return null;
