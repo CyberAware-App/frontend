@@ -42,6 +42,10 @@ export const dashboardQuery = () => {
 	});
 };
 
+export type SelectedModule = Awaited<
+	ReturnType<NonNullable<ReturnType<typeof dashboardQuery>["select"]>>
+>["modules"][number];
+
 export const moduleQuizQuery = (moduleId: string) => {
 	return queryOptions({
 		queryFn: () =>
@@ -53,3 +57,7 @@ export const moduleQuizQuery = (moduleId: string) => {
 		staleTime: Infinity,
 	});
 };
+
+export type SelectedQuizzes = Awaited<
+	ReturnType<NonNullable<ReturnType<typeof moduleQuizQuery>["select"]>>
+>["data"];

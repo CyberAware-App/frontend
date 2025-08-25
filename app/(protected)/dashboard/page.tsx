@@ -17,6 +17,7 @@ function DashboardPage() {
 	const dashboardQueryResult = useQuery(dashboardQuery());
 
 	const ongoingModule = dashboardQueryResult.data?.modules.find((module) => module.status === "ongoing");
+	const completedModulesCount = dashboardQueryResult.data?.completed_modules ?? 0;
 
 	const cardDetails = [
 		{
@@ -30,8 +31,20 @@ function DashboardPage() {
 			isSub: false,
 			title: `${ongoingModule?.title}: ${ongoingModule?.name}`,
 		},
-		{ body: "Day 2", button: null, id: 2, isSub: true, title: <LockIcon /> },
-		{ body: "Day 3", button: null, id: 3, isSub: true, title: <LockIcon /> },
+		{
+			body: completedModulesCount !== 10 ? `Module ${completedModulesCount + 2}` : "No Module Left",
+			button: null,
+			id: 2,
+			isSub: true,
+			title: <LockIcon />,
+		},
+		{
+			body: completedModulesCount !== 10 ? `Module ${completedModulesCount + 2}` : "No Module Left",
+			button: null,
+			id: 3,
+			isSub: true,
+			title: <LockIcon />,
+		},
 		{
 			body: "Complete module 10 to activate",
 			button: (
@@ -96,35 +109,38 @@ function DashboardPage() {
 				</section>
 
 				<section className="grid gap-x-3 gap-y-3.5">
-					{cardDetails.map(({ body, button, id, isSub, title }) => {
-						return (
+					{cardDetails.map((detail) => (
+						<div
+							key={detail.id}
+							className={cnJoin(
+								"flex flex-col gap-5 bg-cyberaware-neutral-gray-lighter px-5 py-6",
+								detail.isSub ? "col-span-1 cursor-not-allowed" : "col-span-2"
+							)}
+						>
 							<div
-								key={id}
 								className={cnJoin(
-									"flex flex-col gap-5 bg-cyberaware-neutral-gray-lighter px-5 py-6",
-									isSub ? "col-span-1" : "col-span-2"
+									"flex flex-col",
+									detail.isSub ? "items-center gap-3.5" : "gap-2"
 								)}
 							>
-								<div className={cnJoin("flex flex-col", isSub ? "items-center gap-3.5" : "gap-2")}>
-									<h4 className="text-[22px] font-semibold text-cyberaware-aeces-blue">
-										{title}
-									</h4>
+								<h4 className="text-[22px] font-semibold text-cyberaware-aeces-blue">
+									{detail.title}
+								</h4>
 
-									<p
-										className={cnJoin(
-											isSub ?
-												"text-[22px] font-semibold text-cyberaware-aeces-blue"
-											:	"text-[10px]"
-										)}
-									>
-										{body}
-									</p>
-								</div>
-
-								{button}
+								<p
+									className={cnJoin(
+										detail.isSub ?
+											"text-[22px] font-semibold text-cyberaware-aeces-blue"
+										:	"text-[10px]"
+									)}
+								>
+									{detail.body}
+								</p>
 							</div>
-						);
-					})}
+
+							{detail.button}
+						</div>
+					))}
 				</section>
 
 				<footer className="flex items-center gap-4 pb-6 text-[10px]">

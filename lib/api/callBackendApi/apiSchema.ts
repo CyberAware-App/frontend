@@ -44,6 +44,12 @@ const ModuleObjectSchema = z.object({
 	mux_playback_url: z.url(),
 	name: z.string(),
 });
+
+export const QuizOptionUnionSchema = z.literal(
+	["A", "B", "C", "D"],
+	"At least one option must be selected"
+);
+
 export const apiSchema = defineSchema(
 	{
 		/* eslint-disable perfectionist/sort-objects */
@@ -91,10 +97,10 @@ export const apiSchema = defineSchema(
 			data: withBaseSuccessResponse(
 				z.array(
 					z.object({
-						correct_answer: z.string(),
+						correct_answer: QuizOptionUnionSchema,
 						id: z.number(),
 						module: z.int().positive(),
-						options: z.record(z.literal(["A", "B", "C", "D"]), z.string()),
+						options: z.record(QuizOptionUnionSchema, z.string()),
 						question: z.string(),
 					})
 				)
@@ -105,7 +111,7 @@ export const apiSchema = defineSchema(
 			data: withBaseSuccessResponse(
 				z.array(
 					z.object({
-						options: z.array(z.string()),
+						options: z.array(QuizOptionUnionSchema),
 						question: z.string(),
 					})
 				)
@@ -175,7 +181,7 @@ export const apiSchema = defineSchema(
 			body: z.array(
 				z.object({
 					question: z.string(),
-					selected_option: z.string("At least one option must be selected"),
+					selected_option: QuizOptionUnionSchema,
 				})
 			),
 			data: withBaseSuccessResponse(

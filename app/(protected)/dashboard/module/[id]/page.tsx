@@ -11,8 +11,7 @@ import { NavLink } from "@/components/common/NavLink";
 import { Button } from "@/components/ui/button";
 import { callBackendApi } from "@/lib/api/callBackendApi";
 import { dashboardQuery } from "@/lib/react-query/queryOptions";
-
-import ModuleHeading from "../ModuleHeading";
+import { ModuleHeading } from "../ModuleHeading";
 
 function ModulePage({ params }: PageProps<"/dashboard/module/[id]">) {
 	const dashboardQueryResult = useQuery(dashboardQuery());
@@ -39,7 +38,7 @@ function ModulePage({ params }: PageProps<"/dashboard/module/[id]">) {
 		}
 	}, [isModuleLocked, router]);
 
-	if (isModuleLocked) {
+	if (!selectedModule || isModuleLocked) {
 		return null;
 	}
 
@@ -55,7 +54,7 @@ function ModulePage({ params }: PageProps<"/dashboard/module/[id]">) {
 
 				<article className="flex flex-col gap-10">
 					<h3 className="text-[28px] font-semibold text-cyberaware-aeces-blue">
-						{selectedModule?.title}: {selectedModule?.name}
+						{selectedModule.title}: {selectedModule.name}
 					</h3>
 
 					<MuxPlayer
@@ -63,7 +62,7 @@ function ModulePage({ params }: PageProps<"/dashboard/module/[id]">) {
 						className="aspect-[398/190]
 							shadow-[0px_5px_20px_0px_var(--color-cyberaware-unizik-orange)]"
 						primaryColor="var(--color-cyberaware-light-orange)"
-						playbackId={selectedModule?.mux_playback}
+						playbackId={selectedModule.mux_playback}
 						onTimeUpdate={(event) => {
 							const element = event.target as HTMLMediaElement;
 
@@ -93,7 +92,7 @@ function ModulePage({ params }: PageProps<"/dashboard/module/[id]">) {
 
 					<Button
 						theme="orange"
-						disabled={selectedModule?.status !== "complete"}
+						disabled={selectedModule.status !== "complete"}
 						className="max-w-[160px] gap-2.5"
 						asChild={true}
 					>
