@@ -10,6 +10,7 @@
 
 	"include": [
 		"stub.d.ts",
+		"stub-routes.d.ts",
 		"**/*.ts",
 		"**/*.tsx",
 		"public/**/*.ts",
