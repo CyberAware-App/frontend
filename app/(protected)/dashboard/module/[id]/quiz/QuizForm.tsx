@@ -7,6 +7,7 @@ import { Button } from "@/components/ui/button";
 import { Form } from "@/components/ui/form";
 import { apiSchema } from "@/lib/api/callBackendApi";
 import type { SelectedModule, SelectedQuizzes } from "@/lib/react-query/queryOptions";
+import { FootNote } from "../../FootNote";
 
 export const QuizSchema = z
 	.record(z.string(), apiSchema.routes["@post/quiz"].body.unwrap())
@@ -111,10 +112,7 @@ function QuizForm(props: QuizFormProps) {
 						</Button>
 					</DialogAnimated.Trigger>
 
-					<p className="text-[12px] font-medium text-cyberaware-aeces-blue">
-						Your progress is saved automatically. You’ll can go to Module {selectedModule.id + 1}{" "}
-						after completing this quiz.
-					</p>
+					<FootNote selectedModule={selectedModule} />
 				</article>
 
 				<DialogAnimated.Content

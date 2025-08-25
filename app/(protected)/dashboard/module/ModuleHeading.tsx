@@ -2,12 +2,12 @@
 
 import { useQuery } from "@tanstack/react-query";
 import Image from "next/image";
+import { usePathname } from "next/navigation";
 import { IconBox } from "@/components/common/IconBox";
 import { NavLink } from "@/components/common/NavLink";
 import { Progress } from "@/components/ui/progress-animated";
 import { dashboardQuery, type SelectedModule } from "@/lib/react-query/queryOptions";
 import { Afam, logoSmall } from "@/public/assets";
-import { usePathname } from "next/navigation";
 
 type ModuleHeadingProps = {
 	totalModules: number | undefined;
@@ -29,7 +29,7 @@ function ModuleHeading(props: ModuleHeadingProps) {
 		<header className="px-4 pt-[50px] pb-8">
 			<NavLink
 				href={isQuizPage ? modulePath : "/dashboard"}
-				className="flex items-center gap-1 text-[12px] text-cyberaware-unizik-orange"
+				className="flex items-center gap-1 text-[12px] font-medium text-cyberaware-unizik-orange"
 			>
 				<IconBox icon="ri:arrow-left-line" className="size-4" />
 				Back to {isQuizPage ? "module" : "dashboard"}

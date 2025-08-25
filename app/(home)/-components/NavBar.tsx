@@ -4,21 +4,29 @@ import { Presence } from "@radix-ui/react-presence";
 import { useToggle } from "@zayne-labs/toolkit-react";
 import { ForWithWrapper } from "@zayne-labs/ui-react/common/for";
 import Image from "next/image";
+import { usePathname } from "next/navigation";
 import { IconBox } from "@/components/common/IconBox";
 import { NavLink } from "@/components/common/NavLink";
 import { Teleport } from "@/components/common/teleport";
 import { HamburgerIcon, XIcon } from "@/components/icons";
 import { Button } from "@/components/ui/button";
-import { cnMerge } from "@/lib/utils/cn";
+import { cnJoin, cnMerge } from "@/lib/utils/cn";
 import { logoSmall } from "@/public/assets";
 
 function NavBar() {
 	const [isNavShow, toggleNavShow] = useToggle(false);
 
+	const pathName = usePathname();
+
+	const isHomePage = pathName === "/";
+
 	return (
 		<header
-			className="absolute top-[72px] isolate z-100 flex w-full max-w-[312px] items-center
-				justify-between bg-cyberaware-aeces-blue py-1 pr-5 pl-1"
+			className={cnJoin(
+				`absolute isolate z-100 flex w-full items-center justify-between bg-cyberaware-aeces-blue py-1
+				pr-5 pl-1`,
+				isHomePage ? "top-[72px] max-w-[312px]" : "top-[95px] max-w-[430px] px-5"
+			)}
 		>
 			<NavLink href="/" className="flex items-center gap-1">
 				<Image src={logoSmall} alt="Logo" className="w-[55px]" />
@@ -54,9 +62,9 @@ const linkItems = [
 		title: "Contact",
 	},
 	{
-		href: "/dashboard/module",
+		href: "/dashboard",
 		icon: "ion:grid-sharp",
-		title: "Module",
+		title: "Modules",
 	},
 ];
 

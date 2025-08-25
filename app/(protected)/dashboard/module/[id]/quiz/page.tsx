@@ -124,7 +124,11 @@ function QuizPage({ params }: PageProps<"/dashboard/module/[id]/quiz">) {
 					</Show.Content>
 
 					<Show.Fallback>
-						<ResultView result={result} onRetake={onRetake} />
+						<ResultView
+							nextModuleHref={`/dashboard/module/${Number(moduleId) + 1}`}
+							result={result}
+							onRetake={onRetake}
+						/>
 					</Show.Fallback>
 				</Show.Root>
 			</section>

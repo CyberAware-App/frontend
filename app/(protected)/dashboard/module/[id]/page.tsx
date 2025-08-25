@@ -11,6 +11,7 @@ import { NavLink } from "@/components/common/NavLink";
 import { Button } from "@/components/ui/button";
 import { callBackendApi } from "@/lib/api/callBackendApi";
 import { dashboardQuery } from "@/lib/react-query/queryOptions";
+import { FootNote } from "../FootNote";
 import { ModuleHeading } from "../ModuleHeading";
 
 function ModulePage({ params }: PageProps<"/dashboard/module/[id]">) {
@@ -102,9 +103,7 @@ function ModulePage({ params }: PageProps<"/dashboard/module/[id]">) {
 						</NavLink>
 					</Button>
 
-					<p className="text-[12px] font-medium text-cyberaware-aeces-blue">
-						Your progress is saved automatically. You’ll unlock Day 2 after completing this quiz.
-					</p>
+					<FootNote selectedModule={selectedModule} />
 				</article>
 			</section>
 		</ProtectedMain>

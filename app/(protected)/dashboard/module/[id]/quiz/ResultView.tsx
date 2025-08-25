@@ -26,11 +26,12 @@ export type ResultPayload = {
 
 type ResultViewProps = {
 	result: ResultPayload | null;
+	nextModuleHref: string;
 	onRetake: () => void;
 };
 
 function ResultView(props: ResultViewProps) {
-	const { result, onRetake } = props;
+	const { result, nextModuleHref, onRetake } = props;
 
 	if (!result) {
 		return null;
@@ -87,10 +88,10 @@ function ResultView(props: ResultViewProps) {
 								/>
 							</span>
 
-							<div className="flex flex-col gap-2">
+							<div className="flex flex-col gap-3">
 								<h4 className="font-semibold text-cyberaware-aeces-blue">{detail.question}</h4>
 
-								<div className="text-sm">
+								<div className="flex flex-col gap-0.5 text-sm">
 									<p
 										className={cnJoin(
 											detail.isCorrect ?
@@ -115,20 +116,26 @@ function ResultView(props: ResultViewProps) {
 				)}
 			/>
 
-			<Show.Root when={result.isPassed}>
-				<Show.Content>
-					<Button theme="orange" className="gap-2.5" asChild={true}>
-						<NavLink href="/dashboard">Return to dashboard</NavLink>
-					</Button>
-				</Show.Content>
+			<div className="flex gap-4">
+				<Show.Root when={result.isPassed}>
+					<Show.Content>
+						<Button theme="blue-ghost" className="gap-2.5" asChild={true}>
+							<NavLink href="/dashboard">Return to dashboard</NavLink>
+						</Button>
+					</Show.Content>
 
-				<Show.Fallback>
-					<Button theme="orange" onClick={onRetake} className="gap-2.5">
-						Retake Quiz
-						<IconBox icon="ri:brain-2-line" className="size-5" />
-					</Button>
-				</Show.Fallback>
-			</Show.Root>
+					<Show.Fallback>
+						<Button theme="blue-ghost" onClick={onRetake} className="gap-2.5">
+							Retake Quiz
+							<IconBox icon="ri:brain-2-line" className="size-5" />
+						</Button>
+					</Show.Fallback>
+				</Show.Root>
+
+				<Button theme="orange" onClick={onRetake} asChild={true}>
+					<NavLink href={nextModuleHref}>Go to next module</NavLink>
+				</Button>
+			</div>
 		</article>
 	);
 }
