@@ -18,7 +18,7 @@ function DashboardPage() {
 	const dashboardQueryResult = useQuery(dashboardQuery());
 
 	if (!dashboardQueryResult.data) {
-		return <AuthLoader text="Loading dashboard..." />;
+		return <AuthLoader />;
 	}
 
 	const ongoingModule = dashboardQueryResult.data.modules.find((module) => module.status === "ongoing");

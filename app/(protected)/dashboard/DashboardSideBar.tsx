@@ -21,7 +21,7 @@ function DashboardSideBar() {
 			sidebarWidth="250px"
 			sidebarWidthIcon="60px"
 			withMobileBreakpoint={false}
-			// className="max-w-(--sidebar-width-icon)"
+			className="max-w-(--sidebar-width-icon) shrink-0"
 		>
 			<Sidebar.Root
 				collapsible="icon"
