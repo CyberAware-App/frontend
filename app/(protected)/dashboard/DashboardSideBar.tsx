@@ -19,9 +19,9 @@ function DashboardSideBar() {
 		<Sidebar.ContextProvider
 			defaultOpen={false}
 			sidebarWidth="250px"
-			sidebarWidthIcon="70px"
+			sidebarWidthIcon="60px"
 			withMobileBreakpoint={false}
-			className="w-[70px] shrink-0"
+			// className="max-w-(--sidebar-width-icon)"
 		>
 			<Sidebar.Root
 				collapsible="icon"

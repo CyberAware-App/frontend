@@ -3,6 +3,7 @@
 import { useQuery } from "@tanstack/react-query";
 import { Credits, ProtectedMain } from "@/app/-components";
 import { UserAvatar } from "@/app/-components/UserAvatar";
+import { AuthLoader } from "@/app/(protected)/-components/AuthLoader";
 import { IconBox } from "@/components/common/IconBox";
 import { NavLink } from "@/components/common/NavLink";
 import { LockIcon } from "@/components/icons/LockIcon";
@@ -16,12 +17,12 @@ function DashboardPage() {
 	const sessionQueryResult = useQuery(sessionQuery());
 	const dashboardQueryResult = useQuery(dashboardQuery());
 
-	// if (!dashboardQueryResult.data) {
-	// 	return null;
-	// }
+	if (!dashboardQueryResult.data) {
+		return <AuthLoader text="Loading dashboard..." />;
+	}
 
-	const ongoingModule = dashboardQueryResult.data?.modules.find((module) => module.status === "ongoing");
-	const completedModulesCount = dashboardQueryResult.data?.completed_modules_count ?? 0;
+	const ongoingModule = dashboardQueryResult.data.modules.find((module) => module.status === "ongoing");
+	const completedModulesCount = dashboardQueryResult.data.completed_modules_count;
 	const isAllModulesCompleted = completedModulesCount === 10;
 
 	const cardDetails = [
@@ -101,7 +102,7 @@ function DashboardPage() {
 							<p className="text-[14px]">
 								{completedModulesCount === 10 ?
 									"You’ve completed all modules!"
-								:	`You’re on Module ${completedModulesCount} of ${dashboardQueryResult.data?.total_modules}`
+								:	`You’re on Module ${completedModulesCount} of ${dashboardQueryResult.data.total_modules}`
 								}
 							</p>
 						</div>
@@ -111,14 +112,14 @@ function DashboardPage() {
 
 					<article className="flex flex-col gap-3">
 						<Progress
-							value={dashboardQueryResult.data?.percentage_completed}
+							value={dashboardQueryResult.data.percentage_completed}
 							classNames={{
 								base: "h-3 rounded-[20px] bg-[hsl(0,0%,85%)]",
 								indicator: "rounded-[20px] bg-cyberaware-unizik-orange",
 							}}
 						/>
 						<p className="text-cyberaware-aeces-blue">
-							{dashboardQueryResult.data?.percentage_completed}% complete
+							{dashboardQueryResult.data.percentage_completed}% complete
 						</p>
 					</article>
 				</section>

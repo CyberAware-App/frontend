@@ -120,6 +120,12 @@ type LayoutConfig<Route extends LayoutRoutes = LayoutRoutes> = {
   handler satisfies LayoutConfig<"/dashboard">
 }
 
+// Validate ..\..\app\(protected)\layout.tsx
+{
+  const handler = {} as typeof import("..\\..\\app\\(protected)\\layout.js")
+  handler satisfies LayoutConfig<"/">
+}
+
 // Validate ..\..\app\auth\layout.tsx
 {
   const handler = {} as typeof import("..\\..\\app\\auth\\layout.js")
