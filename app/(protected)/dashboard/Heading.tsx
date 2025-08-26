@@ -6,33 +6,29 @@ import { usePathname } from "next/navigation";
 import { IconBox } from "@/components/common/IconBox";
 import { NavLink } from "@/components/common/NavLink";
 import { Progress } from "@/components/ui/progress-animated";
-import { dashboardQuery, type SelectedModule } from "@/lib/react-query/queryOptions";
-import { Afam, logoSmall } from "@/public/assets";
+import { dashboardQuery, sessionQuery } from "@/lib/react-query/queryOptions";
+import { logoSmall } from "@/public/assets";
 
-type ModuleHeadingProps = {
-	totalModules: number | undefined;
-	selectedModule: SelectedModule;
-};
-
-function ModuleHeading(props: ModuleHeadingProps) {
-	const { selectedModule, totalModules } = props;
-
+function Heading() {
+	const sessionQueryResult = useQuery(sessionQuery());
 	const dashboardQueryResult = useQuery(dashboardQuery());
 
-	const pathName = usePathname();
-	const quizPath = "/quiz";
+	const testPaths = ["/quiz", "/exam"];
 
-	const isQuizPage = pathName.endsWith(quizPath);
-	const modulePath = pathName.replace(quizPath, "");
+	const pathName = usePathname();
+	const testPath = testPaths.find((path) => pathName.endsWith(path));
+
+	const isTestPage = Boolean(testPath);
+	const modulePath = testPath ? pathName.replace(testPath, "") : pathName;
 
 	return (
 		<header className="px-4 pt-[50px] pb-8">
 			<NavLink
-				href={isQuizPage ? modulePath : "/dashboard"}
+				href={isTestPage ? modulePath : "/dashboard"}
 				className="flex items-center gap-1 text-[12px] font-medium text-cyberaware-unizik-orange"
 			>
 				<IconBox icon="ri:arrow-left-line" className="size-4" />
-				Back to {isQuizPage ? "module" : "dashboard"}
+				Back to {isTestPage ? "module" : "dashboard"}
 			</NavLink>
 
 			<article className="mt-4 flex items-center justify-between gap-5">
@@ -44,7 +40,9 @@ function ModuleHeading(props: ModuleHeadingProps) {
 				</div>
 
 				<Image
-					src={Afam}
+					src={sessionQueryResult.data?.avatar ?? ""}
+					width={50}
+					height={50}
 					alt="user"
 					className="size-[50px] rounded-full border-[2px] border-solid
 						border-cyberaware-unizik-orange"
@@ -53,7 +51,8 @@ function ModuleHeading(props: ModuleHeadingProps) {
 
 			<article className="mt-5.5 flex items-center gap-4">
 				<p className="shrink-0 text-[18px] font-semibold text-cyberaware-neutral-gray-light">
-					{selectedModule.title} of {totalModules}
+					Module {dashboardQueryResult.data?.completed_modules_count} of{" "}
+					{dashboardQueryResult.data?.total_modules}
 				</p>
 
 				<Progress
@@ -67,4 +66,4 @@ function ModuleHeading(props: ModuleHeadingProps) {
 		</header>
 	);
 }
-export { ModuleHeading };
+export { Heading };

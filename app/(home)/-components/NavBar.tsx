@@ -7,7 +7,6 @@ import Image from "next/image";
 import { usePathname } from "next/navigation";
 import { IconBox } from "@/components/common/IconBox";
 import { NavLink } from "@/components/common/NavLink";
-import { Teleport } from "@/components/common/teleport";
 import { HamburgerIcon, XIcon } from "@/components/icons";
 import { Button } from "@/components/ui/button";
 import { cnJoin, cnMerge } from "@/lib/utils/cn";
@@ -23,14 +22,16 @@ function NavBar() {
 	return (
 		<header
 			className={cnJoin(
-				`absolute isolate z-100 flex w-full items-center justify-between bg-cyberaware-aeces-blue py-1
-				pr-5 pl-1`,
-				isHomePage ? "top-[72px] max-w-[312px]" : "top-[95px] max-w-[430px] px-5"
+				"isolate z-100 flex w-full items-center justify-between bg-cyberaware-aeces-blue",
+				isHomePage ? "max-w-[312px] py-1 pr-5 pl-1" : "px-5"
 			)}
 		>
 			<NavLink href="/" className="flex items-center gap-1">
-				<Image src={logoSmall} alt="Logo" className="w-[55px]" />
-				<h3 className="font-medium text-white">CyberAware</h3>
+				<Image src={logoSmall} alt="Logo" className={cnJoin(isHomePage ? "w-[55px]" : "w-10")} />
+
+				<h3 className={cnJoin("text-white", isHomePage ? "font-medium" : "text-[22px] font-semibold")}>
+					CyberAware
+				</h3>
 			</NavLink>
 
 			<MobileNavigation isNavShow={isNavShow} toggleNavShow={toggleNavShow} />
@@ -72,7 +73,7 @@ function MobileNavigation(props: MobileNavProps) {
 	const { className, isNavShow, toggleNavShow } = props;
 
 	return (
-		<Teleport to="#main" insertPosition="afterbegin">
+		<>
 			<Presence present={isNavShow}>
 				<div
 					className={cnMerge(
@@ -119,6 +120,6 @@ function MobileNavigation(props: MobileNavProps) {
 					</Button>
 				</aside>
 			</Presence>
-		</Teleport>
+		</>
 	);
 }

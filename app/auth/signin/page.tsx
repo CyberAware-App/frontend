@@ -7,7 +7,7 @@ import { useForm } from "react-hook-form";
 import { Main } from "@/app/-components";
 import { NavLink } from "@/components/common/NavLink";
 import { Button } from "@/components/ui/button";
-import { apiSchema, callBackendApi } from "@/lib/api/callBackendApi";
+import { apiSchema, callBackendApiForQuery } from "@/lib/api/callBackendApi";
 import { resendOtp } from "../verify-account/utils";
 
 const SigninSchema = apiSchema.routes["@post/login"].body;
@@ -25,7 +25,7 @@ function SigninPage() {
 	const router = useRouter();
 
 	const onSubmit = form.handleSubmit(async (data) => {
-		await callBackendApi("@post/login", {
+		await callBackendApiForQuery("@post/login", {
 			body: data,
 
 			onResponseError: (ctx) => {

@@ -3,58 +3,76 @@
 import { useQuery } from "@tanstack/react-query";
 import Image from "next/image";
 import { Credits, ProtectedMain } from "@/app/-components";
+import { IconBox } from "@/components/common/IconBox";
 import { NavLink } from "@/components/common/NavLink";
 import { LockIcon } from "@/components/icons/LockIcon";
 import { Button } from "@/components/ui/button";
 import { Progress } from "@/components/ui/progress-animated";
 import { dashboardQuery, sessionQuery } from "@/lib/react-query/queryOptions";
 import { cnJoin, cnMerge } from "@/lib/utils/cn";
-import { Afam } from "@/public/assets";
 import { DashboardSideBar } from "./DashboardSideBar";
 
 function DashboardPage() {
 	const sessionQueryResult = useQuery(sessionQuery());
 	const dashboardQueryResult = useQuery(dashboardQuery());
 
+	// if (!dashboardQueryResult.data) {
+	// 	return null;
+	// }
+
 	const ongoingModule = dashboardQueryResult.data?.modules.find((module) => module.status === "ongoing");
-	const completedModulesCount = dashboardQueryResult.data?.completed_modules ?? 0;
+	const completedModulesCount = dashboardQueryResult.data?.completed_modules_count ?? 0;
+	const isAllModulesCompleted = completedModulesCount === 10;
 
 	const cardDetails = [
 		{
 			body: "Estimated time: 10mins",
 			button: (
 				<Button theme="orange" className="max-w-[150px] self-end" asChild={true}>
-					<NavLink href={`/dashboard/module/${ongoingModule?.id}`}>Start Module</NavLink>
+					<NavLink href={ongoingModule ? `/dashboard/module/${ongoingModule.id}` : "/dashboard/exam"}>
+						{ongoingModule ? "Start Module" : "Start Exam"}
+					</NavLink>
 				</Button>
 			),
 			id: 1,
 			isSub: false,
-			title: `${ongoingModule?.title}: ${ongoingModule?.name}`,
+			title: ongoingModule ? `${ongoingModule.title}: ${ongoingModule.name}` : "Exam",
 		},
 		{
-			body: completedModulesCount !== 10 ? `Module ${completedModulesCount + 2}` : "No Module Left",
+			body: isAllModulesCompleted ? "Complete" : `Module ${completedModulesCount + 1}`,
 			button: null,
 			id: 2,
 			isSub: true,
-			title: <LockIcon />,
+			title:
+				isAllModulesCompleted ?
+					<IconBox icon="material-symbols:check-circle-outline" className="size-6" />
+				:	<LockIcon />,
 		},
 		{
-			body: completedModulesCount !== 10 ? `Module ${completedModulesCount + 2}` : "No Module Left",
+			body: isAllModulesCompleted ? "Complete" : `Module ${completedModulesCount + 2}`,
 			button: null,
 			id: 3,
 			isSub: true,
-			title: <LockIcon />,
+			title:
+				isAllModulesCompleted ?
+					<IconBox icon="material-symbols:check-circle-outline" className="size-6" />
+				:	<LockIcon />,
 		},
 		{
-			body: "Complete module 10 to activate",
+			body: isAllModulesCompleted ? "You can take the exam any time" : "Complete module 10 to activate",
 			button: (
-				<Button theme="orange" disabled={true} className="max-w-[150px] self-end">
-					Take Quiz
+				<Button
+					theme="orange"
+					disabled={completedModulesCount !== 10}
+					className="max-w-[150px] self-end"
+					asChild={true}
+				>
+					<NavLink href="/dashboard/exam">Take Exam</NavLink>
 				</Button>
 			),
 			id: 4,
 			isSub: false,
-			title: "Quiz",
+			title: "Exam",
 		},
 		{
 			body: "A Certificate of completion would be sent to your E-mail If you pass the minimum mark of 80% in the quiz",
@@ -78,16 +96,20 @@ function DashboardPage() {
 					<article className="flex items-center justify-between gap-5">
 						<div className="flex flex-col gap-1">
 							<p className="text-[28px] font-semibold text-cyberaware-aeces-blue">
-								Hello, {sessionQueryResult.data?.data.first_name}!
+								Hello, {sessionQueryResult.data?.first_name}!
 							</p>
 							<p className="text-[14px]">
-								You’re on Module {(dashboardQueryResult.data?.completed_modules ?? 0) + 1} of{" "}
-								{dashboardQueryResult.data?.total_modules}
+								{completedModulesCount === 10 ?
+									"You’ve completed all modules!"
+								:	`You’re on Module ${completedModulesCount} of ${dashboardQueryResult.data?.total_modules}`
+								}
 							</p>
 						</div>
 
 						<Image
-							src={Afam}
+							src={sessionQueryResult.data?.avatar ?? ""}
+							width={50}
+							height={50}
 							alt="user"
 							className="size-[50px] rounded-full border-[2px] border-solid
 								border-cyberaware-unizik-orange"

@@ -17,7 +17,7 @@ export type ButtonProps = InferProps<"button">
 	>;
 
 const buttonVariants = tv({
-	base: "flex h-[52px] w-full min-w-fit items-center justify-center p-3.5 text-base font-medium",
+	base: "flex h-[52px] w-full min-w-fit items-center justify-center px-3.5 text-base font-medium",
 
 	defaultVariants: {
 		theme: "orange",
@@ -33,6 +33,7 @@ const buttonVariants = tv({
 			"blue-ghost": "border-2 border-cyberaware-aeces-blue bg-transparent text-cyberaware-aeces-blue",
 			orange: "bg-cyberaware-unizik-orange text-white",
 			white: "bg-white text-cyberaware-aeces-blue",
+			danger: "bg-cyberaware-danger-red text-white",
 		},
 
 		disabled: {

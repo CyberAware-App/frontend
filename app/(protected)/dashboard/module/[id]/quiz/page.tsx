@@ -1,35 +1,19 @@
 "use client";
 
+import { useRouter } from "@bprogress/next";
 import { zodResolver } from "@hookform/resolvers/zod";
 import { useQuery } from "@tanstack/react-query";
-import { useRouter } from "next/navigation";
 import { use, useEffect, useMemo, useState } from "react";
 import { useForm } from "react-hook-form";
 import { toast } from "sonner";
 import { ProtectedMain } from "@/app/-components";
 import { Show } from "@/components/common/show";
 import { dashboardQuery, moduleQuizQuery } from "@/lib/react-query/queryOptions";
-import { ModuleHeading } from "../../ModuleHeading";
-import { QuizForm, QuizSchema } from "./QuizForm";
-import { type ResultPayload, ResultView } from "./ResultView";
-
-const shuffle = <TArray extends unknown[]>(array: TArray | undefined) => {
-	if (!array) return;
-
-	const shuffledArray = structuredClone(array);
-
-	// == Using Fisher-Yates algorithm
-	for (let lastElementIndex = shuffledArray.length - 1; lastElementIndex > 0; lastElementIndex--) {
-		const randomIndex = Math.floor(Math.random() * (lastElementIndex + 1));
-
-		[shuffledArray[lastElementIndex], shuffledArray[randomIndex]] = [
-			shuffledArray[randomIndex],
-			shuffledArray[lastElementIndex],
-		];
-	}
-
-	return shuffledArray;
-};
+import { shuffleArray } from "@/lib/utils/common";
+import { ExamSchema } from "../../../exam/ExamForm";
+import { Heading } from "../../../Heading";
+import { QuizForm } from "./QuizForm";
+import { type QuizResultPayload, QuizResultView } from "./QuizResultView";
 
 function QuizPage({ params }: PageProps<"/dashboard/module/[id]/quiz">) {
 	const dashboardQueryResult = useQuery(dashboardQuery());
@@ -42,37 +26,37 @@ function QuizPage({ params }: PageProps<"/dashboard/module/[id]/quiz">) {
 		(module) => String(module.id) === moduleId
 	);
 
-	const isModuleLocked = selectedModule?.status === "locked";
+	const isQuizUnaccessible = selectedModule && selectedModule.status === "locked";
 
 	const router = useRouter();
 
 	useEffect(() => {
-		if (isModuleLocked) {
+		if (isQuizUnaccessible) {
 			toast.error("You are not authorized to access this module quiz");
 
 			router.push("/dashboard");
 		}
-	}, [isModuleLocked, router]);
+	}, [isQuizUnaccessible, router]);
 
-	const [result, setResult] = useState<ResultPayload | null>(null);
+	const [result, setResult] = useState<QuizResultPayload | null>(null);
 
 	const form = useForm({
 		defaultValues: [],
-		resolver: zodResolver(QuizSchema),
+		resolver: zodResolver(ExamSchema),
 	});
 
-	const selectedQuizzes = useMemo(() => {
-		return shuffle(moduleQuizQueryResult.data?.data)?.slice(0, 5);
+	const selectedQuizQuestions = useMemo(() => {
+		return shuffleArray(moduleQuizQueryResult.data?.data)?.slice(0, 5);
 		// eslint-disable-next-line react-hooks/exhaustive-deps
-	}, [form, moduleQuizQueryResult.data?.data, result]);
+	}, [moduleQuizQueryResult.data?.data, result]);
 
-	if (!selectedModule || isModuleLocked || !selectedQuizzes) {
+	if (!selectedModule || isQuizUnaccessible || !selectedQuizQuestions) {
 		return null;
 	}
 
 	const onSubmit = form.handleSubmit((data) => {
 		const details = data.map((answer) => {
-			const selectedQuiz = selectedQuizzes.find((quiz) => quiz.question === answer.question);
+			const selectedQuiz = selectedQuizQuestions.find((quiz) => quiz.question === answer.question);
 
 			if (!selectedQuiz) {
 				throw new Error("Quiz not found");
@@ -86,16 +70,16 @@ function QuizPage({ params }: PageProps<"/dashboard/module/[id]/quiz">) {
 				userAnswer: answer.selected_option,
 				correctAnswer: selectedQuiz.correct_answer,
 				isCorrect,
-			} satisfies ResultPayload["details"][number];
+			} satisfies QuizResultPayload["details"][number];
 		});
 
 		const score = details.reduce((accumulator, detail) => accumulator + (detail.isCorrect ? 1 : 0), 0);
 
-		const percentage = Math.round((score / selectedQuizzes.length) * 100);
+		const percentage = Math.round((score / selectedQuizQuestions.length) * 100);
 
 		const isPassed = percentage >= 80;
 
-		setResult({ score, total: selectedQuizzes.length, percentage, isPassed, details });
+		setResult({ score, total: selectedQuizQuestions.length, percentage, isPassed, details });
 	});
 
 	const onRetake = () => {
@@ -105,26 +89,21 @@ function QuizPage({ params }: PageProps<"/dashboard/module/[id]/quiz">) {
 
 	return (
 		<ProtectedMain>
-			<ModuleHeading
-				selectedModule={selectedModule}
-				totalModules={dashboardQueryResult.data?.total_modules}
-			/>
+			<Heading />
 
 			<section className="flex grow flex-col gap-[50px] bg-white px-5 pt-5 pb-[50px]">
 				<hr className="h-px w-full border-none bg-cyberaware-neutral-gray-light" />
 
 				<Show.Root when={!result}>
-					<Show.Content>
-						<QuizForm
-							form={form}
-							onSubmit={onSubmit}
-							selectedModule={selectedModule}
-							selectedQuizzes={selectedQuizzes}
-						/>
-					</Show.Content>
+					<QuizForm
+						form={form}
+						onSubmit={onSubmit}
+						selectedModule={selectedModule}
+						selectedQuizQuestions={selectedQuizQuestions}
+					/>
 
 					<Show.Fallback>
-						<ResultView
+						<QuizResultView
 							nextModuleHref={`/dashboard/module/${Number(moduleId) + 1}`}
 							result={result}
 							onRetake={onRetake}

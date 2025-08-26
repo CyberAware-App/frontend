@@ -13,7 +13,7 @@ import {
 	reasonTwo,
 } from "@/public/assets/landing";
 import { Credits, Main } from "../-components";
-import { HowItWorksLadder } from "./-components";
+import { HowItWorksLadder, NavBar } from "./-components";
 
 const reasons = [
 	{
@@ -60,7 +60,9 @@ const faqs = [
 function HomePage() {
 	return (
 		<Main>
-			<section className="mx-4 mt-4 flex flex-col gap-8 bg-white px-[45px] pt-[170px] pb-4">
+			<section className="mx-4 mt-4 flex flex-col gap-8 bg-white px-[45px] pt-[76px] pb-4">
+				<NavBar />
+
 				<h1 className="text-center text-[36px] font-bold text-cyberaware-aeces-blue">
 					Be CyberAware.
 					<span className="inline-flex items-center">

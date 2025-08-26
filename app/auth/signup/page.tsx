@@ -7,7 +7,7 @@ import { useForm } from "react-hook-form";
 import { Main } from "@/app/-components";
 import { NavLink } from "@/components/common/NavLink";
 import { Button } from "@/components/ui/button";
-import { apiSchema, callBackendApi } from "@/lib/api/callBackendApi";
+import { apiSchema, callBackendApiForQuery } from "@/lib/api/callBackendApi";
 
 const SignupSchema = apiSchema.routes["@post/register"].body;
 
@@ -25,6 +25,24 @@ function SignupPage() {
 
 	const router = useRouter();
 
+	const onSubmit = form.handleSubmit(async (data) => {
+		await callBackendApiForQuery("@post/register", {
+			body: data,
+
+			onResponseError: (ctx) => {
+				for (const [key, value] of Object.entries(ctx.error.errorData.errors ?? {})) {
+					form.setError(key as never, { message: value });
+				}
+			},
+
+			onSuccess: () => {
+				localStorage.setItem("email", data.email);
+
+				router.push("/auth/verify-account");
+			},
+		});
+	});
+
 	return (
 		<Main className="gap-13 px-4 pb-[158px]">
 			<header className="flex flex-col gap-5">
@@ -41,29 +59,7 @@ function SignupPage() {
 			</header>
 
 			<section>
-				<Form.Root
-					methods={form}
-					className="gap-6"
-					onSubmit={(event) =>
-						void form.handleSubmit(async (data) => {
-							await callBackendApi("@post/register", {
-								body: data,
-
-								onResponseError: (ctx) => {
-									for (const [key, value] of Object.entries(ctx.error.errorData.errors ?? {})) {
-										form.setError(key as never, { message: value });
-									}
-								},
-
-								onSuccess: () => {
-									localStorage.setItem("email", data.email);
-
-									router.push("/auth/verify-account");
-								},
-							});
-						})(event)
-					}
-				>
+				<Form.Root methods={form} className="gap-6" onSubmit={(event) => void onSubmit(event)}>
 					<Form.Field control={form.control} name="first_name">
 						<Form.Label className="text-white">First name</Form.Label>
 						<Form.Input

@@ -4,33 +4,33 @@ import { IconBox } from "@/components/common/IconBox";
 import { NavLink } from "@/components/common/NavLink";
 import { Show } from "@/components/common/show";
 import { Button } from "@/components/ui/button";
-import type { SelectedQuizzes } from "@/lib/react-query/queryOptions";
+import type { SelectedQuizQuestions } from "@/lib/react-query/queryOptions";
 import { cnJoin } from "@/lib/utils/cn";
 import { emojiFailed, emojiPassed } from "@/public/assets";
 
-export type ResultDetail = {
+export type QuizResultDetail = {
 	question: string | undefined;
-	options: SelectedQuizzes[number]["options"];
-	userAnswer: SelectedQuizzes[number]["correct_answer"];
-	correctAnswer: SelectedQuizzes[number]["correct_answer"];
+	options: SelectedQuizQuestions[number]["options"];
+	userAnswer: SelectedQuizQuestions[number]["correct_answer"];
+	correctAnswer: SelectedQuizQuestions[number]["correct_answer"];
 	isCorrect: boolean;
 };
 
-export type ResultPayload = {
+export type QuizResultPayload = {
 	score: number;
 	total: number;
 	percentage: number;
 	isPassed: boolean;
-	details: ResultDetail[];
+	details: QuizResultDetail[];
 };
 
-type ResultViewProps = {
-	result: ResultPayload | null;
+type QuizResultViewProps = {
+	result: QuizResultPayload | null;
 	nextModuleHref: string;
 	onRetake: () => void;
 };
 
-function ResultView(props: ResultViewProps) {
+function QuizResultView(props: QuizResultViewProps) {
 	const { result, nextModuleHref, onRetake } = props;
 
 	if (!result) {
@@ -140,4 +140,4 @@ function ResultView(props: ResultViewProps) {
 	);
 }
 
-export { ResultView };
+export { QuizResultView };

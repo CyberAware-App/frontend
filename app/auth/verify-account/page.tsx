@@ -12,7 +12,7 @@ import { toast } from "sonner";
 import { Main } from "@/app/-components";
 import { InputOTP } from "@/components/ui";
 import { Button } from "@/components/ui/button";
-import { apiSchema, callBackendApi } from "@/lib/api/callBackendApi";
+import { apiSchema, callBackendApiForQuery } from "@/lib/api/callBackendApi";
 import { resendOtp } from "./utils";
 
 const VerifyAccountSchema = apiSchema.routes["@post/verify-otp"].body.pick({ code: true });
@@ -42,7 +42,7 @@ function VerifyAccountPage() {
 	}
 
 	const onSubmit = form.handleSubmit(async (data) => {
-		await callBackendApi("@post/verify-otp", {
+		await callBackendApiForQuery("@post/verify-otp", {
 			body: { code: data.code, email },
 
 			onResponseError: (ctx) => {

@@ -1,8 +1,8 @@
 "use client";
 
+import { useRouter } from "@bprogress/next";
 import MuxPlayer from "@mux/mux-player-react";
 import { useQuery, useQueryClient } from "@tanstack/react-query";
-import { useRouter } from "next/navigation";
 import { use, useEffect, useState } from "react";
 import { toast } from "sonner";
 import { ProtectedMain } from "@/app/-components";
@@ -11,8 +11,8 @@ import { NavLink } from "@/components/common/NavLink";
 import { Button } from "@/components/ui/button";
 import { callBackendApi } from "@/lib/api/callBackendApi";
 import { dashboardQuery } from "@/lib/react-query/queryOptions";
+import { Heading } from "../../Heading";
 import { FootNote } from "../FootNote";
-import { ModuleHeading } from "../ModuleHeading";
 
 function ModulePage({ params }: PageProps<"/dashboard/module/[id]">) {
 	const dashboardQueryResult = useQuery(dashboardQuery());
@@ -29,7 +29,9 @@ function ModulePage({ params }: PageProps<"/dashboard/module/[id]">) {
 
 	const queryClient = useQueryClient();
 
-	const isModuleLocked = selectedModule?.status === "locked";
+	const isModuleLocked = selectedModule && selectedModule.status === "locked";
+
+	const isFinalModule = selectedModule?.id === 10;
 
 	useEffect(() => {
 		if (isModuleLocked) {
@@ -45,10 +47,7 @@ function ModulePage({ params }: PageProps<"/dashboard/module/[id]">) {
 
 	return (
 		<ProtectedMain>
-			<ModuleHeading
-				selectedModule={selectedModule}
-				totalModules={dashboardQueryResult.data?.total_modules}
-			/>
+			<Heading />
 
 			<section className="flex grow flex-col gap-[50px] bg-white px-5 pt-5 pb-[50px]">
 				<hr className="h-px w-full border-none bg-cyberaware-neutral-gray-light" />
@@ -59,7 +58,6 @@ function ModulePage({ params }: PageProps<"/dashboard/module/[id]">) {
 					</h3>
 
 					<MuxPlayer
-						// theme="classic"
 						className="aspect-[398/190]
 							shadow-[0px_5px_20px_0px_var(--color-cyberaware-unizik-orange)]"
 						primaryColor="var(--color-cyberaware-light-orange)"
@@ -72,16 +70,18 @@ function ModulePage({ params }: PageProps<"/dashboard/module/[id]">) {
 							);
 
 							const shouldMarkModuleAsComplete =
-								completionPercentage >= 80 && !isModuleMarkedAsCompleted;
+								selectedModule.status !== "complete"
+								&& completionPercentage >= 80
+								&& !isModuleMarkedAsCompleted;
 
 							if (!shouldMarkModuleAsComplete) return;
+
+							setIsModuleMarkedAsCompleted(true);
 
 							void callBackendApi("@post/module/:id/complete", {
 								params: { id: moduleId },
 								onSuccess: () => queryClient.refetchQueries(dashboardQuery()),
 							});
-
-							setIsModuleMarkedAsCompleted(true);
 						}}
 					/>
 				</article>
@@ -97,8 +97,8 @@ function ModulePage({ params }: PageProps<"/dashboard/module/[id]">) {
 						className="max-w-[160px] gap-2.5"
 						asChild={true}
 					>
-						<NavLink href={`/dashboard/module/${moduleId}/quiz`}>
-							Take Quiz
+						<NavLink href={isFinalModule ? "/dashboard/exam" : `/dashboard/module/${moduleId}/quiz`}>
+							Take {isFinalModule ? "Exam" : "Quiz"}
 							<IconBox icon="ri:brain-2-line" className="size-5" />
 						</NavLink>
 					</Button>

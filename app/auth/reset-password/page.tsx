@@ -12,7 +12,7 @@ import { Main } from "@/app/-components";
 import { For } from "@/components/common/for";
 import { InputOTP } from "@/components/ui";
 import { Button } from "@/components/ui/button";
-import { apiSchema, callBackendApi } from "@/lib/api/callBackendApi";
+import { apiSchema, callBackendApiForQuery } from "@/lib/api/callBackendApi";
 
 const ResetPasswordSchema = apiSchema.routes["@post/reset-password"].body.omit({ email: true });
 
@@ -42,7 +42,7 @@ function ResetPasswordPage() {
 	}
 
 	const onSubmit = form.handleSubmit(async (data) => {
-		await callBackendApi("@post/reset-password", {
+		await callBackendApiForQuery("@post/reset-password", {
 			body: { ...data, email },
 
 			onResponseError: (ctx) => {

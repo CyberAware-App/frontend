@@ -50,6 +50,7 @@ export const QuizOptionUnionSchema = z.literal(
 	"At least one option must be selected"
 );
 
+const QuizOptionSchema = z.record(QuizOptionUnionSchema, z.string());
 export const apiSchema = defineSchema(
 	{
 		/* eslint-disable perfectionist/sort-objects */
@@ -65,7 +66,7 @@ export const apiSchema = defineSchema(
 					certificate_url: z.url(),
 					is_valid: z.boolean(),
 					issued_date: z.string(),
-					score: z.number().int().nonnegative(),
+					score: z.number(),
 					user_email: z.string(),
 					user_name: z.string(),
 				})
@@ -77,10 +78,10 @@ export const apiSchema = defineSchema(
 		"@get/dashboard": {
 			data: withBaseSuccessResponse(
 				z.object({
-					completed_modules: z.int().nonnegative(),
+					completed_modules: z.number(),
 					modules: z.array(ModuleObjectSchema),
-					percentage_completed: z.number().min(0).max(100),
-					total_modules: z.int().nonnegative(),
+					percentage_completed: z.number(),
+					total_modules: z.number(),
 				})
 			),
 		},
@@ -99,8 +100,8 @@ export const apiSchema = defineSchema(
 					z.object({
 						correct_answer: QuizOptionUnionSchema,
 						id: z.number(),
-						module: z.int().positive(),
-						options: z.record(QuizOptionUnionSchema, z.string()),
+						module: z.number(),
+						options: QuizOptionSchema,
 						question: z.string(),
 					})
 				)
@@ -111,7 +112,7 @@ export const apiSchema = defineSchema(
 			data: withBaseSuccessResponse(
 				z.array(
 					z.object({
-						options: z.array(QuizOptionUnionSchema),
+						options: QuizOptionSchema,
 						question: z.string(),
 					})
 				)
@@ -144,7 +145,9 @@ export const apiSchema = defineSchema(
 		},
 
 		"@post/forgot-password": {
-			body: z.object({ email: z.email() }),
+			body: z.object({
+				email: z.email(),
+			}),
 			data: withBaseSuccessResponse(
 				z.object({
 					email: z.string(),
@@ -186,11 +189,11 @@ export const apiSchema = defineSchema(
 			),
 			data: withBaseSuccessResponse(
 				z.object({
-					attempt_number: z.number().int().positive(),
-					correct_answers: z.number().int().nonnegative(),
+					attempt_number: z.number(),
+					correct_answers: z.number(),
 					passed: z.boolean(),
 					score: z.union([z.string(), z.number()]),
-					total_questions: z.number().int().positive(),
+					total_questions: z.number(),
 				})
 			),
 		},
@@ -213,7 +216,9 @@ export const apiSchema = defineSchema(
 		},
 
 		"@post/resend-otp": {
-			body: z.object({ email: z.email() }),
+			body: z.object({
+				email: z.email(),
+			}),
 			data: withBaseSuccessResponse(
 				z.object({
 					email: z.string(),
@@ -237,7 +242,9 @@ export const apiSchema = defineSchema(
 		},
 
 		"@post/token-refresh": {
-			body: z.object({ refresh: z.jwt() }),
+			body: z.object({
+				refresh: z.jwt(),
+			}),
 			data: withBaseSuccessResponse(
 				z.object({
 					access: z.jwt(),
@@ -246,7 +253,10 @@ export const apiSchema = defineSchema(
 		},
 
 		"@post/verify-otp": {
-			body: z.object({ code: CodeSchema, email: z.email() }),
+			body: z.object({
+				code: CodeSchema,
+				email: z.email(),
+			}),
 			data: withBaseSuccessResponse(
 				z.object({
 					access: z.jwt(),

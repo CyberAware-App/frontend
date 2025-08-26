@@ -5,26 +5,26 @@ import { IconBox } from "@/components/common/IconBox";
 import { DialogAnimated, RadioGroupAnimated } from "@/components/ui";
 import { Button } from "@/components/ui/button";
 import { Form } from "@/components/ui/form";
-import type { SelectedModule, SelectedQuizQuestions } from "@/lib/react-query/queryOptions";
-import type { ExamSchema } from "../../../exam/ExamForm";
-import { FootNote } from "../../FootNote";
+import { apiSchema } from "@/lib/api/callBackendApi";
+import type { SelectedExamQuestions } from "@/lib/react-query/queryOptions";
 
-type QuizFormProps = {
+export const ExamSchema = z
+	.record(z.string(), apiSchema.routes["@post/quiz"].body.unwrap())
+	.transform((data) => Object.values(data)) as unknown as (typeof apiSchema.routes)["@post/quiz"]["body"];
+
+type ExamFormProps = {
 	onSubmit: ReturnType<UseFormReturn["handleSubmit"]>;
 	form: UseFormReturn<z.infer<typeof ExamSchema>>;
-	selectedModule: SelectedModule;
-	selectedQuizQuestions: SelectedQuizQuestions;
+	selectedExamQuestions: SelectedExamQuestions;
 };
 
-function QuizForm(props: QuizFormProps) {
-	const { form, selectedModule, onSubmit, selectedQuizQuestions } = props;
+function ExamForm(props: ExamFormProps) {
+	const { form, onSubmit, selectedExamQuestions } = props;
 
 	return (
 		<>
 			<article className="flex flex-col gap-10">
-				<h3 className="text-[28px] font-semibold text-cyberaware-aeces-blue">
-					{selectedModule.title} Quiz:
-				</h3>
+				<h3 className="text-[28px] font-semibold text-cyberaware-aeces-blue">Exam:</h3>
 
 				<Form.Root
 					id="quiz-form"
@@ -33,24 +33,24 @@ function QuizForm(props: QuizFormProps) {
 					className="gap-10"
 				>
 					<For
-						each={selectedQuizQuestions}
-						renderItem={(quiz, quizIndex) => (
+						each={selectedExamQuestions}
+						renderItem={(exam, examIndex) => (
 							<Form.Field
-								key={quiz.id}
+								key={exam.question}
 								control={form.control}
-								name={`${quizIndex}.question`}
+								name={`${examIndex}.question`}
 								className="flex flex-col gap-5"
 							>
 								<Form.Label className="flex gap-1.5 text-cyberaware-aeces-blue">
-									<span>{quizIndex + 1}.</span> <p>{quiz.question}</p>
+									<span>{examIndex + 1}.</span> <p>{exam.question}</p>
 								</Form.Label>
 
-								<Form.Input hidden={true} type="text" value={quiz.question} />
+								<Form.Input hidden={true} type="text" value={exam.question} />
 
 								<Form.Field
-									key={quiz.id}
+									key={exam.question}
 									control={form.control}
-									name={`${quizIndex}.selected_option`}
+									name={`${examIndex}.selected_option`}
 									className="ml-3"
 								>
 									<Form.FieldController
@@ -60,7 +60,7 @@ function QuizForm(props: QuizFormProps) {
 												onValueChange={field.onChange}
 											>
 												<For
-													each={Object.entries(quiz.options)}
+													each={Object.entries(exam.options)}
 													renderItem={([option, value]) => (
 														<div
 															className="flex items-center gap-2 text-cyberaware-aeces-blue"
@@ -103,17 +103,15 @@ function QuizForm(props: QuizFormProps) {
 				<article className="flex flex-col gap-7">
 					<DialogAnimated.Trigger asChild={true}>
 						<Button
-							theme="orange"
 							isLoading={form.formState.isSubmitting}
 							isDisabled={form.formState.isSubmitting}
+							theme="orange"
 							className="gap-2.5"
 						>
 							Submit
 							<IconBox icon="ri:brain-2-line" className="size-5" />
 						</Button>
 					</DialogAnimated.Trigger>
-
-					<FootNote selectedModule={selectedModule} />
 				</article>
 
 				<DialogAnimated.Content
@@ -155,4 +153,4 @@ function QuizForm(props: QuizFormProps) {
 	);
 }
 
-export { QuizForm };
+export { ExamForm };

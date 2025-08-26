@@ -17,6 +17,16 @@ const nextConfig: NextConfig = {
 		ignoreDuringBuilds: true,
 	},
 
+	images: {
+		remotePatterns: [
+			{
+				protocol: "https",
+				hostname: "avatar.iran.liara.run",
+				pathname: "/**",
+			},
+		],
+	},
+
 	typescript: {
 		ignoreBuildErrors: true,
 	},

@@ -1,4 +1,3 @@
-export { default as Afam } from "./afamHeadshot.jpg";
 export { default as emojiFailed } from "./emoji-failed.png";
 export { default as emojiPassed } from "./emoji-passed.png";
 export { default as emojiTooBad } from "./emoji-too-bad.png";

@@ -6,7 +6,7 @@ import { Form } from "@zayne-labs/ui-react/ui/form";
 import { useForm } from "react-hook-form";
 import { Main } from "@/app/-components";
 import { Button } from "@/components/ui/button";
-import { callBackendApi } from "@/lib/api/callBackendApi";
+import { callBackendApiForQuery } from "@/lib/api/callBackendApi";
 import { apiSchema } from "@/lib/api/callBackendApi/apiSchema";
 
 const ForgotPasswordSchema = apiSchema.routes["@post/forgot-password"].body.pick({ email: true });
@@ -23,7 +23,7 @@ function ForgotPasswordPage() {
 	const router = useRouter();
 
 	const onSubmit = form.handleSubmit(async (data) => {
-		await callBackendApi("@post/forgot-password", {
+		await callBackendApiForQuery("@post/forgot-password", {
 			body: data,
 
 			onResponseError: (ctx) => {
