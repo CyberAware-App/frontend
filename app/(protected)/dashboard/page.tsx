@@ -1,8 +1,8 @@
 "use client";
 
 import { useQuery } from "@tanstack/react-query";
-import Image from "next/image";
 import { Credits, ProtectedMain } from "@/app/-components";
+import { UserAvatar } from "@/app/-components/UserAvatar";
 import { IconBox } from "@/components/common/IconBox";
 import { NavLink } from "@/components/common/NavLink";
 import { LockIcon } from "@/components/icons/LockIcon";
@@ -106,14 +106,7 @@ function DashboardPage() {
 							</p>
 						</div>
 
-						<Image
-							src={sessionQueryResult.data?.avatar ?? ""}
-							width={50}
-							height={50}
-							alt="user"
-							className="size-[50px] rounded-full border-[2px] border-solid
-								border-cyberaware-unizik-orange"
-						/>
+						<UserAvatar />
 					</article>
 
 					<article className="flex flex-col gap-3">

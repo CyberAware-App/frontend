@@ -46,6 +46,8 @@
 	--animate-sidebar-in: sidebar-in 250ms ease;
 	--animate-sidebar-out: sidebar-out 250ms ease;
 
+	--animate-text-gradient: text-gradient 1.3s linear infinite;
+
 	@keyframes nav-show {
 		from {
 			width: 0;
@@ -99,6 +101,12 @@
 	@keyframes sidebar-out {
 		to {
 			transform: translateX(-100%);
+		}
+	}
+
+	@keyframes text-gradient {
+		to {
+			background-position: -200% center;
 		}
 	}
 }

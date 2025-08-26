@@ -6,6 +6,7 @@ import { useQuery, useQueryClient } from "@tanstack/react-query";
 import { use, useEffect, useState } from "react";
 import { toast } from "sonner";
 import { ProtectedMain } from "@/app/-components";
+import { AuthLoader } from "@/app/(protected)/-components/AuthLoader";
 import { IconBox } from "@/components/common/IconBox";
 import { NavLink } from "@/components/common/NavLink";
 import { Button } from "@/components/ui/button";
@@ -42,7 +43,7 @@ function ModulePage({ params }: PageProps<"/dashboard/module/[id]">) {
 	}, [isModuleLocked, router]);
 
 	if (!selectedModule || isModuleLocked) {
-		return null;
+		return <AuthLoader text="Loading module..." />;
 	}
 
 	return (

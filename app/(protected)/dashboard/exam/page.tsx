@@ -11,6 +11,7 @@ import { Show } from "@/components/common/show";
 import { callBackendApiForQuery } from "@/lib/api/callBackendApi";
 import { dashboardQuery, examQuery } from "@/lib/react-query/queryOptions";
 import { shuffleArray } from "@/lib/utils/common";
+import { AuthLoader } from "../../-components/AuthLoader";
 import { Heading } from "../Heading";
 import { ExamForm, ExamSchema } from "./ExamForm";
 import { type ExamResultPayload, ExamResultView } from "./ExamResultView";
@@ -46,7 +47,7 @@ function ExamPage() {
 	}, [examQueryResult.data?.data, result]);
 
 	if (isExamUnaccessible || !selectedExamQuestions) {
-		return null;
+		return <AuthLoader text="Loading exam..." />;
 	}
 
 	const onSubmit = form.handleSubmit(async (data) => {

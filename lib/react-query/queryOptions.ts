@@ -13,7 +13,7 @@ export const sessionQuery = () => {
 		staleTime: Infinity,
 		select: (data) => ({
 			...data.data,
-			avatar: getUserAvatar(`${data.data.first_name} ${data.data.last_name}`),
+			avatar: getUserAvatar(data.data.first_name, data.data.last_name),
 		}),
 	});
 };

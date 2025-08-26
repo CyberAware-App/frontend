@@ -7,6 +7,7 @@ import { use, useEffect, useMemo, useState } from "react";
 import { useForm } from "react-hook-form";
 import { toast } from "sonner";
 import { ProtectedMain } from "@/app/-components";
+import { AuthLoader } from "@/app/(protected)/-components/AuthLoader";
 import { Show } from "@/components/common/show";
 import { dashboardQuery, moduleQuizQuery } from "@/lib/react-query/queryOptions";
 import { shuffleArray } from "@/lib/utils/common";
@@ -51,7 +52,7 @@ function QuizPage({ params }: PageProps<"/dashboard/module/[id]/quiz">) {
 	}, [moduleQuizQueryResult.data?.data, result]);
 
 	if (!selectedModule || isQuizUnaccessible || !selectedQuizQuestions) {
-		return null;
+		return <AuthLoader text="Loading quiz..." />;
 	}
 
 	const onSubmit = form.handleSubmit((data) => {

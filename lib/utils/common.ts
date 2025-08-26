@@ -16,7 +16,4 @@ export const shuffleArray = <TArray extends unknown[]>(array: TArray | undefined
 	return shuffledArray;
 };
 
-export const getUserAvatar = (name?: string) =>
-	name ?
-		`https://avatar.iran.liara.run/username?username=${name}`
-	:	"https://avatar.iran.liara.run/public/boy";
+export const getUserAvatar = (firstName: string, lastName: string) => `${firstName[0]}${lastName[0]}`;

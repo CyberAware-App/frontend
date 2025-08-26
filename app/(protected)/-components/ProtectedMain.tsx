@@ -2,17 +2,19 @@
 
 import { useQuery } from "@tanstack/react-query";
 import type { InferProps } from "@zayne-labs/toolkit-react/utils";
-import { sessionQuery } from "@/lib/react-query/queryOptions";
 import { Main } from "@/app/-components";
+import { dashboardQuery, sessionQuery } from "@/lib/react-query/queryOptions";
+import { AuthLoader } from "./AuthLoader";
 
 function ProtectedMain(props: InferProps<typeof Main>) {
-	const { data } = useQuery(sessionQuery());
+	const sessionQueryResult = useQuery(sessionQuery());
+	const dashboardQueryResult = useQuery(dashboardQuery());
 
-	if (data) {
+	if (sessionQueryResult.data && dashboardQueryResult.data) {
 		return <Main {...props} />;
 	}
 
-	return null;
+	return <AuthLoader />;
 }
 
 export { ProtectedMain };

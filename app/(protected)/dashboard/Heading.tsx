@@ -3,14 +3,14 @@
 import { useQuery } from "@tanstack/react-query";
 import Image from "next/image";
 import { usePathname } from "next/navigation";
+import { UserAvatar } from "@/app/-components/UserAvatar";
 import { IconBox } from "@/components/common/IconBox";
 import { NavLink } from "@/components/common/NavLink";
 import { Progress } from "@/components/ui/progress-animated";
-import { dashboardQuery, sessionQuery } from "@/lib/react-query/queryOptions";
+import { dashboardQuery } from "@/lib/react-query/queryOptions";
 import { logoSmall } from "@/public/assets";
 
 function Heading() {
-	const sessionQueryResult = useQuery(sessionQuery());
 	const dashboardQueryResult = useQuery(dashboardQuery());
 
 	const testPaths = ["/quiz", "/exam"];
@@ -39,14 +39,7 @@ function Heading() {
 					</h3>
 				</div>
 
-				<Image
-					src={sessionQueryResult.data?.avatar ?? ""}
-					width={50}
-					height={50}
-					alt="user"
-					className="size-[50px] rounded-full border-[2px] border-solid
-						border-cyberaware-unizik-orange"
-				/>
+				<UserAvatar />
 			</article>
 
 			<article className="mt-5.5 flex items-center gap-4">
