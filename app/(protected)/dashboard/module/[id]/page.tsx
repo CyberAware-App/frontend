@@ -58,33 +58,35 @@ function ModulePage({ params }: PageProps<"/dashboard/module/[id]">) {
 						{selectedModule.title}: {selectedModule.name}
 					</h3>
 
-					<MuxPlayer
-						className="aspect-[398/190]
-							shadow-[0px_5px_20px_0px_var(--color-cyberaware-unizik-orange)]"
-						primaryColor="var(--color-cyberaware-light-orange)"
-						playbackId={selectedModule.mux_playback}
-						onTimeUpdate={(event) => {
-							const element = event.target as HTMLMediaElement;
+					<div className="flex items-center justify-center">
+						<MuxPlayer
+							className="h-[190px] w-full max-w-[398px]
+								shadow-[0px_5px_20px_0px_var(--color-cyberaware-unizik-orange)]"
+							primaryColor="var(--color-cyberaware-light-orange)"
+							playbackId={selectedModule.mux_playback}
+							onTimeUpdate={(event) => {
+								const element = event.target as HTMLMediaElement;
 
-							const completionPercentage = Math.trunc(
-								(element.currentTime / element.duration) * 100
-							);
+								const completionPercentage = Math.trunc(
+									(element.currentTime / element.duration) * 100
+								);
 
-							const shouldMarkModuleAsComplete =
-								selectedModule.status !== "complete"
-								&& completionPercentage >= 80
-								&& !isModuleMarkedAsCompleted;
+								const shouldMarkModuleAsComplete =
+									selectedModule.status !== "complete"
+									&& completionPercentage >= 80
+									&& !isModuleMarkedAsCompleted;
 
-							if (!shouldMarkModuleAsComplete) return;
+								if (!shouldMarkModuleAsComplete) return;
 
-							setIsModuleMarkedAsCompleted(true);
+								setIsModuleMarkedAsCompleted(true);
 
-							void callBackendApi("@post/module/:id/complete", {
-								params: { id: moduleId },
-								onSuccess: () => queryClient.refetchQueries(dashboardQuery()),
-							});
-						}}
-					/>
+								void callBackendApi("@post/module/:id/complete", {
+									params: { id: moduleId },
+									onSuccess: () => queryClient.refetchQueries(dashboardQuery()),
+								});
+							}}
+						/>
+					</div>
 				</article>
 
 				<article className="mt-5 flex flex-col gap-6">

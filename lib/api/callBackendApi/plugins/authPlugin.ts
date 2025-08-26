@@ -1,48 +1,50 @@
 import { definePlugin, type ResponseErrorContext } from "@zayne-labs/callapi";
-import { hardNavigate } from "@zayne-labs/toolkit-core";
+import { isBrowser } from "@zayne-labs/toolkit-core";
 import type { BaseApiErrorResponse } from "../apiSchema";
-import { isAuthTokenRelatedError } from "./utils";
+import {
+	authTokenObject,
+	isAuthTokenRelatedError,
+	isMatchedRoute,
+	redirectAndThrow,
+	type PossibleAuthToken,
+} from "./utils";
 import { refreshUserSession } from "./utils/refreshUserSession";
-
-type PossibleAuthToken = "accessToken" | "refreshToken";
 
 export type AuthPluginMeta = {
 	auth?: {
 		authTokenToAdd?: PossibleAuthToken;
-		routesToExemptFromHeaderAddition?: string[];
+		routesToExemptFromHeaderAddition?: Array<`/${string}` | `/${string}/**`>;
 		skipHeaderAddition?: boolean;
 	};
 };
+
+export const routesToIncludeForRedirection = ["/dashboard/**"];
+
+export const redirectionRoute = "/auth/signin";
+
 export const authPlugin = definePlugin(() => ({
 	id: "auth-plugin",
 	name: "authPlugin",
 
 	hooks: {
 		onRequest: (ctx) => {
+			if (!isBrowser()) return;
+
 			const authMeta = ctx.options.meta?.auth;
 
 			const shouldSkipAuthHeaderAddition =
 				authMeta?.routesToExemptFromHeaderAddition?.some(
-					(route) => window.location.pathname.includes(route)
+					(route) => isMatchedRoute(route)
 					// eslint-disable-next-line ts-eslint/prefer-nullish-coalescing
 				) || authMeta?.skipHeaderAddition;
 
 			if (shouldSkipAuthHeaderAddition) return;
 
-			const authTokenObject = {
-				accessToken: localStorage.getItem("accessToken"),
-				refreshToken: localStorage.getItem("refreshToken"),
-			} satisfies Record<PossibleAuthToken, string | null>;
-
-			if (!authTokenObject.refreshToken) {
-				const message = "Session is missing! Redirecting to login...";
-
-				setTimeout(() => hardNavigate("/auth/signin"), 2100);
-
-				throw new Error(message);
+			if (!authTokenObject.refreshToken()) {
+				return redirectAndThrow();
 			}
 
-			const selectedAuthToken = authTokenObject[authMeta?.authTokenToAdd ?? "accessToken"];
+			const selectedAuthToken = authTokenObject[authMeta?.authTokenToAdd ?? "accessToken"]();
 
 			ctx.options.auth = selectedAuthToken;
 		},

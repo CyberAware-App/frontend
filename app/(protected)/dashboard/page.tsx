@@ -3,7 +3,6 @@
 import { useQuery } from "@tanstack/react-query";
 import { Credits, ProtectedMain } from "@/app/-components";
 import { UserAvatar } from "@/app/-components/UserAvatar";
-import { AuthLoader } from "@/app/(protected)/-components/AuthLoader";
 import { IconBox } from "@/components/common/IconBox";
 import { NavLink } from "@/components/common/NavLink";
 import { LockIcon } from "@/components/icons/LockIcon";
@@ -11,18 +10,15 @@ import { Button } from "@/components/ui/button";
 import { Progress } from "@/components/ui/progress-animated";
 import { dashboardQuery, sessionQuery } from "@/lib/react-query/queryOptions";
 import { cnJoin, cnMerge } from "@/lib/utils/cn";
+import { AuthLoader } from "../-components/AuthLoader";
 import { DashboardSideBar } from "./DashboardSideBar";
 
 function DashboardPage() {
 	const sessionQueryResult = useQuery(sessionQuery());
 	const dashboardQueryResult = useQuery(dashboardQuery());
 
-	if (!dashboardQueryResult.data) {
-		return <AuthLoader />;
-	}
-
-	const ongoingModule = dashboardQueryResult.data.modules.find((module) => module.status === "ongoing");
-	const completedModulesCount = dashboardQueryResult.data.completed_modules_count;
+	const ongoingModule = dashboardQueryResult.data?.modules.find((module) => module.status === "ongoing");
+	const completedModulesCount = dashboardQueryResult.data?.completed_modules_count ?? 0;
 	const isAllModulesCompleted = completedModulesCount === 10;
 
 	const cardDetails = [
@@ -78,7 +74,11 @@ function DashboardPage() {
 		{
 			body: "A Certificate of completion would be sent to your E-mail If you pass the minimum mark of 80% in the quiz",
 			button: (
-				<Button theme="orange" disabled={true} className={cnMerge("max-w-[150px] self-end")}>
+				<Button
+					theme="orange"
+					disabled={!sessionQueryResult.data?.is_certified}
+					className={cnMerge("max-w-[150px] self-end")}
+				>
 					Download certificate
 				</Button>
 			),
@@ -87,6 +87,10 @@ function DashboardPage() {
 			title: "Certificate",
 		},
 	];
+
+	if (!dashboardQueryResult.data) {
+		return <AuthLoader text="Loading dashboard..." />;
+	}
 
 	return (
 		<ProtectedMain className="flex-row">
@@ -106,10 +110,8 @@ function DashboardPage() {
 								}
 							</p>
 						</div>
-
 						<UserAvatar />
 					</article>
-
 					<article className="flex flex-col gap-3">
 						<Progress
 							value={dashboardQueryResult.data.percentage_completed}
@@ -142,7 +144,6 @@ function DashboardPage() {
 								<h4 className="text-[22px] font-semibold text-cyberaware-aeces-blue">
 									{detail.title}
 								</h4>
-
 								<p
 									className={cnJoin(
 										detail.isSub ?

@@ -5,6 +5,7 @@ import {
 	type SuccessContext,
 } from "@zayne-labs/callapi";
 import { isHTTPError } from "@zayne-labs/callapi/utils";
+import { isBrowser } from "@zayne-labs/toolkit-core";
 import { toast } from "sonner";
 import type { BaseApiErrorResponse, BaseApiSuccessResponse } from "../apiSchema";
 
@@ -31,6 +32,8 @@ export const toastPlugin = definePlugin(() => ({
 
 	hooks: {
 		onError: (ctx: ErrorContext<BaseApiErrorResponse>) => {
+			if (!isBrowser()) return;
+
 			const toastMeta = ctx.options.meta?.toast;
 
 			/* eslint-disable ts-eslint/prefer-nullish-coalescing */
@@ -55,6 +58,8 @@ export const toastPlugin = definePlugin(() => ({
 		},
 
 		onSuccess: (ctx: SuccessContext<BaseApiSuccessResponse>) => {
+			if (!isBrowser()) return;
+
 			const toastMeta = ctx.options.meta?.toast;
 
 			/* eslint-disable ts-eslint/prefer-nullish-coalescing */

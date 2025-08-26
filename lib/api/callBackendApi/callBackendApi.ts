@@ -1,7 +1,7 @@
 import { createFetchClient, defineBaseConfig } from "@zayne-labs/callapi";
 import { apiSchema } from "./apiSchema";
 import { type AuthPluginMeta, authPlugin, type ToastPluginMeta, toastPlugin } from "./plugins";
-import { isAuthTokenRelatedError } from "./plugins/utils";
+import { isAuthTokenRelatedError, isDefaultRedirectionMessage } from "./plugins/utils";
 
 type GlobalMeta = AuthPluginMeta & ToastPluginMeta;
 
@@ -23,8 +23,10 @@ const BASE_API_URL = `${BACKEND_HOST}/api`;
 
 const sharedBaseCallApiConfig = defineBaseConfig((instanceCtx) => ({
 	baseURL: BASE_API_URL,
+
 	dedupeCacheScope: "global",
-	dedupeCacheScopeKey: BASE_API_URL,
+	dedupeCacheScopeKey: instanceCtx.options.baseURL,
+
 	plugins: [authPlugin(), toastPlugin()],
 	schema: apiSchema,
 
@@ -36,7 +38,7 @@ const sharedBaseCallApiConfig = defineBaseConfig((instanceCtx) => ({
 		...instanceCtx.options.meta,
 
 		auth: {
-			routesToExemptFromHeaderAddition: ["/auth"],
+			routesToExemptFromHeaderAddition: ["/auth/**"],
 			...instanceCtx.options.meta?.auth,
 		},
 
@@ -47,11 +49,12 @@ const sharedBaseCallApiConfig = defineBaseConfig((instanceCtx) => ({
 			},
 			error: true,
 			errorsToSkip: ["AbortError"],
-			errorsToSkipCondition: (error) => isAuthTokenRelatedError(error),
+			errorsToSkipCondition: (error) =>
+				isAuthTokenRelatedError(error) || isDefaultRedirectionMessage(error),
 			success: true,
 			...instanceCtx.options.meta?.toast,
 		},
-	},
+	} satisfies GlobalMeta,
 }));
 
 export const callBackendApi = createFetchClient(sharedBaseCallApiConfig);

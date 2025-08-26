@@ -8,16 +8,13 @@ function UserAvatar() {
 	const sessionQueryResult = useQuery(sessionQuery());
 
 	return (
-		<AvatarGroup.Root
-			invertOverlap={true}
-			tooltipProps={{ side: "top", sideOffset: 24 }}
-			translate="10%"
-		>
+		<AvatarGroup.Root invertOverlap={true} tooltipProps={{ side: "top", sideOffset: 15 }} translate="5%">
 			<Avatar.Root
-				className="size-[50px] rounded-full border-2 border-solid border-cyberaware-unizik-orange
-					text-[18px] font-semibold"
+				className="size-[50px] rounded-full border-2 border-solid border-cyberaware-unizik-orange"
 			>
-				<Avatar.Fallback>{sessionQueryResult.data?.avatar}</Avatar.Fallback>
+				<Avatar.Fallback className="bg-gray-200 text-[20px] font-semibold text-cyberaware-aeces-blue">
+					{sessionQueryResult.data?.avatar}
+				</Avatar.Fallback>
 				<AvatarGroup.Tooltip>
 					{sessionQueryResult.data?.first_name} {sessionQueryResult.data?.last_name}
 				</AvatarGroup.Tooltip>

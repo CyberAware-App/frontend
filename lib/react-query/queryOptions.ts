@@ -8,7 +8,7 @@ export const sessionQuery = () => {
 	return queryOptions({
 		queryFn: () => checkAndRefreshUserSession(),
 		queryKey: ["session"],
-		refetchInterval: 9 * 60 * 1000, // 9 minutes
+		// refetchInterval: 9 * 60 * 1000, // 9 minutes
 		retry: false,
 		staleTime: Infinity,
 		select: (data) => ({

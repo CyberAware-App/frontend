@@ -6,12 +6,12 @@ import { DialogAnimated, RadioGroupAnimated } from "@/components/ui";
 import { Button } from "@/components/ui/button";
 import { Form } from "@/components/ui/form";
 import type { SelectedModule, SelectedQuizQuestions } from "@/lib/react-query/queryOptions";
-import type { ExamSchema } from "../../../exam/ExamForm";
+import type { ExamFormSchema } from "../../../exam/ExamForm";
 import { FootNote } from "../../FootNote";
 
 type QuizFormProps = {
 	onSubmit: ReturnType<UseFormReturn["handleSubmit"]>;
-	form: UseFormReturn<z.infer<typeof ExamSchema>>;
+	form: UseFormReturn<z.infer<typeof ExamFormSchema>>;
 	selectedModule: SelectedModule;
 	selectedQuizQuestions: SelectedQuizQuestions;
 };

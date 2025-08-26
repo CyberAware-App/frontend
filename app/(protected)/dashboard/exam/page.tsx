@@ -13,7 +13,7 @@ import { dashboardQuery, examQuery } from "@/lib/react-query/queryOptions";
 import { shuffleArray } from "@/lib/utils/common";
 import { AuthLoader } from "../../-components/AuthLoader";
 import { Heading } from "../Heading";
-import { ExamForm, ExamSchema } from "./ExamForm";
+import { ExamForm, ExamFormSchema } from "./ExamForm";
 import { type ExamResultPayload, ExamResultView } from "./ExamResultView";
 
 function ExamPage() {
@@ -36,13 +36,13 @@ function ExamPage() {
 
 	const form = useForm({
 		defaultValues: [],
-		resolver: zodResolver(ExamSchema),
+		resolver: zodResolver(ExamFormSchema),
 	});
 
 	const [result, setResult] = useState<ExamResultPayload | null>(null);
 
 	const selectedExamQuestions = useMemo(() => {
-		return shuffleArray(examQueryResult.data?.data)?.slice(0, 15);
+		return shuffleArray(examQueryResult.data?.data)?.slice(0, 50);
 		// eslint-disable-next-line react-hooks/exhaustive-deps
 	}, [examQueryResult.data?.data, result]);
 
@@ -53,6 +53,7 @@ function ExamPage() {
 	const onSubmit = form.handleSubmit(async (data) => {
 		await callBackendApiForQuery("@post/quiz", {
 			body: data,
+			meta: { toast: { success: false } },
 			onSuccess: (ctx) => setResult(ctx.data.data),
 		});
 	});
@@ -62,6 +63,8 @@ function ExamPage() {
 		form.reset();
 	};
 
+	const MAX_ATTEMPTS = 5;
+
 	return (
 		<ProtectedMain>
 			<Heading />
@@ -69,11 +72,15 @@ function ExamPage() {
 			<section className="flex grow flex-col gap-[50px] bg-white px-5 pt-5 pb-[50px]">
 				<hr className="h-px w-full border-none bg-cyberaware-neutral-gray-light" />
 
-				<Show.Root when={!result}>
-					<ExamForm form={form} onSubmit={onSubmit} selectedExamQuestions={selectedExamQuestions} />
+				<Show.Root when={result}>
+					<ExamResultView result={result} maxAttempts={MAX_ATTEMPTS} onRetake={onRetake} />
 
 					<Show.Fallback>
-						<ExamResultView result={result} onRetake={onRetake} />
+						<ExamForm
+							form={form}
+							onSubmit={onSubmit}
+							selectedExamQuestions={selectedExamQuestions}
+						/>
 					</Show.Fallback>
 				</Show.Root>
 			</section>

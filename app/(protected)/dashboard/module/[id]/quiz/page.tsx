@@ -11,7 +11,7 @@ import { AuthLoader } from "@/app/(protected)/-components/AuthLoader";
 import { Show } from "@/components/common/show";
 import { dashboardQuery, moduleQuizQuery } from "@/lib/react-query/queryOptions";
 import { shuffleArray } from "@/lib/utils/common";
-import { ExamSchema } from "../../../exam/ExamForm";
+import { ExamFormSchema } from "../../../exam/ExamForm";
 import { Heading } from "../../../Heading";
 import { QuizForm } from "./QuizForm";
 import { type QuizResultPayload, QuizResultView } from "./QuizResultView";
@@ -43,7 +43,7 @@ function QuizPage({ params }: PageProps<"/dashboard/module/[id]/quiz">) {
 
 	const form = useForm({
 		defaultValues: [],
-		resolver: zodResolver(ExamSchema),
+		resolver: zodResolver(ExamFormSchema),
 	});
 
 	const selectedQuizQuestions = useMemo(() => {

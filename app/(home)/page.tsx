@@ -4,7 +4,6 @@ import { NavLink } from "@/components/common/NavLink";
 import { Button } from "@/components/ui/button";
 import { tw } from "@/lib/utils/cn";
 import {
-	eyeShield,
 	modelOne,
 	modelTwo,
 	reasonFour,
@@ -12,8 +11,9 @@ import {
 	reasonThree,
 	reasonTwo,
 } from "@/public/assets/landing";
-import { Credits, Main } from "../-components";
-import { HowItWorksLadder, NavBar } from "./-components";
+import { Main } from "../-components";
+import { HowItWorksLadder } from "./-components";
+import { HeroSection } from "./-components/HeroSection";
 
 const reasons = [
 	{
@@ -60,34 +60,7 @@ const faqs = [
 function HomePage() {
 	return (
 		<Main>
-			<section className="mx-4 mt-4 flex flex-col gap-8 bg-white px-[45px] pt-[76px] pb-4">
-				<NavBar />
-
-				<h1 className="text-center text-[36px] font-bold text-cyberaware-aeces-blue">
-					Be CyberAware.
-					<span className="inline-flex items-center">
-						Stay <Image src={eyeShield} alt="Eye Shield" className="mt-1 ml-2 size-6" /> Secure
-					</span>
-					.
-				</h1>
-
-				<p className="text-center text-[16px] text-cyberaware-body-color">
-					Learn how to protect your digital world within just 10 modules. Designed for lecturers,
-					staff, and students.
-				</p>
-
-				<div className="flex items-center justify-center gap-3.5">
-					<Button theme="blue-ghost" className="max-w-[118px]">
-						Learn More
-					</Button>
-
-					<Button className="max-w-[175px]" asChild={true}>
-						<NavLink href="/auth/signin">Get Started</NavLink>
-					</Button>
-				</div>
-
-				<Credits />
-			</section>
+			<HeroSection />
 
 			<section className="mt-12 flex px-4">
 				<span className="block w-[15px] shrink-0 bg-cyberaware-unizik-orange" />

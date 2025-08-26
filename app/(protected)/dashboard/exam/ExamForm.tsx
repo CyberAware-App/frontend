@@ -8,13 +8,15 @@ import { Form } from "@/components/ui/form";
 import { apiSchema } from "@/lib/api/callBackendApi";
 import type { SelectedExamQuestions } from "@/lib/react-query/queryOptions";
 
-export const ExamSchema = z
-	.record(z.string(), apiSchema.routes["@post/quiz"].body.unwrap())
-	.transform((data) => Object.values(data)) as unknown as (typeof apiSchema.routes)["@post/quiz"]["body"];
+const QuizBodySchema = apiSchema.routes["@post/quiz"].body;
+
+const ExamSchemaRecord = z.record(z.string(), QuizBodySchema.unwrap()) as unknown as typeof QuizBodySchema;
+
+export const ExamFormSchema = ExamSchemaRecord.transform((data) => Object.values(data));
 
 type ExamFormProps = {
 	onSubmit: ReturnType<UseFormReturn["handleSubmit"]>;
-	form: UseFormReturn<z.infer<typeof ExamSchema>>;
+	form: UseFormReturn<z.infer<typeof ExamFormSchema>>;
 	selectedExamQuestions: SelectedExamQuestions;
 };
 

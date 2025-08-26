@@ -1,3 +1,5 @@
+"use client";
+
 import { defineSchema, fallBackRouteSchemaKey } from "@zayne-labs/callapi";
 import { REGEXP_ONLY_DIGITS } from "input-otp";
 import { z } from "zod";
@@ -51,6 +53,7 @@ export const QuizOptionUnionSchema = z.literal(
 );
 
 const QuizOptionSchema = z.record(QuizOptionUnionSchema, z.string());
+
 export const apiSchema = defineSchema(
 	{
 		/* eslint-disable perfectionist/sort-objects */
@@ -125,6 +128,7 @@ export const apiSchema = defineSchema(
 					email: z.string(),
 					first_name: z.string(),
 					has_session: z.boolean(),
+					is_certified: z.boolean(),
 					is_verified: z.boolean(),
 					last_name: z.string(),
 				})

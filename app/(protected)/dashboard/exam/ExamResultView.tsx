@@ -11,38 +11,39 @@ import { emojiFailed, emojiPassed, emojiTooBad } from "@/public/assets";
 export type ExamResultPayload = z.infer<(typeof apiSchema.routes)["@post/quiz"]["data"]>["data"];
 
 type ExamResultViewProps = {
+	maxAttempts: number;
 	result: ExamResultPayload | null;
 	onRetake: () => void;
 };
 
-const MAX_ATTEMPTS = 5;
-
-const computedResultStatus = (result: ExamResultPayload) => {
-	if (result.passed) {
-		return "passed";
-	}
-
-	if (result.attempt_number < MAX_ATTEMPTS) {
-		return "pending";
-	}
-
-	return "exhausted";
-};
-
 function ExamResultView(props: ExamResultViewProps) {
-	const { result, onRetake } = props;
+	const { maxAttempts, result, onRetake } = props;
 
 	if (!result) {
 		return null;
 	}
 
-	const resultStatus = computedResultStatus(result);
+	const computedResultStatus = () => {
+		if (result.passed) {
+			return "passed";
+		}
+
+		if (result.attempt_number < maxAttempts) {
+			return "pending";
+		}
+
+		return "exhausted";
+	};
+
+	const resultStatus = computedResultStatus();
 
 	const emojiMap = {
 		passed: emojiPassed,
 		pending: emojiFailed,
 		exhausted: emojiTooBad,
 	} satisfies Record<typeof resultStatus, string>;
+
+	const attemptsLeft = maxAttempts - result.attempt_number;
 
 	return (
 		<article className="flex flex-col gap-10 pb-[100px]">
@@ -85,7 +86,7 @@ function ExamResultView(props: ExamResultViewProps) {
 						</Button>
 
 						<p className="text-center text-[12px] font-medium text-cyberaware-aeces-blue">
-							Try again, You have {MAX_ATTEMPTS - result.attempt_number} more chances.
+							Try again, You have {attemptsLeft} more chances.
 						</p>
 					</div>
 				</Switch.Match>
