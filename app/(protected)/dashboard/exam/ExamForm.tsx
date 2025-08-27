@@ -6,7 +6,7 @@ import { DialogAnimated, RadioGroupAnimated } from "@/components/ui";
 import { Button } from "@/components/ui/button";
 import { Form } from "@/components/ui/form";
 import { apiSchema } from "@/lib/api/callBackendApi";
-import type { SelectedExamQuestions } from "@/lib/react-query/queryOptions";
+import type { SelectedExamDetails } from "@/lib/react-query/queryOptions";
 
 const QuizBodySchema = apiSchema.routes["@post/quiz"].body;
 
@@ -17,7 +17,7 @@ export const ExamFormSchema = ExamSchemaRecord.transform((data) => Object.values
 type ExamFormProps = {
 	onSubmit: ReturnType<UseFormReturn["handleSubmit"]>;
 	form: UseFormReturn<z.infer<typeof ExamFormSchema>>;
-	selectedExamQuestions: SelectedExamQuestions;
+	selectedExamQuestions: SelectedExamDetails["exam_data"];
 };
 
 function ExamForm(props: ExamFormProps) {

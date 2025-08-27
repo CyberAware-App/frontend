@@ -8,14 +8,18 @@ import { NavLink } from "@/components/common/NavLink";
 import { LockIcon } from "@/components/icons/LockIcon";
 import { Button } from "@/components/ui/button";
 import { Progress } from "@/components/ui/progress-animated";
-import { dashboardQuery, sessionQuery } from "@/lib/react-query/queryOptions";
+import { certificateQuery, dashboardQuery, sessionQuery } from "@/lib/react-query/queryOptions";
 import { cnJoin, cnMerge } from "@/lib/utils/cn";
 import { AuthLoader } from "../-components/AuthLoader";
 import { DashboardSideBar } from "./DashboardSideBar";
+import { useRouter } from "@bprogress/next";
 
 function DashboardPage() {
 	const sessionQueryResult = useQuery(sessionQuery());
 	const dashboardQueryResult = useQuery(dashboardQuery());
+	const certificateQueryResult = useQuery(certificateQuery());
+
+	const router = useRouter();
 
 	const ongoingModule = dashboardQueryResult.data?.modules.find((module) => module.status === "ongoing");
 	const completedModulesCount = dashboardQueryResult.data?.completed_modules_count ?? 0;
@@ -78,6 +82,7 @@ function DashboardPage() {
 					theme="orange"
 					disabled={!sessionQueryResult.data?.is_certified}
 					className={cnMerge("max-w-[150px] self-end")}
+					onClick={() => router.push(certificateQueryResult.data?.certificate_url ?? "#")}
 				>
 					Download certificate
 				</Button>

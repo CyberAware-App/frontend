@@ -113,12 +113,15 @@ export const apiSchema = defineSchema(
 
 		"@get/quiz": {
 			data: withBaseSuccessResponse(
-				z.array(
-					z.object({
-						options: QuizOptionSchema,
-						question: z.string(),
-					})
-				)
+				z.object({
+					exam_data: z.array(
+						z.object({
+							options: QuizOptionSchema,
+							question: z.string(),
+						})
+					),
+					max_attempts: z.number(),
+				})
 			),
 		},
 

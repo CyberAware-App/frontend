@@ -63,6 +63,7 @@ export const moduleQuizQuery = (moduleId: string) => {
 				params: { id: moduleId },
 				meta: { toast: { success: false } },
 			}),
+		select: (data) => data.data,
 		queryKey: ["module-quiz", moduleId],
 		staleTime: Infinity,
 	});
@@ -70,7 +71,7 @@ export const moduleQuizQuery = (moduleId: string) => {
 
 export type SelectedQuizQuestions = Awaited<
 	ReturnType<NonNullable<ReturnType<typeof moduleQuizQuery>["select"]>>
->["data"];
+>;
 
 export const examQuery = (router: AppRouterInstance) => {
 	return queryOptions({
@@ -85,11 +86,20 @@ export const examQuery = (router: AppRouterInstance) => {
 					}
 				},
 			}),
+		select: (data) => data.data,
 		queryKey: ["exam"],
 		staleTime: Infinity,
 	});
 };
 
-export type SelectedExamQuestions = Awaited<
-	ReturnType<NonNullable<ReturnType<typeof examQuery>["select"]>>
->["data"];
+export type SelectedExamDetails = Awaited<ReturnType<NonNullable<ReturnType<typeof examQuery>["select"]>>>;
+
+export const certificateQuery = () => {
+	return queryOptions({
+		queryFn: () =>
+			callBackendApiForQuery("@get/certificate", { meta: { toast: { error: false, success: false } } }),
+		select: (data) => data.data,
+		queryKey: ["certificate"],
+		staleTime: Infinity,
+	});
+};

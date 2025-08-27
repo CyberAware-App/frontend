@@ -1,5 +1,3 @@
-import Image from "next/image";
-import type { z } from "zod";
 import { IconBox } from "@/components/common/IconBox";
 import { NavLink } from "@/components/common/NavLink";
 import { Switch } from "@/components/common/switch";
@@ -7,35 +5,27 @@ import { Button } from "@/components/ui/button";
 import type { apiSchema } from "@/lib/api/callBackendApi";
 import { cnJoin } from "@/lib/utils/cn";
 import { emojiFailed, emojiPassed, emojiTooBad } from "@/public/assets";
+import Image from "next/image";
+import type { z } from "zod";
 
 export type ExamResultPayload = z.infer<(typeof apiSchema.routes)["@post/quiz"]["data"]>["data"];
 
+export type ResultStatus = "passed" | "pending" | "exhausted";
+
 type ExamResultViewProps = {
 	maxAttempts: number;
+	resultStatus: ResultStatus;
 	result: ExamResultPayload | null;
 	onRetake: () => void;
+	onCertificateDownload: () => void;
 };
 
 function ExamResultView(props: ExamResultViewProps) {
-	const { maxAttempts, result, onRetake } = props;
+	const { maxAttempts, result, resultStatus, onRetake, onCertificateDownload } = props;
 
 	if (!result) {
 		return null;
 	}
-
-	const computedResultStatus = () => {
-		if (result.passed) {
-			return "passed";
-		}
-
-		if (result.attempt_number < maxAttempts) {
-			return "pending";
-		}
-
-		return "exhausted";
-	};
-
-	const resultStatus = computedResultStatus();
 
 	const emojiMap = {
 		passed: emojiPassed,
@@ -69,8 +59,8 @@ function ExamResultView(props: ExamResultViewProps) {
 			<Switch.Root>
 				<Switch.Match when={resultStatus === "passed"}>
 					<div className="flex flex-col items-center gap-6">
-						<Button theme="orange" className="gap-2.5" asChild={true}>
-							<NavLink href="/dashboard/certificate">Get certificate</NavLink>
+						<Button theme="orange" className="gap-2.5" onClick={onCertificateDownload}>
+							Get certificate
 						</Button>
 						<p className="text-center text-[12px] font-medium text-cyberaware-aeces-blue">
 							You can go obtain your certificate

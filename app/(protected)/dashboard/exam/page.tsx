@@ -2,22 +2,23 @@
 
 import { useRouter } from "@bprogress/next";
 import { zodResolver } from "@hookform/resolvers/zod";
-import { useQuery } from "@tanstack/react-query";
+import { useQuery, useQueryClient } from "@tanstack/react-query";
 import { useEffect, useMemo, useState } from "react";
 import { useForm } from "react-hook-form";
 import { toast } from "sonner";
 import { ProtectedMain } from "@/app/-components";
 import { Show } from "@/components/common/show";
 import { callBackendApiForQuery } from "@/lib/api/callBackendApi";
-import { dashboardQuery, examQuery } from "@/lib/react-query/queryOptions";
+import { certificateQuery, dashboardQuery, examQuery } from "@/lib/react-query/queryOptions";
 import { shuffleArray } from "@/lib/utils/common";
 import { AuthLoader } from "../../-components/AuthLoader";
 import { Heading } from "../Heading";
 import { ExamForm, ExamFormSchema } from "./ExamForm";
-import { type ExamResultPayload, ExamResultView } from "./ExamResultView";
+import { type ExamResultPayload, ExamResultView, type ResultStatus } from "./ExamResultView";
 
 function ExamPage() {
 	const dashboardQueryResult = useQuery(dashboardQuery());
+	const certificateQueryResult = useQuery(certificateQuery());
 
 	const router = useRouter();
 
@@ -42,9 +43,11 @@ function ExamPage() {
 	const [result, setResult] = useState<ExamResultPayload | null>(null);
 
 	const selectedExamQuestions = useMemo(() => {
-		return shuffleArray(examQueryResult.data?.data)?.slice(0, 50);
+		return shuffleArray(examQueryResult.data?.exam_data)?.slice(0, 50);
 		// eslint-disable-next-line react-hooks/exhaustive-deps
-	}, [examQueryResult.data?.data, result]);
+	}, [examQueryResult.data, result]);
+
+	const queryClient = useQueryClient();
 
 	if (isExamUnaccessible || !selectedExamQuestions) {
 		return <AuthLoader text="Loading exam..." />;
@@ -54,7 +57,11 @@ function ExamPage() {
 		await callBackendApiForQuery("@post/quiz", {
 			body: data,
 			meta: { toast: { success: false } },
-			onSuccess: (ctx) => setResult(ctx.data.data),
+
+			onSuccess: (ctx) => {
+				setResult(ctx.data.data);
+				void queryClient.refetchQueries(certificateQuery());
+			},
 		});
 	});
 
@@ -63,7 +70,21 @@ function ExamPage() {
 		form.reset();
 	};
 
-	const MAX_ATTEMPTS = 5;
+	const maxAttempts = examQueryResult.data?.max_attempts ?? 5;
+
+	const computedResultStatus = (): ResultStatus => {
+		if (result?.passed) {
+			return "passed";
+		}
+
+		if (result && result.attempt_number < maxAttempts) {
+			return "pending";
+		}
+
+		return "exhausted";
+	};
+
+	const resultStatus = computedResultStatus();
 
 	return (
 		<ProtectedMain>
@@ -72,8 +93,16 @@ function ExamPage() {
 			<section className="flex grow flex-col gap-[50px] bg-white px-5 pt-5 pb-[50px]">
 				<hr className="h-px w-full border-none bg-cyberaware-neutral-gray-light" />
 
-				<Show.Root when={result}>
-					<ExamResultView result={result} maxAttempts={MAX_ATTEMPTS} onRetake={onRetake} />
+				<Show.Root when={Boolean(result) || resultStatus === "exhausted"}>
+					<ExamResultView
+						result={result}
+						resultStatus={resultStatus}
+						maxAttempts={maxAttempts}
+						onRetake={onRetake}
+						onCertificateDownload={() =>
+							router.push(certificateQueryResult.data?.certificate_url ?? "#")
+						}
+					/>
 
 					<Show.Fallback>
 						<ExamForm

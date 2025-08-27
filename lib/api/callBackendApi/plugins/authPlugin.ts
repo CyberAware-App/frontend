@@ -5,10 +5,11 @@ import {
 	authTokenObject,
 	isAuthTokenRelatedError,
 	isMatchedRoute,
-	redirectAndThrow,
 	type PossibleAuthToken,
+	redirectAndThrow,
 } from "./utils";
-import { refreshUserSession } from "./utils/refreshUserSession";
+import { callBackendApi } from "../callBackendApi";
+import { isHTTPError } from "@zayne-labs/callapi/utils";
 
 export type AuthPluginMeta = {
 	auth?: {
@@ -40,7 +41,7 @@ export const authPlugin = definePlugin(() => ({
 
 			if (shouldSkipAuthHeaderAddition) return;
 
-			if (!authTokenObject.refreshToken()) {
+			if (authTokenObject.refreshToken() === null) {
 				return redirectAndThrow();
 			}
 
@@ -55,7 +56,23 @@ export const authPlugin = definePlugin(() => ({
 
 			if (!shouldRefreshToken) return;
 
-			await refreshUserSession();
+			const refreshToken = authTokenObject.refreshToken();
+
+			if (!refreshToken) {
+				return redirectAndThrow();
+			}
+
+			const result = await callBackendApi("@post/token-refresh", {
+				body: { refresh: refreshToken },
+				dedupeStrategy: "defer",
+				meta: { auth: { skipHeaderAddition: true } },
+			});
+
+			if (isHTTPError(result.error)) {
+				return redirectAndThrow("Session invalid or expired! Redirecting to login...");
+			}
+
+			result.data?.data && localStorage.setItem("accessToken", result.data.data.access);
 
 			// NOTE: This will not work for requests made via react query, which in that case retries are up to react query
 			ctx.options.retryAttempts = 1;

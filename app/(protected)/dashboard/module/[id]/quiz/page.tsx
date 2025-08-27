@@ -47,9 +47,9 @@ function QuizPage({ params }: PageProps<"/dashboard/module/[id]/quiz">) {
 	});
 
 	const selectedQuizQuestions = useMemo(() => {
-		return shuffleArray(moduleQuizQueryResult.data?.data)?.slice(0, 5);
+		return shuffleArray(moduleQuizQueryResult.data)?.slice(0, 5);
 		// eslint-disable-next-line react-hooks/exhaustive-deps
-	}, [moduleQuizQueryResult.data?.data, result]);
+	}, [moduleQuizQueryResult.data, result]);
 
 	if (!selectedModule || isQuizUnaccessible || !selectedQuizQuestions) {
 		return <AuthLoader text="Loading quiz..." />;

@@ -1,9 +1,9 @@
 import type { CallApiResultErrorVariant } from "@zayne-labs/callapi";
 import { isHTTPError } from "@zayne-labs/callapi/utils";
-import { hardNavigate } from "@zayne-labs/toolkit-core";
+import { hardNavigate, isBrowser } from "@zayne-labs/toolkit-core";
+import { toast } from "sonner";
 import type { BaseApiErrorResponse } from "../../apiSchema";
 import { redirectionRoute, routesToIncludeForRedirection } from "../authPlugin";
-import { toast } from "sonner";
 
 type ErrorWithCodeAndDetail = CallApiResultErrorVariant<BaseApiErrorResponse>["error"] & {
 	errorData: { code: string; detail: string } | { code?: never; detail: string };
@@ -25,10 +25,12 @@ export const isAuthTokenRelatedError = (
 };
 export type PossibleAuthToken = "accessToken" | "refreshToken";
 
+/* eslint-disable ts-eslint/no-unnecessary-condition */
 export const authTokenObject = {
-	accessToken: () => globalThis.localStorage.getItem("accessToken"),
-	refreshToken: () => globalThis.localStorage.getItem("refreshToken"),
+	accessToken: () => globalThis.localStorage?.getItem("accessToken"),
+	refreshToken: () => globalThis.localStorage?.getItem("refreshToken"),
 };
+/* eslint-enable ts-eslint/no-unnecessary-condition */
 
 const defaultRedirectionMessage = "Session is missing! Redirecting to login...";
 
@@ -51,6 +53,10 @@ export const redirectAndThrow = (message = defaultRedirectionMessage) => {
 };
 
 export const isMatchedRoute = (route: string) => {
+	if (!isBrowser()) {
+		return false;
+	}
+
 	const isCatchAllRoute = route.endsWith("/**");
 
 	const pathname = globalThis.location.pathname;
