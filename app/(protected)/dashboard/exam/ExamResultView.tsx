@@ -1,10 +1,15 @@
+"use client";
+
 import { IconBox } from "@/components/common/IconBox";
 import { NavLink } from "@/components/common/NavLink";
 import { Switch } from "@/components/common/switch";
 import { Button } from "@/components/ui/button";
 import type { apiSchema } from "@/lib/api/callBackendApi";
+import { certificateQuery } from "@/lib/react-query/queryOptions";
 import { cnJoin } from "@/lib/utils/cn";
 import { emojiFailed, emojiPassed, emojiTooBad } from "@/public/assets";
+import { useRouter } from "@bprogress/next";
+import { useQuery } from "@tanstack/react-query";
 import Image from "next/image";
 import type { z } from "zod";
 
@@ -17,11 +22,14 @@ type ExamResultViewProps = {
 	resultStatus: ResultStatus;
 	result: ExamResultPayload | null;
 	onRetake: () => void;
-	onCertificateDownload: () => void;
 };
 
 function ExamResultView(props: ExamResultViewProps) {
-	const { maxAttempts, result, resultStatus, onRetake, onCertificateDownload } = props;
+	const { maxAttempts, result, resultStatus, onRetake } = props;
+
+	const certificateQueryResult = useQuery(certificateQuery());
+
+	const router = useRouter();
 
 	if (!result) {
 		return null;
@@ -59,7 +67,11 @@ function ExamResultView(props: ExamResultViewProps) {
 			<Switch.Root>
 				<Switch.Match when={resultStatus === "passed"}>
 					<div className="flex flex-col items-center gap-6">
-						<Button theme="orange" className="gap-2.5" onClick={onCertificateDownload}>
+						<Button
+							theme="orange"
+							className="gap-2.5"
+							onClick={() => router.push(certificateQueryResult.data?.certificate_url ?? "#")}
+						>
 							Get certificate
 						</Button>
 						<p className="text-center text-[12px] font-medium text-cyberaware-aeces-blue">

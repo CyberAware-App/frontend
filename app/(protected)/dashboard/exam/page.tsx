@@ -18,7 +18,6 @@ import { type ExamResultPayload, ExamResultView, type ResultStatus } from "./Exa
 
 function ExamPage() {
 	const dashboardQueryResult = useQuery(dashboardQuery());
-	const certificateQueryResult = useQuery(certificateQuery());
 
 	const router = useRouter();
 
@@ -73,15 +72,15 @@ function ExamPage() {
 	const maxAttempts = examQueryResult.data?.max_attempts ?? 5;
 
 	const computedResultStatus = (): ResultStatus => {
+		if (result && result.attempt_number > maxAttempts) {
+			return "exhausted";
+		}
+
 		if (result?.passed) {
 			return "passed";
 		}
 
-		if (result && result.attempt_number < maxAttempts) {
-			return "pending";
-		}
-
-		return "exhausted";
+		return "pending";
 	};
 
 	const resultStatus = computedResultStatus();
@@ -93,22 +92,21 @@ function ExamPage() {
 			<section className="flex grow flex-col gap-[50px] bg-white px-5 pt-5 pb-[50px]">
 				<hr className="h-px w-full border-none bg-cyberaware-neutral-gray-light" />
 
-				<Show.Root when={Boolean(result) || resultStatus === "exhausted"}>
-					<ExamResultView
-						result={result}
-						resultStatus={resultStatus}
-						maxAttempts={maxAttempts}
-						onRetake={onRetake}
-						onCertificateDownload={() =>
-							router.push(certificateQueryResult.data?.certificate_url ?? "#")
-						}
-					/>
-
-					<Show.Fallback>
+				<Show.Root when={!result && resultStatus !== "exhausted"}>
+					<Show.Content>
 						<ExamForm
 							form={form}
 							onSubmit={onSubmit}
 							selectedExamQuestions={selectedExamQuestions}
+						/>
+					</Show.Content>
+
+					<Show.Fallback>
+						<ExamResultView
+							result={result}
+							resultStatus={resultStatus}
+							maxAttempts={maxAttempts}
+							onRetake={onRetake}
 						/>
 					</Show.Fallback>
 				</Show.Root>
