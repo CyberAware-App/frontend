@@ -1,6 +1,46 @@
 # CyberAware - Developer's Guide
 
-Welcome to the CyberAware development guide! This document will help you understand and work with the CyberAware frontend codebase, whether you're a beginner or experienced developer.
+Welcome to the comprehensive CyberAware development guide! This document provides detailed information about the complete CyberAware frontend application - a modern cybersecurity education platform that delivers a 10-day learning journey with interactive modules, video content, quizzes, exams, and certification.
+
+## 📋 Table of Contents
+
+- [🎯 Application Overview](#-application-overview)
+- [🚀 Quick Start](#-quick-start)
+- [🌟 Key Features](#-key-features)
+- [📚 What You'll Learn](#-what-youll-learn)
+- [📁 Project Structure](#-project-structure)
+- [🔧 Key Technologies](#-key-technologies)
+- [🏗️ How Components Work](#️-how-components-work)
+- [🎨 Design System](#-design-system)
+- [🔘 Button Component Guide](#-button-component-guide)
+- [🔐 Authentication & Protected Routes](#-authentication--protected-routes)
+- [🎨 Theme Management](#-theme-management)
+- [🔔 Toast Notifications](#-toast-notifications)
+- [🌐 API Integration](#-api-integration)
+- [📝 Form Handling](#-form-handling)
+- [✅ Best Practices](#-best-practices)
+- [🔄 Development Workflow](#-development-workflow)
+- [🛠️ Common Development Tasks](#️-common-development-tasks)
+- [🧪 Testing](#-testing)
+- [⚙️ Project Configuration](#️-project-configuration)
+- [📦 Dependencies](#-dependencies)
+- [🚀 Performance Optimizations](#-performance-optimizations)
+- [🔍 Troubleshooting](#-troubleshooting)
+- [📚 Additional Resources](#-additional-resources)
+- [🎉 Conclusion](#-conclusion)
+
+## 🎯 Application Overview
+
+CyberAware is a full-featured educational platform that includes:
+
+- **🏠 Landing Page**: Marketing site with team information and how-it-works flow
+- **🔐 Authentication System**: Complete signup, signin, password reset, and email verification
+- **📚 Learning Management**: 10 progressive cybersecurity modules with video content
+- **🎯 Interactive Quizzes**: Module-specific quizzes and comprehensive final exam
+- **📊 Progress Tracking**: Visual progress indicators and completion tracking
+- **🏆 Certification System**: Digital certificate generation and download
+- **📱 Responsive Design**: Mobile-first approach with collapsible sidebar navigation
+- **🎨 Modern UI**: Custom design system with animations and micro-interactions
 
 ## 🚀 Quick Start
 
@@ -8,17 +48,76 @@ New to the project? Start here:
 
 1. **Read the [README.md](./README.md)** for project overview and setup
 2. **Explore the [Project Structure](#-project-structure)** to understand the codebase
-3. **Learn about [Key Technologies](#-key-technologies)** we use
-4. **Check out [Common Tasks](#-common-development-tasks)** for everyday development
+3. **Review the [Key Features](#-key-features)** to understand the application capabilities
+4. **Learn about [Key Technologies](#-key-technologies)** we use
+5. **Check out [Common Tasks](#-common-development-tasks)** for everyday development
+
+## 🌟 Key Features
+
+### 🏠 Landing Page & Marketing
+- **Hero Section**: Compelling introduction with call-to-action buttons
+- **How It Works**: Interactive ladder-style flow showing the 3-step learning process
+- **Team Leads Page**: Dedicated page showcasing project team members and roles
+- **Responsive Navigation**: Mobile-friendly navigation with animated sidebar overlay
+- **Footer Credits**: Institution branding and project acknowledgments
+
+### 🔐 Authentication & Security
+- **User Registration**: Email-based signup with comprehensive form validation
+- **Email Verification**: OTP-based account verification with resend functionality
+- **Secure Login**: JWT-based authentication with automatic token refresh
+- **Password Recovery**: Complete forgot/reset password flow with email verification
+- **Protected Routes**: Route-level authentication with automatic redirects and session management
+- **Session Persistence**: Automatic session refresh and logout handling
+
+### 📚 Learning Management System
+- **10-Day Program**: Progressive module unlocking system with clear learning path
+- **Video Content**: Mux-powered video streaming with custom player controls
+- **Progress Tracking**: Automatic completion tracking based on 80% video watch time
+- **Module Status**: Visual indicators for locked, ongoing, and completed modules
+- **Content Organization**: Structured learning path with module dependencies
+- **Sidebar Navigation**: Collapsible sidebar with module progress visualization
+
+### 🎯 Assessment System
+- **Module Quizzes**: Individual quizzes for each learning module with immediate feedback
+- **Final Exam**: Comprehensive 50-question exam with randomized question selection
+- **Time Management**: 35-minute countdown timer with automatic submission
+- **Multiple Attempts**: Up to 5 exam attempts with attempt tracking and status
+- **Real-time Validation**: Form validation with error handling and user feedback
+- **Results Display**: Instant pass/fail results with detailed scoring information
+
+### 🏆 Certification & Progress
+- **Digital Certificates**: PDF certificate generation for 80%+ exam scores
+- **Progress Visualization**: Animated progress bars with percentage completion
+- **Achievement System**: Module completion badges and status indicators
+- **Download System**: Secure certificate download with unique identification
+- **Completion Tracking**: Real-time progress updates across the application
+
+### 🎨 User Experience & Design
+- **Responsive Design**: Mobile-first approach with adaptive layouts for all screen sizes
+- **Animated UI**: Smooth transitions, micro-interactions, and loading animations
+- **Loading States**: Comprehensive loading indicators, skeleton screens, and auth loaders
+- **Error Handling**: User-friendly error messages with recovery suggestions
+- **Toast Notifications**: Real-time feedback for user actions and system events
+- **Theme System**: Consistent color palette and typography throughout the application
+
+### 🔧 Technical Features
+- **Server-Side Rendering**: Next.js App Router with optimized performance
+- **State Management**: React Query for server state, Zustand for client state
+- **Type Safety**: Full TypeScript integration with runtime validation
+- **API Integration**: Schema-first API client with automatic error handling
+- **Form Management**: React Hook Form with Zod validation schemas
+- **Video Streaming**: Mux integration with progress tracking and custom controls
 
 ## 📚 What You'll Learn
 
-- How the project is organized and why
-- Key technologies and how we use them
-- Design system and styling approach
-- API integration patterns
-- Component usage and best practices
-- Common development workflows
+- How the complete learning platform is architected
+- Modern React patterns and Next.js App Router usage
+- Type-safe API integration with schema validation
+- Advanced form handling and user experience patterns
+- Video streaming integration and progress tracking
+- Authentication flows and protected route implementation
+- Component design system and styling approaches
+- State management patterns for complex applications
 
 ## 📁 Project Structure
 
@@ -80,8 +179,8 @@ The CyberAware project is organized to make it easy to find and work with differ
 Understanding these technologies will help you work effectively with the codebase:
 
 ### Frontend Framework
-- **Next.js 15.4.6** - React framework with file-based routing
-- **React 19.1.1** - UI library for building components
+- **Next.js 15** - React framework with file-based routing
+- **React 19** - UI library for building components
 - **TypeScript** - Adds type safety to JavaScript
 
 ### Styling
@@ -1034,16 +1133,591 @@ This pattern provides several key advantages:
 
 ## 🧪 Testing
 
-The project uses manual testing for UI components and functionality. Future improvements could include:
+### Current State
 
-- Unit tests with Jest/React Testing Library
-- Integration tests for key user flows
-- End-to-end tests with Cypress or Playwright
+**This codebase currently has no automated tests.** All testing is done manually during development.
+
+### Manual Testing Approach
+
+Since there are no automated tests, developers rely on:
+
+- **Browser Testing**: Manual verification of UI components and user flows
+- **Dev Tools**: Using browser developer tools to inspect API calls and responses
+- **Form Testing**: Manually testing form validation with various inputs
+- **Cross-Device Testing**: Testing responsive design on different screen sizes
+
+### Future Testing Recommendations
+
+When adding tests to this project, consider implementing:
+
+#### Unit Tests
+```bash
+# Recommended setup
+npm install --save-dev jest @testing-library/react @testing-library/jest-dom
+```
+
+**What to test:**
+- Utility functions (like `cnMerge`)
+- Component rendering and props
+- Form validation logic
+- API schema validation
+
+#### Integration Tests
+**What to test:**
+- Form submission flows
+- Authentication workflows
+- API integration with CallAPI
+- Component interactions
+
+#### End-to-End Tests
+```bash
+# Recommended tools
+npm install --save-dev playwright
+# or
+npm install --save-dev cypress
+```
+
+**What to test:**
+- Complete user journeys (signup → verification → dashboard)
+- Learning module progression
+- Quiz and exam flows
+- Certificate generation
+
+### Testing Strategy for CallAPI
+
+Since this project uses CallAPI with schema validation, testing should focus on:
+
+```tsx
+// Example unit test for API schema
+import { apiSchema } from '@/lib/api/callBackendApi/apiSchema';
+
+describe('API Schema Validation', () => {
+  it('should validate registration data correctly', () => {
+    const validData = {
+      email: 'test@example.com',
+      first_name: 'John',
+      last_name: 'Doe',
+      password: 'securepassword123'
+    };
+
+    const result = apiSchema.routes['@post/register'].body.safeParse(validData);
+    expect(result.success).toBe(true);
+  });
+});
+```
+
+### Manual Testing Checklist
+
+Until automated tests are implemented, use this checklist:
+
+#### 🔐 Authentication Flow
+- [ ] User registration with valid/invalid data
+- [ ] Email verification process
+- [ ] Login with correct/incorrect credentials
+- [ ] Password reset flow
+- [ ] Session persistence and refresh
+
+#### 📚 Learning Platform
+- [ ] Module navigation and unlocking
+- [ ] Video playback and progress tracking
+- [ ] Quiz completion and scoring
+- [ ] Final exam functionality
+- [ ] Certificate generation and download
+
+#### 📱 Responsive Design
+- [ ] Mobile navigation (sidebar collapse)
+- [ ] Form layouts on small screens
+- [ ] Video player responsiveness
+- [ ] Button and component scaling
+
+#### 🎨 UI Components
+- [ ] Button states (loading, disabled, hover)
+- [ ] Form validation messages
+- [ ] Toast notifications
+- [ ] Progress indicators
+- [ ] Theme switching (if implemented)
+3. **Test Loading States**: Verify loading indicators appear during API calls
+4. **Test Error Scenarios**: Test with network failures and invalid API responses
+5. **Test Authentication**: Verify protected routes redirect properly when not authenticated
+
+### Future Testing Improvements
+
+The project would benefit from automated testing:
+
+- **Unit Tests**: Jest/React Testing Library for component testing
+- **Integration Tests**: Testing complete user flows
+- **End-to-End Tests**: Cypress or Playwright for full application testing
+- **API Tests**: Testing API integration with mock servers
+
+### Manual Testing Checklist
+
+```markdown
+## Pre-deployment Testing Checklist
+
+### Authentication
+- [ ] User can sign up with valid email
+- [ ] Email verification works
+- [ ] User can sign in with correct credentials
+- [ ] Password reset flow works
+- [ ] Protected routes redirect to login when not authenticated
+
+### Learning Platform
+- [ ] Dashboard shows correct module progress
+- [ ] Video playback works and tracks progress
+- [ ] Module completion updates correctly
+- [ ] Quiz submissions work properly
+- [ ] Final exam timer and submission work
+
+### UI/UX
+- [ ] Responsive design works on mobile/tablet/desktop
+- [ ] Loading states appear during API calls
+- [ ] Error messages are user-friendly
+- [ ] Toast notifications appear for user actions
+- [ ] Theme switching works properly
+
+### Performance
+- [ ] Pages load quickly
+- [ ] Images are optimized
+- [ ] No console errors in browser
+- [ ] API calls are efficient (check Network tab)
+```
+
+## �  Project Configuration
+
+### Next.js Configuration
+
+The project uses Next.js 15 with several optimizations configured in `next.config.ts`:
+
+```tsx
+const nextConfig: NextConfig = {
+  devIndicators: {
+    position: "bottom-right",
+  },
+  typedRoutes: true,
+  turbopack: {
+    root: path.dirname(fileURLToPath(import.meta.url)),
+  },
+  eslint: {
+    ignoreDuringBuilds: true,
+  },
+  images: {
+    remotePatterns: [
+      {
+        protocol: "https",
+        hostname: "avatar.iran.liara.run",
+        pathname: "/**",
+      },
+    ],
+  },
+  typescript: {
+    ignoreBuildErrors: true,
+  },
+};
+```
+
+Key configuration features:
+- **Typed Routes**: Enables type-safe routing with Next.js App Router
+- **Turbopack**: Fast bundler for development (experimental)
+- **Development Indicators**: Shows build status in bottom-right corner
+- **Image Optimization**: Configured for avatar images from Iran Liara
+- **Build Optimizations**: Ignores ESLint and TypeScript errors during builds for faster deployment
+
+### TypeScript Configuration
+
+The project uses strict TypeScript configuration with path mapping:
+
+```json
+{
+  "compilerOptions": {
+    "strict": true,
+    "baseUrl": ".",
+    "paths": {
+      "@/*": ["./*"]
+    },
+    "target": "ES2017",
+    "lib": ["dom", "dom.iterable", "es6"],
+    "allowJs": true,
+    "skipLibCheck": true,
+    "esModuleInterop": true,
+    "allowSyntheticDefaultImports": true,
+    "forceConsistentCasingInFileNames": true,
+    "noEmit": true,
+    "moduleResolution": "bundler",
+    "resolveJsonModule": true,
+    "isolatedModules": true,
+    "jsx": "preserve",
+    "incremental": true,
+    "plugins": [
+      {
+        "name": "next"
+      }
+    ]
+  }
+}
+```
+
+### Tailwind Configuration
+
+Custom design system configuration in `tailwind.config.ts`:
+
+```tsx
+const config: Config = {
+  content: [
+    "./pages/**/*.{js,ts,jsx,tsx,mdx}",
+    "./components/**/*.{js,ts,jsx,tsx,mdx}",
+    "./app/**/*.{js,ts,jsx,tsx,mdx}",
+  ],
+  theme: {
+    extend: {
+      colors: {
+        "cyberaware-aeces-blue": "#003366",
+        "cyberaware-aeces-blue-light": "#E6F2FF",
+        "cyberaware-unizik-orange": "#FF6600",
+        "cyberaware-light-orange": "#FFF4E6",
+        "cyberaware-neutral-gray-light": "#F5F5F5",
+      },
+      fontFamily: {
+        sans: ["var(--font-work-sans)", ...fontFamily.sans],
+      },
+      screens: {
+        sm: "480px",
+        md: "780px",
+        lg: "1000px",
+        xl: "1280px",
+      },
+    },
+  },
+  plugins: [],
+};
+```
+
+### ESLint Configuration
+
+The project uses comprehensive ESLint rules for code quality:
+
+```json
+{
+  "extends": [
+    "next/core-web-vitals",
+    "@zayne-labs/eslint-config/react",
+    "@zayne-labs/eslint-config/typescript"
+  ],
+  "rules": {
+    "react/jsx-sort-props": "error",
+    "@typescript-eslint/consistent-type-imports": "error"
+  }
+}
+```
+
+### Environment Variables
+
+The application uses environment-based configuration for API endpoints:
+
+```tsx
+// lib/api/callBackendApi/callBackendApi.ts
+const BACKEND_HOST =
+  process.env.NODE_ENV === "development"
+    ? "http://127.0.0.1:8000"           // Local Django server
+    : "https://cyberaware-api-mx7u.onrender.com"; // Production API
+```
+
+**Environment Configuration:**
+- **Development**: Points to local Django server at `http://127.0.0.1:8000`
+- **Production**: Points to deployed API at `https://cyberaware-api-mx7u.onrender.com`
+
+**No `.env` files required** - the application automatically detects the environment using `NODE_ENV`.
+
+### Deployment Configuration
+
+The application is configured for easy deployment:
+
+**Frontend Deployment:**
+- Optimized for platforms like Vercel, Netlify, or similar
+- Automatic environment detection
+- Build-time optimizations enabled
+
+**API Integration:**
+- Automatic switching between development and production APIs
+- No manual configuration needed for different environments
+- CORS handling built into the backend
+
+## 📦 Dependencies
+
+### Core Dependencies
+
+| Package | Version | Purpose |
+|---------|---------|---------|
+| **Next.js** | 15.4.6 | React framework with App Router |
+| **React** | 19.1.1 | UI library |
+| **TypeScript** | 5.7.3 | Type safety |
+| **Tailwind CSS** | 3.4.17 | Utility-first CSS framework |
+
+### State Management
+
+| Package | Version | Purpose |
+|---------|---------|---------|
+| **@tanstack/react-query** | 5.62.7 | Server state management |
+| **zustand** | 5.0.2 | Client state management |
+| **react-hook-form** | 7.54.2 | Form state management |
+
+### API & Validation
+
+| Package | Version | Purpose |
+|---------|---------|---------|
+| **@zayne-labs/callapi** | 0.12.0 | Type-safe HTTP client |
+| **zod** | 3.24.1 | Schema validation |
+| **@hookform/resolvers** | 3.10.0 | Form validation integration |
+
+### UI & Styling
+
+| Package | Version | Purpose |
+|---------|---------|---------|
+| **@radix-ui/react-progress** | 1.1.1 | Accessible progress component |
+| **sonner** | 1.7.1 | Toast notifications |
+| **lucide-react** | 0.468.0 | Icon library |
+
+### Development Tools
+
+| Package | Version | Purpose |
+|---------|---------|---------|
+| **@zayne-labs/eslint-config** | 0.3.0 | ESLint configuration |
+| **prettier** | 3.4.2 | Code formatting |
+| **@types/node** | 22.10.2 | Node.js type definitions |
+
+## 🚀 Performance Optimizations
+
+### Bundle Optimization
+
+1. **Package Import Optimization**: Next.js optimizes imports from `@zayne-labs/toolkit-react`
+2. **Tree Shaking**: Unused code is automatically removed during build
+3. **Code Splitting**: Pages are automatically split into separate bundles
+4. **Dynamic Imports**: Heavy components can be loaded on demand
+
+### Runtime Performance
+
+1. **React Query Caching**: API responses are cached and shared across components
+2. **Request Deduplication**: CallAPI prevents duplicate API calls
+3. **Image Optimization**: Next.js Image component optimizes images automatically
+4. **Font Optimization**: Google Fonts are optimized with `next/font`
+
+### Development Experience
+
+1. **Fast Refresh**: Instant feedback during development
+2. **TypeScript Integration**: Real-time type checking
+3. **ESLint Integration**: Code quality checks in editor
+4. **Prettier Integration**: Automatic code formatting
+
+## 🔍 Troubleshooting
+
+### Common Issues
+
+#### API Calls Not Working
+
+1. **Check the network tab** to see if requests are being made
+2. **Verify the API endpoint** - ensure the backend is running on `http://127.0.0.1:8000` in development
+3. **Check the API schema** matches the backend expectations
+4. **Check authentication** - ensure tokens are being included
+5. **Look for CORS issues** in development
+6. **Verify environment** - check if `NODE_ENV` is set correctly
+
+**Common API Issues:**
+```bash
+# Backend not running
+Error: fetch failed (connection refused)
+Solution: Start the Django backend server
+
+# Wrong API URL
+Error: 404 Not Found
+Solution: Check if API endpoints match between frontend and backend
+
+# Authentication issues
+Error: 401 Unauthorized
+Solution: Check if access tokens are being sent correctly
+```
+
+#### TypeScript Errors
+
+1. **Update schema definitions** if API responses change
+2. **Check import paths** - use `@/` for absolute imports
+3. **Verify component props** match the expected types
+4. **Run type checking** with `pnpm lint:type-check`
+
+#### Styling Issues
+
+1. **Check Tailwind classes** are spelled correctly
+2. **Verify responsive breakpoints** match the design
+3. **Use browser dev tools** to inspect computed styles
+4. **Check for class conflicts** using `cnMerge()`
+
+#### Form Validation
+
+1. **Ensure schema matches** the API endpoint schema
+2. **Check error mapping** in form submission handlers
+3. **Verify field names** match the schema properties
+4. **Test validation rules** with invalid data
+
+### Development Tips
+
+1. **Use React Query DevTools** to debug API calls and cache
+2. **Enable React Strict Mode** to catch potential issues early
+3. **Check browser console** for warnings and errors
+4. **Use TypeScript errors** as guidance for fixes
+5. **Test on different screen sizes** using browser dev tools
 
 ## 📚 Additional Resources
 
-- [Next.js Documentation](https://nextjs.org/docs)
-- [React Documentation](https://react.dev/)
-- [Tailwind CSS Documentation](https://tailwindcss.com/docs)
-- [React Hook Form Documentation](https://react-hook-form.com/)
-- [TanStack Query Documentation](https://tanstack.com/query/latest)
+### Documentation Links
+
+- **CallAPI Documentation**: [https://zayne-labs-callapi.netlify.app/](https://zayne-labs-callapi.netlify.app/)
+- **Next.js App Router**: [https://nextjs.org/docs/app](https://nextjs.org/docs/app)
+- **React Query Guide**: [https://tanstack.com/query/latest/docs/framework/react/overview](https://tanstack.com/query/latest/docs/framework/react/overview)
+- **Tailwind CSS**: [https://tailwindcss.com/docs](https://tailwindcss.com/docs)
+- **React Hook Form**: [https://react-hook-form.com/get-started](https://react-hook-form.com/get-started)
+- **Zod Validation**: [https://zod.dev/](https://zod.dev/)
+
+### Learning Path
+
+For new developers joining the project:
+
+1. **Week 1**: Understand the project structure and key technologies
+2. **Week 2**: Learn CallAPI integration and form handling patterns
+3. **Week 3**: Practice with component creation and styling
+4. **Week 4**: Work on authentication flows and protected routes
+5. **Week 5+**: Contribute to new features and improvements
+
+### Code Examples Repository
+
+Common patterns and examples can be found throughout this guide. Key sections to reference:
+
+- [Button Component Guide](#-button-component-guide) - UI component patterns
+- [API Integration](#-api-integration) - Backend communication
+- [Form Handling](#-form-handling) - Form validation and submission
+- [Authentication & Protected Routes](#-authentication--protected-routes) - Security patterns
+
+---
+
+## 🚧 Current Limitations & Future Improvements
+
+### Known Limitations
+
+1. **No Automated Testing**: The codebase currently has no unit, integration, or e2e tests
+2. **Build Warnings Ignored**: TypeScript and ESLint errors are ignored during builds
+3. **Manual Quality Assurance**: All testing is done manually
+4. **No CI/CD Pipeline**: No automated deployment or quality checks
+
+### Recommended Improvements
+
+#### Testing Implementation
+```bash
+# Add testing framework
+pnpm add -D jest @testing-library/react @testing-library/jest-dom
+pnpm add -D playwright  # for e2e tests
+```
+
+#### Code Quality
+```bash
+# Remove build error ignoring
+# In next.config.ts, remove:
+# eslint: { ignoreDuringBuilds: true }
+# typescript: { ignoreBuildErrors: true }
+```
+
+#### CI/CD Pipeline
+- Add GitHub Actions for automated testing
+- Implement pre-commit hooks for code quality
+- Add automated deployment checks
+
+#### Performance Monitoring
+- Add performance monitoring tools
+- Implement error tracking
+- Add analytics for user behavior
+
+## 🎉 Conclusion
+
+This developer guide provides comprehensive coverage of the CyberAware frontend application. The architecture emphasizes:
+
+- **Type Safety**: Full TypeScript integration with runtime validation
+- **Developer Experience**: Modern tooling with fast feedback loops
+- **Maintainability**: Clear patterns and consistent code organization
+- **Performance**: Optimized for both development and production
+- **User Experience**: Responsive design with smooth interactions
+
+The combination of Next.js, CallAPI, React Query, and Tailwind CSS creates a robust foundation for building modern web applications. The schema-first approach ensures consistency between frontend and backend while providing excellent developer experience through automatic type generation and validation.
+
+**This guide reflects the current state of the project** and provides both practical guidance for immediate development and recommendations for future improvements.
+
+Happy coding! 🚀
+
+---
+
+## 📖 Quick Reference
+
+### Common Commands
+
+```bash
+# Development
+pnpm dev                    # Start development server
+pnpm build                  # Build for production
+pnpm start                  # Start production server
+
+# Code Quality
+pnpm lint:eslint           # Run ESLint
+pnpm lint:format           # Format with Prettier
+pnpm lint:type-check       # TypeScript type checking
+```
+
+### Essential Imports
+
+```tsx
+// API Integration
+import { callBackendApi, callBackendApiForQuery } from "@/lib/api/callBackendApi";
+import { useQuery } from "@tanstack/react-query";
+
+// Components
+import { Button } from "@/components/ui/button";
+import { NavLink } from "@/components/common/NavLink";
+
+// Utilities
+import { cnMerge } from "@/lib/utils/cn";
+
+// Forms
+import { useForm } from "react-hook-form";
+import { zodResolver } from "@hookform/resolvers/zod";
+```
+
+### Quick Patterns
+
+```tsx
+// API Call with React Query
+const { data, isLoading } = useQuery({
+  queryKey: ["endpoint"],
+  queryFn: () => callBackendApiForQuery("/endpoint"),
+});
+
+// Form with Validation
+const form = useForm({
+  resolver: zodResolver(schema),
+  defaultValues: { /* defaults */ },
+});
+
+// Button with Loading
+<Button isLoading={isSubmitting}>
+  {isSubmitting ? "Saving..." : "Save"}
+</Button>
+
+// Styled Component
+<div className={cnMerge("base-styles", className)}>
+  Content
+</div>
+```
+
+### File Locations
+
+- **Pages**: `app/*/page.tsx`
+- **Components**: `components/ui/` or `components/common/`
+- **API Schema**: `lib/api/callBackendApi/apiSchema.ts`
+- **Styles**: `tailwind.css`
+- **Types**: Inferred from API schemas
+- **Config**: `next.config.ts`, `tailwind.config.ts`
+
+This guide is your companion for building with CyberAware. Keep it handy and happy coding! 🚀
