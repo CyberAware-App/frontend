@@ -1,6 +1,8 @@
 import { definePlugin, type ResponseErrorContext } from "@zayne-labs/callapi";
+import { isHTTPError } from "@zayne-labs/callapi/utils";
 import { isBrowser } from "@zayne-labs/toolkit-core";
 import type { BaseApiErrorResponse } from "../apiSchema";
+import { callBackendApi } from "../callBackendApi";
 import {
 	authTokenObject,
 	isAuthTokenRelatedError,
@@ -8,8 +10,6 @@ import {
 	type PossibleAuthToken,
 	redirectAndThrow,
 } from "./utils";
-import { callBackendApi } from "../callBackendApi";
-import { isHTTPError } from "@zayne-labs/callapi/utils";
 
 export type AuthPluginMeta = {
 	auth?: {

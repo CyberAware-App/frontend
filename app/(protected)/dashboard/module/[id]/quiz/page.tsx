@@ -3,9 +3,8 @@
 import { useRouter } from "@bprogress/next";
 import { zodResolver } from "@hookform/resolvers/zod";
 import { useQuery } from "@tanstack/react-query";
-import { use, useEffect, useMemo, useState } from "react";
+import { use, useMemo, useState } from "react";
 import { useForm } from "react-hook-form";
-import { toast } from "sonner";
 import { ProtectedMain } from "@/app/-components";
 import { AuthLoader } from "@/app/(protected)/-components/AuthLoader";
 import { Show } from "@/components/common/show";
@@ -16,12 +15,12 @@ import { Heading } from "../../../Heading";
 import { QuizForm } from "./QuizForm";
 import { type QuizResultPayload, QuizResultView } from "./QuizResultView";
 
+const MAX_QUESTION = 5;
+
 function QuizPage({ params }: PageProps<"/dashboard/module/[id]/quiz">) {
 	const dashboardQueryResult = useQuery(dashboardQuery());
 
 	const { id: moduleId } = use(params);
-
-	const moduleQuizQueryResult = useQuery(moduleQuizQuery(moduleId));
 
 	const selectedModule = dashboardQueryResult.data?.modules.find(
 		(module) => String(module.id) === moduleId
@@ -31,13 +30,9 @@ function QuizPage({ params }: PageProps<"/dashboard/module/[id]/quiz">) {
 
 	const router = useRouter();
 
-	useEffect(() => {
-		if (isQuizUnaccessible) {
-			toast.error("You are not authorized to access this module quiz");
-
-			router.push("/dashboard");
-		}
-	}, [isQuizUnaccessible, router]);
+	const moduleQuizQueryResult = useQuery(
+		moduleQuizQuery({ moduleId, router, isUnaccessible: isQuizUnaccessible })
+	);
 
 	const [result, setResult] = useState<QuizResultPayload | null>(null);
 
@@ -47,7 +42,7 @@ function QuizPage({ params }: PageProps<"/dashboard/module/[id]/quiz">) {
 	});
 
 	const selectedQuizQuestions = useMemo(() => {
-		return shuffleArray(moduleQuizQueryResult.data)?.slice(0, 5);
+		return shuffleArray(moduleQuizQueryResult.data)?.slice(0, MAX_QUESTION);
 		// eslint-disable-next-line react-hooks/exhaustive-deps
 	}, [moduleQuizQueryResult.data, result]);
 

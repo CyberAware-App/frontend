@@ -1,5 +1,7 @@
 import type { AppRouterInstance } from "@bprogress/next";
 import { queryOptions } from "@tanstack/react-query";
+import type { CallApiExtraOptions } from "@zayne-labs/callapi";
+import { toast } from "sonner";
 import { callBackendApiForQuery } from "../api/callBackendApi";
 import { checkAndRefreshUserSession } from "../api/callBackendApi/plugins/utils";
 import { getUserAvatar } from "../utils/common";
@@ -56,15 +58,29 @@ export type SelectedModule = Awaited<
 	ReturnType<NonNullable<ReturnType<typeof dashboardQuery>["select"]>>
 >["modules"][number];
 
-export const moduleQuizQuery = (moduleId: string) => {
+export const moduleQuizQuery = (options?: {
+	moduleId: string;
+	router: AppRouterInstance;
+	isUnaccessible: boolean | undefined;
+}) => {
+	const { moduleId = "", router, isUnaccessible } = options ?? {};
+
 	return queryOptions({
-		queryFn: () =>
-			callBackendApiForQuery("@get/module/:id/quiz", {
+		queryFn: () => {
+			if (isUnaccessible) {
+				const message = "You are not authorized to access this module";
+				toast.error(message);
+				router?.push("/dashboard");
+				throw new Error(message);
+			}
+
+			return callBackendApiForQuery("@get/module/:id/quiz", {
 				params: { id: moduleId },
 				meta: { toast: { success: false } },
-			}),
+			});
+		},
 		select: (data) => data.data,
-		queryKey: ["module-quiz", moduleId],
+		queryKey: ["module-quiz", moduleId, { isUnaccessible }],
 		staleTime: Infinity,
 	});
 };
@@ -73,21 +89,45 @@ export type SelectedQuizQuestions = Awaited<
 	ReturnType<NonNullable<ReturnType<typeof moduleQuizQuery>["select"]>>
 >;
 
-export const examQuery = (router: AppRouterInstance) => {
+export const examQuery = (options?: {
+	router: AppRouterInstance;
+	isCertified: boolean | undefined;
+	isUnaccessible: boolean | undefined;
+}) => {
+	const { router, isCertified, isUnaccessible } = options ?? {};
+
 	return queryOptions({
-		queryFn: () =>
-			callBackendApiForQuery("@get/quiz", {
+		queryFn: () => {
+			if (isUnaccessible) {
+				const message = "You are not authorized to access this exam";
+				toast.error(message);
+				router?.push("/dashboard");
+				throw new Error(message);
+			}
+
+			if (isCertified) {
+				const message = "You have already been certified";
+				toast.success(message);
+				router?.push("/dashboard");
+				throw new Error(message);
+			}
+
+			return callBackendApiForQuery("@get/quiz", {
 				meta: { toast: { success: false } },
+
+				onRequest: () => {},
+
 				onResponseError: (ctx) => {
 					const isMaximumError = ctx.response.status === 400 && ctx.error.message.includes("maximum");
 
 					if (isMaximumError) {
-						router.push("/dashboard");
+						router?.push("/dashboard");
 					}
 				},
-			}),
+			});
+		},
 		select: (data) => data.data,
-		queryKey: ["exam"],
+		queryKey: ["exam", { isCertified, isUnaccessible }],
 		staleTime: Infinity,
 	});
 };
@@ -96,10 +136,45 @@ export type SelectedExamDetails = Awaited<ReturnType<NonNullable<ReturnType<type
 
 export const certificateQuery = () => {
 	return queryOptions({
-		queryFn: () =>
-			callBackendApiForQuery("@get/certificate", { meta: { toast: { error: false, success: false } } }),
+		queryFn: () => {
+			return callBackendApiForQuery("@get/certificate", {
+				meta: { toast: { error: false, success: false } },
+			});
+		},
 		select: (data) => data.data,
 		queryKey: ["certificate"],
+		staleTime: Infinity,
+	});
+};
+
+const forceDownload = (data: Blob, id: string) => {
+	const blobUrl = window.URL.createObjectURL(data);
+
+	const link = document.createElement("a");
+	link.href = blobUrl;
+	link.download = `certificate-${id}.pdf`;
+	link.click();
+
+	window.URL.revokeObjectURL(blobUrl);
+};
+
+export const downloadCertificateQuery = (
+	options: { id: string | undefined; enabled: boolean } & Pick<CallApiExtraOptions, "onResponse">
+) => {
+	const { id = "", enabled, onResponse } = options;
+
+	return queryOptions({
+		queryFn: () => {
+			return callBackendApiForQuery("@get/certificate/:id/download", {
+				params: { id },
+				meta: { toast: { success: false } },
+				responseType: "blob",
+				onResponse,
+				onSuccess: (ctx) => forceDownload(ctx.data, id),
+			});
+		},
+		enabled,
+		queryKey: ["certificate", "download", id, enabled, onResponse],
 		staleTime: Infinity,
 	});
 };

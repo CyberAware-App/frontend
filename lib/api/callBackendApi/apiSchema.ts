@@ -26,6 +26,7 @@ const withBaseSuccessResponse = <TSchemaObject extends z.ZodType>(dataSchema: TS
 		data: dataSchema,
 	});
 
+// eslint-disable-next-line ts-eslint/no-unused-vars
 const withBaseErrorResponse = <
 	TSchemaObject extends z.ZodType = typeof BaseErrorResponseSchema.shape.errors,
 >(
@@ -58,7 +59,7 @@ export const apiSchema = defineSchema(
 	{
 		/* eslint-disable perfectionist/sort-objects */
 		[fallBackRouteSchemaKey]: {
-			errorData: withBaseErrorResponse(),
+			errorData: (data) => data as BaseApiErrorResponse,
 		},
 
 		"@get/certificate": {
@@ -69,7 +70,7 @@ export const apiSchema = defineSchema(
 					certificate_url: z.url(),
 					is_valid: z.boolean(),
 					issued_date: z.string(),
-					score: z.number(),
+					score: z.string(),
 					user_email: z.string(),
 					user_name: z.string(),
 				})
@@ -120,7 +121,7 @@ export const apiSchema = defineSchema(
 							question: z.string(),
 						})
 					),
-					max_attempts: z.number(),
+					max_attempts: z.string(),
 				})
 			),
 		},

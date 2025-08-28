@@ -9,17 +9,19 @@ import { LockIcon } from "@/components/icons/LockIcon";
 import { Button } from "@/components/ui/button";
 import { Progress } from "@/components/ui/progress-animated";
 import { certificateQuery, dashboardQuery, sessionQuery } from "@/lib/react-query/queryOptions";
+import { useDownloadCertificate } from "@/lib/react-query/useDownloadCertificate";
 import { cnJoin, cnMerge } from "@/lib/utils/cn";
 import { AuthLoader } from "../-components/AuthLoader";
 import { DashboardSideBar } from "./DashboardSideBar";
-import { useRouter } from "@bprogress/next";
 
 function DashboardPage() {
 	const sessionQueryResult = useQuery(sessionQuery());
 	const dashboardQueryResult = useQuery(dashboardQuery());
 	const certificateQueryResult = useQuery(certificateQuery());
 
-	const router = useRouter();
+	const certificateId = certificateQueryResult.data?.certificate_id;
+
+	const { downloadCertificate, isFetching } = useDownloadCertificate(certificateId);
 
 	const ongoingModule = dashboardQueryResult.data?.modules.find((module) => module.status === "ongoing");
 	const completedModulesCount = dashboardQueryResult.data?.completed_modules_count ?? 0;
@@ -81,8 +83,10 @@ function DashboardPage() {
 				<Button
 					theme="orange"
 					disabled={!sessionQueryResult.data?.is_certified}
+					isLoading={isFetching}
+					isDisabled={isFetching}
 					className={cnMerge("max-w-[150px] self-end")}
-					onClick={() => router.push(certificateQueryResult.data?.certificate_url ?? "#")}
+					onClick={() => downloadCertificate()}
 				>
 					Download certificate
 				</Button>

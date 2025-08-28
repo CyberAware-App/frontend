@@ -1,3 +1,4 @@
+import { Timer } from "@ark-ui/react";
 import type { UseFormReturn } from "react-hook-form";
 import { z } from "zod";
 import { For } from "@/components/common/for";
@@ -16,20 +17,37 @@ export const ExamFormSchema = ExamSchemaRecord.transform((data) => Object.values
 
 type ExamFormProps = {
 	onSubmit: ReturnType<UseFormReturn["handleSubmit"]>;
+	examDuration: number;
+	onTimeUp: () => void;
 	form: UseFormReturn<z.infer<typeof ExamFormSchema>>;
+	isSubmitting: boolean;
 	selectedExamQuestions: SelectedExamDetails["exam_data"];
 };
 
 function ExamForm(props: ExamFormProps) {
-	const { form, onSubmit, selectedExamQuestions } = props;
+	const { form, onSubmit, examDuration, onTimeUp, isSubmitting, selectedExamQuestions } = props;
 
 	return (
-		<>
+		<Timer.Root
+			autoStart={true}
+			countdown={true}
+			startMs={examDuration}
+			onComplete={onTimeUp}
+			className="flex flex-col gap-[50px]"
+		>
 			<article className="flex flex-col gap-10">
-				<h3 className="text-[28px] font-semibold text-cyberaware-aeces-blue">Exam:</h3>
+				<header className="flex flex-col gap-5">
+					<h3 className="text-[28px] font-semibold text-cyberaware-aeces-blue">Exam:</h3>
+
+					<Timer.Area
+						className="flex items-center gap-1 text-[14px] font-medium text-cyberaware-aeces-blue"
+					>
+						Time: <Timer.Item type="minutes" /> minutes <Timer.Item type="seconds" /> seconds
+					</Timer.Area>
+				</header>
 
 				<Form.Root
-					id="quiz-form"
+					id="exam-form"
 					methods={form}
 					onSubmit={(event) => void onSubmit(event)}
 					className="gap-10"
@@ -105,8 +123,8 @@ function ExamForm(props: ExamFormProps) {
 				<article className="flex flex-col gap-7">
 					<DialogAnimated.Trigger asChild={true}>
 						<Button
-							isLoading={form.formState.isSubmitting}
-							isDisabled={form.formState.isSubmitting}
+							isLoading={isSubmitting}
+							isDisabled={isSubmitting}
 							theme="orange"
 							className="gap-2.5"
 						>
@@ -140,7 +158,7 @@ function ExamForm(props: ExamFormProps) {
 							<Button theme="blue-ghost">Cancel</Button>
 						</DialogAnimated.Close>
 
-						<Form.Submit form="quiz-form" asChild={true}>
+						<Form.Submit form="exam-form" asChild={true}>
 							<DialogAnimated.Close asChild={true}>
 								<Button theme="orange" className="gap-2.5">
 									Submit
@@ -151,7 +169,7 @@ function ExamForm(props: ExamFormProps) {
 					</DialogAnimated.Footer>
 				</DialogAnimated.Content>
 			</DialogAnimated.Root>
-		</>
+		</Timer.Root>
 	);
 }
 

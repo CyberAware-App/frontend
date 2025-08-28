@@ -1,17 +1,17 @@
 "use client";
 
+import { useQuery } from "@tanstack/react-query";
+import Image from "next/image";
+import type { z } from "zod";
 import { IconBox } from "@/components/common/IconBox";
 import { NavLink } from "@/components/common/NavLink";
 import { Switch } from "@/components/common/switch";
 import { Button } from "@/components/ui/button";
 import type { apiSchema } from "@/lib/api/callBackendApi";
 import { certificateQuery } from "@/lib/react-query/queryOptions";
+import { useDownloadCertificate } from "@/lib/react-query/useDownloadCertificate";
 import { cnJoin } from "@/lib/utils/cn";
 import { emojiFailed, emojiPassed, emojiTooBad } from "@/public/assets";
-import { useRouter } from "@bprogress/next";
-import { useQuery } from "@tanstack/react-query";
-import Image from "next/image";
-import type { z } from "zod";
 
 export type ExamResultPayload = z.infer<(typeof apiSchema.routes)["@post/quiz"]["data"]>["data"];
 
@@ -29,11 +29,9 @@ function ExamResultView(props: ExamResultViewProps) {
 
 	const certificateQueryResult = useQuery(certificateQuery());
 
-	const router = useRouter();
+	const certificateId = certificateQueryResult.data?.certificate_id;
 
-	if (!result) {
-		return null;
-	}
+	const { downloadCertificate, isFetching } = useDownloadCertificate(certificateId);
 
 	const emojiMap = {
 		passed: emojiPassed,
@@ -41,7 +39,7 @@ function ExamResultView(props: ExamResultViewProps) {
 		exhausted: emojiTooBad,
 	} satisfies Record<typeof resultStatus, string>;
 
-	const attemptsLeft = maxAttempts - result.attempt_number;
+	const attemptsLeft = maxAttempts - Number(result?.attempt_number);
 
 	return (
 		<article className="flex flex-col gap-10 pb-[100px]">
@@ -58,9 +56,9 @@ function ExamResultView(props: ExamResultViewProps) {
 							:	"text-cyberaware-danger-red"
 						)}
 					>
-						{result.correct_answers}
+						{result?.correct_answers}
 					</span>
-					/<span>{result.total_questions}</span>
+					/<span>{result?.total_questions}</span>
 				</p>
 			</div>
 
@@ -70,12 +68,14 @@ function ExamResultView(props: ExamResultViewProps) {
 						<Button
 							theme="orange"
 							className="gap-2.5"
-							onClick={() => router.push(certificateQueryResult.data?.certificate_url ?? "#")}
+							isLoading={isFetching}
+							isDisabled={isFetching}
+							onClick={() => downloadCertificate()}
 						>
 							Get certificate
 						</Button>
 						<p className="text-center text-[12px] font-medium text-cyberaware-aeces-blue">
-							You can go obtain your certificate
+							You can click to download your certificate
 						</p>
 					</div>
 				</Switch.Match>
@@ -88,7 +88,9 @@ function ExamResultView(props: ExamResultViewProps) {
 						</Button>
 
 						<p className="text-center text-[12px] font-medium text-cyberaware-aeces-blue">
-							Try again, You have {attemptsLeft} more chances.
+							Try again, You have{" "}
+							<span className="font-semibold text-cyberaware-danger-red">{attemptsLeft}</span> more{" "}
+							{attemptsLeft === 1 ? "attempt" : "attempts"} left.
 						</p>
 					</div>
 				</Switch.Match>
@@ -98,12 +100,21 @@ function ExamResultView(props: ExamResultViewProps) {
 						<Button theme="danger" className="gap-2.5" asChild={true}>
 							<NavLink href="/dashboard">Exit</NavLink>
 						</Button>
-						<p
-							className="max-w-[305px] text-center text-[12px] font-medium
-								text-cyberaware-aeces-blue"
-						>
-							You have exhausted all your chances and cannot continue with this programme
-						</p>
+
+						<div>
+							<p
+								className="max-w-[305px] text-center text-[12px] font-medium
+									text-cyberaware-aeces-blue"
+							>
+								You've used all available attempts for this program and hence cannot continue.
+							</p>
+							<p
+								className="max-w-[305px] text-center text-[12px] font-medium
+									text-cyberaware-aeces-blue"
+							>
+								For assistance or to request a progress reset, please contact our support team.
+							</p>
+						</div>
 					</div>
 				</Switch.Match>
 			</Switch.Root>
