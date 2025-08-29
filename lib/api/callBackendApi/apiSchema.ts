@@ -250,7 +250,7 @@ export const apiSchema = defineSchema(
 			data: withBaseSuccessResponse(
 				z.object({
 					email: z.string(),
-					otp_resent: z.boolean(),
+					password_reset: z.boolean(),
 				})
 			),
 		},
