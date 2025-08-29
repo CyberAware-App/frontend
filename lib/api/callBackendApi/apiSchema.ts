@@ -179,6 +179,12 @@ export const apiSchema = defineSchema(
 			),
 		},
 
+		"@post/logout": {
+			body: z.object({
+				refresh: z.string(),
+			}),
+		},
+
 		"@post/module/:id/complete": {
 			data: withBaseSuccessResponse(
 				z.object({

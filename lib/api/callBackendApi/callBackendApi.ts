@@ -12,12 +12,13 @@ declare module "@zayne-labs/callapi" {
 	}
 }
 
-// const BACKEND_HOST =
-// 	process.env.NODE_ENV === "development" ?
-// 		"http://127.0.0.1:8000"
-// 	:	"https://cyberaware-api-mx7u.onrender.com";
+const LOCAL_BACKEND_HOST = "http://127.0.0.1:8000";
 
-const BACKEND_HOST = "https://cyberaware-api-mx7u.onrender.com";
+const REMOTE_BACKEND_HOST = "https://familiar-lethia-ferditech-4c835a92.koyeb.app";
+
+const BACKEND_HOST = process.env.NODE_ENV === "development" ? LOCAL_BACKEND_HOST : REMOTE_BACKEND_HOST;
+
+// const BACKEND_HOST = REMOTE_BACKEND_HOST;
 
 const BASE_API_URL = `${BACKEND_HOST}/api`;
 

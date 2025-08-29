@@ -1,5 +1,6 @@
 "use client";
 
+import { useRouter } from "@bprogress/next";
 import { useQuery } from "@tanstack/react-query";
 import Image from "next/image";
 import { For } from "@/components/common/for";
@@ -11,9 +12,12 @@ import { CollapsibleAnimated, Sidebar } from "@/components/ui";
 import { Button } from "@/components/ui/button";
 import { dashboardQuery } from "@/lib/react-query/queryOptions";
 import { logoSmall } from "@/public/assets";
+import { logout } from "../utils";
 
 function DashboardSideBar() {
 	const dashboardQueryResult = useQuery(dashboardQuery());
+
+	const router = useRouter();
 
 	return (
 		<Sidebar.ContextProvider
@@ -115,7 +119,11 @@ function DashboardSideBar() {
 								)}
 							/>
 
-							<Button className="mt-2.5 w-fit text-cyberaware-unizik-orange" unstyled={true}>
+							<Button
+								className="mt-2.5 w-fit text-cyberaware-unizik-orange"
+								unstyled={true}
+								onClick={() => logout(router)}
+							>
 								Logout
 							</Button>
 						</Sidebar.Menu>

@@ -25,10 +25,17 @@ export const isAuthTokenRelatedError = (
 };
 export type PossibleAuthToken = "accessToken" | "refreshToken";
 
+const refreshTokenKey = "refreshToken";
+const accessTokenKey = "accessToken";
+
 /* eslint-disable ts-eslint/no-unnecessary-condition */
 export const authTokenObject = {
-	accessToken: () => globalThis.localStorage?.getItem("accessToken"),
-	refreshToken: () => globalThis.localStorage?.getItem("refreshToken"),
+	accessToken: () => globalThis.localStorage?.getItem(accessTokenKey),
+	refreshToken: () => globalThis.localStorage?.getItem(refreshTokenKey),
+	clearTokens: () => {
+		globalThis.localStorage?.removeItem(accessTokenKey);
+		globalThis.localStorage?.removeItem(refreshTokenKey);
+	},
 };
 /* eslint-enable ts-eslint/no-unnecessary-condition */
 
