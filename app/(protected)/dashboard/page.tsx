@@ -11,7 +11,7 @@ import { Progress } from "@/components/ui/progress-animated";
 import { certificateQuery, dashboardQuery, sessionQuery } from "@/lib/react-query/queryOptions";
 import { useDownloadCertificate } from "@/lib/react-query/useDownloadCertificate";
 import { cnJoin, cnMerge } from "@/lib/utils/cn";
-import { AuthLoader } from "../-components/AuthLoader";
+import { LoadingScreen } from "../../-components/LoadingScreen";
 import { DashboardSideBar } from "./DashboardSideBar";
 
 function DashboardPage() {
@@ -29,7 +29,10 @@ function DashboardPage() {
 
 	const cardDetails = [
 		{
-			body: "Estimated time: 10mins",
+			body:
+				ongoingModule ? "Estimated time: 10mins" : (
+					"Warning: This exam is timed for 35mins. You will be automatically submitted after the time expires."
+				),
 			button: (
 				<Button theme="orange" className="max-w-[150px] self-end" asChild={true}>
 					<NavLink href={ongoingModule ? `/dashboard/module/${ongoingModule.id}` : "/dashboard/exam"}>
@@ -70,7 +73,7 @@ function DashboardPage() {
 					className="max-w-[150px] self-end"
 					asChild={true}
 				>
-					<NavLink href="/dashboard/exam">Take Exam</NavLink>
+					<NavLink href="#">Take Exam</NavLink>
 				</Button>
 			),
 			id: 4,
@@ -98,7 +101,7 @@ function DashboardPage() {
 	];
 
 	if (!dashboardQueryResult.data) {
-		return <AuthLoader text="Loading dashboard..." />;
+		return <LoadingScreen text="Loading dashboard..." />;
 	}
 
 	return (
@@ -138,6 +141,7 @@ function DashboardPage() {
 				<section className="grid gap-x-3 gap-y-3.5">
 					{cardDetails.map((detail) => (
 						<div
+							id={detail.id.toString()}
 							key={detail.id}
 							className={cnJoin(
 								"flex flex-col gap-5 bg-cyberaware-neutral-gray-lighter px-5 py-6",

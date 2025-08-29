@@ -25,6 +25,7 @@ function ForgotPasswordPage() {
 	const onSubmit = form.handleSubmit(async (data) => {
 		await callBackendApiForQuery("@post/forgot-password", {
 			body: data,
+			meta: { auth: { skipHeaderAddition: true } },
 
 			onResponseError: (ctx) => {
 				form.setError("email", { message: ctx.error.message });
@@ -59,7 +60,13 @@ function ForgotPasswordPage() {
 					</Form.Field>
 
 					<Form.Submit asChild={true}>
-						<Button className="h-[64px]">Reset password</Button>
+						<Button
+							isLoading={form.formState.isSubmitting}
+							isDisabled={form.formState.isSubmitting}
+							className="h-[64px]"
+						>
+							Reset password
+						</Button>
 					</Form.Submit>
 				</Form.Root>
 			</section>

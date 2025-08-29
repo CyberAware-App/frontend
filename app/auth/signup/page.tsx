@@ -28,6 +28,7 @@ function SignupPage() {
 	const onSubmit = form.handleSubmit(async (data) => {
 		await callBackendApiForQuery("@post/register", {
 			body: data,
+			meta: { auth: { skipHeaderAddition: true } },
 
 			onResponseError: (ctx) => {
 				for (const [key, value] of Object.entries(ctx.error.errorData.errors ?? {})) {

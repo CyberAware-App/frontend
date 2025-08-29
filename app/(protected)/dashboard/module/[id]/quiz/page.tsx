@@ -6,7 +6,7 @@ import { useQuery } from "@tanstack/react-query";
 import { use, useMemo, useState } from "react";
 import { useForm } from "react-hook-form";
 import { ProtectedMain } from "@/app/-components";
-import { AuthLoader } from "@/app/(protected)/-components/AuthLoader";
+import { LoadingScreen } from "@/app/-components/LoadingScreen";
 import { Show } from "@/components/common/show";
 import { dashboardQuery, moduleQuizQuery } from "@/lib/react-query/queryOptions";
 import { shuffleArray } from "@/lib/utils/common";
@@ -31,7 +31,11 @@ function QuizPage({ params }: PageProps<"/dashboard/module/[id]/quiz">) {
 	const router = useRouter();
 
 	const moduleQuizQueryResult = useQuery(
-		moduleQuizQuery({ moduleId, router, isUnaccessible: isQuizUnaccessible })
+		moduleQuizQuery({
+			moduleId,
+			router,
+			isUnaccessible: isQuizUnaccessible,
+		})
 	);
 
 	const [result, setResult] = useState<QuizResultPayload | null>(null);
@@ -47,7 +51,7 @@ function QuizPage({ params }: PageProps<"/dashboard/module/[id]/quiz">) {
 	}, [moduleQuizQueryResult.data, result]);
 
 	if (!selectedModule || isQuizUnaccessible || !selectedQuizQuestions) {
-		return <AuthLoader text="Loading quiz..." />;
+		return <LoadingScreen text="Loading quiz..." />;
 	}
 
 	const onSubmit = form.handleSubmit((data) => {

@@ -51,6 +51,8 @@ export const authPlugin = definePlugin(() => ({
 		},
 
 		onResponseError: async (ctx: ResponseErrorContext<BaseApiErrorResponse>) => {
+			if (!isBrowser()) return;
+
 			// NOTE: Only call refreshUserSession on auth token related errors, and remake the request
 			const shouldRefreshToken = ctx.response.status === 401 && isAuthTokenRelatedError(ctx.error);
 

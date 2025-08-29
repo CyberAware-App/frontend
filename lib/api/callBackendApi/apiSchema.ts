@@ -121,7 +121,7 @@ export const apiSchema = defineSchema(
 							question: z.string(),
 						})
 					),
-					max_attempts: z.string(),
+					max_attempts: z.number(),
 				})
 			),
 		},
@@ -159,7 +159,7 @@ export const apiSchema = defineSchema(
 			data: withBaseSuccessResponse(
 				z.object({
 					email: z.string(),
-					otp_resent: z.boolean(),
+					otp_sent: z.boolean(),
 				})
 			),
 		},

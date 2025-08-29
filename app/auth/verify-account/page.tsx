@@ -6,18 +6,27 @@ import { useStorageState } from "@zayne-labs/toolkit-react";
 import { For } from "@zayne-labs/ui-react/common/for";
 import { Form } from "@zayne-labs/ui-react/ui/form";
 import { REGEXP_ONLY_DIGITS } from "input-otp";
-import { useEffect } from "react";
 import { useForm } from "react-hook-form";
-import { toast } from "sonner";
 import { Main } from "@/app/-components";
 import { InputOTP } from "@/components/ui";
 import { Button } from "@/components/ui/button";
 import { apiSchema, callBackendApiForQuery } from "@/lib/api/callBackendApi";
+import { usePageBlocker } from "@/lib/hooks";
 import { resendOtp } from "./utils";
 
 const VerifyAccountSchema = apiSchema.routes["@post/verify-otp"].body.pick({ code: true });
 
 function VerifyAccountPage() {
+	const router = useRouter();
+
+	const [email] = useStorageState<string | null>("email", null);
+
+	usePageBlocker({
+		condition: !email,
+		message: "Email not provided",
+		redirectPath: "/auth/signin",
+	});
+
 	const form = useForm({
 		defaultValues: {
 			code: "",
@@ -26,17 +35,6 @@ function VerifyAccountPage() {
 		resolver: zodResolver(VerifyAccountSchema),
 	});
 
-	const router = useRouter();
-
-	const [email] = useStorageState<string | null>("email", null);
-
-	useEffect(() => {
-		if (!email) {
-			toast.error("Email not provided");
-			router.push("/auth/signin");
-		}
-	}, [email, router]);
-
 	if (!email) {
 		return null;
 	}
@@ -44,6 +42,7 @@ function VerifyAccountPage() {
 	const onSubmit = form.handleSubmit(async (data) => {
 		await callBackendApiForQuery("@post/verify-otp", {
 			body: { code: data.code, email },
+			meta: { auth: { skipHeaderAddition: true } },
 
 			onResponseError: (ctx) => {
 				form.setError("code", { message: ctx.error.errorData.errors?.code });

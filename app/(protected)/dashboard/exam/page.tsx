@@ -1,20 +1,20 @@
 "use client";
 
-import { useRouter } from "@bprogress/next";
-import { zodResolver } from "@hookform/resolvers/zod";
-import { useQuery, useQueryClient } from "@tanstack/react-query";
-import { defineSchemaConfig } from "@zayne-labs/callapi";
-import { useToggle } from "@zayne-labs/toolkit-react";
-import { useEffect, useMemo, useState } from "react";
-import { useForm } from "react-hook-form";
-import { toast } from "sonner";
-import type { z } from "zod";
 import { ProtectedMain } from "@/app/-components";
 import { Show } from "@/components/common/show";
 import { callBackendApiForQuery } from "@/lib/api/callBackendApi";
 import { certificateQuery, dashboardQuery, examQuery, sessionQuery } from "@/lib/react-query/queryOptions";
 import { shuffleArray } from "@/lib/utils/common";
-import { AuthLoader } from "../../-components/AuthLoader";
+import { useRouter } from "@bprogress/next";
+import { zodResolver } from "@hookform/resolvers/zod";
+import { useQuery, useQueryClient } from "@tanstack/react-query";
+import { defineSchemaConfig } from "@zayne-labs/callapi";
+import { useToggle } from "@zayne-labs/toolkit-react";
+import { useMemo, useState } from "react";
+import { useForm } from "react-hook-form";
+import { toast } from "sonner";
+import type { z } from "zod";
+import { LoadingScreen } from "../../../-components/LoadingScreen";
 import { Heading } from "../Heading";
 import { ExamForm, ExamFormSchema } from "./ExamForm";
 import { type ExamResultPayload, ExamResultView, type ResultStatus } from "./ExamResultView";
@@ -41,14 +41,6 @@ function ExamPage() {
 		})
 	);
 
-	useEffect(() => {
-		if (isExamUnaccessible) {
-			toast.error("You are not authorized to access this exam");
-
-			router.push("/dashboard");
-		}
-	}, [isExamUnaccessible, router]);
-
 	const [isTimeUp, toggleTimeUp] = useToggle(false);
 
 	const [isSubmittingOnTimeout, toggleSubmittingOnTimeout] = useToggle(false);
@@ -68,11 +60,11 @@ function ExamPage() {
 	const queryClient = useQueryClient();
 
 	if (examQueryResult.isRefetching) {
-		return <AuthLoader text="Retaking exam..." />;
+		return <LoadingScreen text="Retaking exam..." />;
 	}
 
 	if (isExamUnaccessible || !selectedExamQuestions) {
-		return <AuthLoader text="Loading exam..." />;
+		return <LoadingScreen text="Loading exam..." />;
 	}
 
 	const uploadAnswers = async (data: z.infer<typeof ExamFormSchema>) => {

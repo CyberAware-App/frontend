@@ -27,6 +27,7 @@ function SigninPage() {
 	const onSubmit = form.handleSubmit(async (data) => {
 		await callBackendApiForQuery("@post/login", {
 			body: data,
+			meta: { auth: { skipHeaderAddition: true } },
 
 			onResponseError: (ctx) => {
 				if (
@@ -95,7 +96,7 @@ function SigninPage() {
 						<Form.ErrorMessage />
 
 						<NavLink
-							href="/auth/reset-password"
+							href="/auth/forgot-password"
 							className="self-end font-semibold text-cyberaware-primary-blue-light"
 						>
 							Forgot Password?

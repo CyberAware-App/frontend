@@ -1,16 +1,15 @@
 "use client";
 
-import { useRouter } from "@bprogress/next";
 import MuxPlayer from "@mux/mux-player-react";
 import { useQuery, useQueryClient } from "@tanstack/react-query";
-import { use, useEffect, useState } from "react";
-import { toast } from "sonner";
+import { use, useState } from "react";
 import { ProtectedMain } from "@/app/-components";
-import { AuthLoader } from "@/app/(protected)/-components/AuthLoader";
+import { LoadingScreen } from "@/app/-components/LoadingScreen";
 import { IconBox } from "@/components/common/IconBox";
 import { NavLink } from "@/components/common/NavLink";
 import { Button } from "@/components/ui/button";
 import { callBackendApi } from "@/lib/api/callBackendApi";
+import { usePageBlocker } from "@/lib/hooks";
 import { dashboardQuery } from "@/lib/react-query/queryOptions";
 import { Heading } from "../../Heading";
 import { FootNote } from "../FootNote";
@@ -26,24 +25,20 @@ function ModulePage({ params }: PageProps<"/dashboard/module/[id]">) {
 
 	const [isModuleMarkedAsCompleted, setIsModuleMarkedAsCompleted] = useState(false);
 
-	const router = useRouter();
-
 	const queryClient = useQueryClient();
 
-	const isModuleLocked = selectedModule && selectedModule.status === "locked";
+	const isModuleUnaccessible = Boolean(selectedModule) && selectedModule.status === "locked";
 
 	const isFinalModule = selectedModule?.id === 10;
 
-	useEffect(() => {
-		if (isModuleLocked) {
-			toast.error("You are not authorized to access this module");
+	usePageBlocker({
+		condition: isModuleUnaccessible,
+		message: "Module not found",
+		redirectPath: "/dashboard",
+	});
 
-			router.push("/dashboard");
-		}
-	}, [isModuleLocked, router]);
-
-	if (!selectedModule || isModuleLocked) {
-		return <AuthLoader text="Loading module..." />;
+	if (!selectedModule || isModuleUnaccessible) {
+		return <LoadingScreen text="Loading module..." />;
 	}
 
 	return (

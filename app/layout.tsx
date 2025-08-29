@@ -3,7 +3,7 @@ import { Work_Sans } from "next/font/google";
 import { SonnerToaster } from "@/components/common/Toaster";
 import { cnJoin } from "../lib/utils/cn";
 import "../tailwind.css";
-import { Providers } from "./Providers";
+import { Providers } from "./-components/Providers";
 
 const workSans = Work_Sans({
 	subsets: ["latin"],

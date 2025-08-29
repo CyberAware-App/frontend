@@ -5,18 +5,27 @@ import { zodResolver } from "@hookform/resolvers/zod";
 import { useStorageState } from "@zayne-labs/toolkit-react";
 import { Form } from "@zayne-labs/ui-react/ui/form";
 import { REGEXP_ONLY_DIGITS } from "input-otp";
-import { useEffect } from "react";
 import { useForm } from "react-hook-form";
-import { toast } from "sonner";
 import { Main } from "@/app/-components";
 import { For } from "@/components/common/for";
 import { InputOTP } from "@/components/ui";
 import { Button } from "@/components/ui/button";
 import { apiSchema, callBackendApiForQuery } from "@/lib/api/callBackendApi";
+import { usePageBlocker } from "@/lib/hooks";
 
 const ResetPasswordSchema = apiSchema.routes["@post/reset-password"].body.omit({ email: true });
 
 function ResetPasswordPage() {
+	const router = useRouter();
+
+	const [email] = useStorageState<string | null>("email", null);
+
+	usePageBlocker({
+		condition: !email,
+		message: "Email not provided",
+		redirectPath: "/auth/forgot-password",
+	});
+
 	const form = useForm({
 		defaultValues: {
 			code: "",
@@ -26,17 +35,6 @@ function ResetPasswordPage() {
 		resolver: zodResolver(ResetPasswordSchema),
 	});
 
-	const router = useRouter();
-
-	const [email] = useStorageState<string | null>("email", null);
-
-	useEffect(() => {
-		if (!email) {
-			toast.error("Email not provided");
-			router.push("/auth/forgot-password");
-		}
-	}, [email, router]);
-
 	if (!email) {
 		return null;
 	}
@@ -44,6 +42,7 @@ function ResetPasswordPage() {
 	const onSubmit = form.handleSubmit(async (data) => {
 		await callBackendApiForQuery("@post/reset-password", {
 			body: { ...data, email },
+			meta: { auth: { skipHeaderAddition: true } },
 
 			onResponseError: (ctx) => {
 				form.setError("code", { message: ctx.error.message });
@@ -113,7 +112,13 @@ function ResetPasswordPage() {
 					</Form.Field>
 
 					<Form.Submit asChild={true}>
-						<Button className="h-[64px]">Reset password</Button>
+						<Button
+							className="h-[64px]"
+							isLoading={form.formState.isSubmitting}
+							isDisabled={form.formState.isSubmitting}
+						>
+							Reset password
+						</Button>
 					</Form.Submit>
 				</Form.Root>
 			</section>

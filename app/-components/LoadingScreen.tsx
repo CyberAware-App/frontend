@@ -1,4 +1,4 @@
-function AuthLoader(props: { text?: string }) {
+function LoadingScreen(props: { text?: string }) {
 	const { text = "Verifying account..." } = props;
 
 	return (
@@ -16,4 +16,4 @@ function AuthLoader(props: { text?: string }) {
 	);
 }
 
-export { AuthLoader };
+export { LoadingScreen };

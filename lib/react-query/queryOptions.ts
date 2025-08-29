@@ -36,7 +36,12 @@ const computeModuleStatus = (moduleId: number, completedModules: number | undefi
 
 export const dashboardQuery = () => {
 	return queryOptions({
-		queryFn: () => callBackendApiForQuery("@get/dashboard", { meta: { toast: { success: false } } }),
+		queryFn: () => {
+			return callBackendApiForQuery("@get/dashboard", {
+				dedupeStrategy: "defer",
+				meta: { toast: { success: false } },
+			});
+		},
 		select: (data) => ({
 			...data.data,
 			completed_modules_count:

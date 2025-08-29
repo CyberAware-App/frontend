@@ -4,7 +4,7 @@ import { useQuery } from "@tanstack/react-query";
 import type { InferProps } from "@zayne-labs/toolkit-react/utils";
 import { Main } from "@/app/-components";
 import { sessionQuery } from "@/lib/react-query/queryOptions";
-import { AuthLoader } from "./AuthLoader";
+import { LoadingScreen } from "../../-components/LoadingScreen";
 
 function ProtectedMain(props: InferProps<typeof Main>) {
 	const sessionQueryResult = useQuery(sessionQuery());
@@ -13,7 +13,7 @@ function ProtectedMain(props: InferProps<typeof Main>) {
 		return <Main {...props} />;
 	}
 
-	return <AuthLoader />;
+	return <LoadingScreen />;
 }
 
 export { ProtectedMain };
