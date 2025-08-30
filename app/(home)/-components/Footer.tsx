@@ -25,10 +25,10 @@ const footerLinks = [
 function Footer() {
 	return (
 		<footer className="flex flex-col gap-12 bg-cyberaware-aeces-blue px-12 pt-11 pb-8 text-white">
-			<div className="flex items-center">
+			<NavLink href="/" className="flex items-center">
 				<Image src={logoLarge} alt="Logo" className="max-w-[106px]" />
 				<h3 className="text-[32px] font-semibold">CyberAware</h3>
-			</div>
+			</NavLink>
 
 			<ForWithWrapper
 				className="flex flex-col gap-1.5 px-4.5 text-[14px]"

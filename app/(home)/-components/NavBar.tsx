@@ -67,6 +67,16 @@ const linkItems = [
 		icon: "ion:grid-sharp",
 		title: "Modules",
 	},
+	// {
+	// 	href: "/privacy-policy",
+	// 	icon: "ri:lock-fill",
+	// 	title: "Privacy policy",
+	// },
+	// {
+	// 	href: "/partners",
+	// 	icon: "ri:team-fill",
+	// 	title: "Partners",
+	// },
 ];
 
 function MobileNavigation(props: MobileNavProps) {

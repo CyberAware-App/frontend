@@ -38,8 +38,11 @@ declare namespace __next_route_internal_types__ {
     | `/auth/signin`
     | `/auth/signup`
     | `/auth/verify-account`
+    | `/contact`
     | `/dashboard`
     | `/dashboard/exam`
+    | `/partners`
+    | `/privacy-policy`
     | `/team-leads`
   type DynamicRoutes<T extends string = string> = 
     | `/dashboard/module/${SafeSlug<T>}`
