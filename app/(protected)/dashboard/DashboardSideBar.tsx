@@ -12,7 +12,7 @@ import { CollapsibleAnimated, Sidebar } from "@/components/ui";
 import { Button } from "@/components/ui/button";
 import { dashboardQuery } from "@/lib/react-query/queryOptions";
 import { logoSmall } from "@/public/assets";
-import { logout } from "../utils";
+import { logout } from "./utils";
 
 function DashboardSideBar() {
 	const dashboardQueryResult = useQuery(dashboardQuery());
