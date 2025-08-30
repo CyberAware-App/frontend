@@ -13,15 +13,10 @@ export const logout = (router: AppRouterInstance, queryClient: QueryClient) => {
 		return;
 	}
 
-	void callBackendApi("@post/logout", {
-		body: { refresh: refreshToken },
+	void callBackendApi("@post/logout", { body: { refresh: refreshToken } });
 
-		onSuccess: () => {
-			authTokenObject.clearTokens();
-
-			queryClient.removeQueries(sessionQuery());
-			queryClient.removeQueries(dashboardQuery());
-			router.push("/");
-		},
-	});
+	authTokenObject.clearTokens();
+	queryClient.removeQueries(sessionQuery());
+	queryClient.removeQueries(dashboardQuery());
+	router.push("/");
 };

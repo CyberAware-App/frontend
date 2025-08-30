@@ -84,7 +84,7 @@ function DashboardPage() {
 			title: "Exam",
 		},
 		{
-			body: "A Certificate of completion would be sent to your E-mail If you pass the minimum mark of 80% in the quiz",
+			body: "A certificate of completion can be obtained if you pass the minimum mark of 80% in the exam",
 			button: (
 				<Button
 					theme="orange"
