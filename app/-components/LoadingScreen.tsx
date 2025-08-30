@@ -3,7 +3,8 @@ function LoadingScreen(props: { text?: string }) {
 
 	return (
 		<section
-			className="absolute inset-0 z-1000 flex items-center justify-center bg-cyberaware-aeces-blue"
+			className="fixed inset-0 z-1000 flex h-svh w-svw items-center justify-center
+				bg-cyberaware-aeces-blue"
 		>
 			<p
 				className="flex h-[160px] animate-text-gradient items-center justify-center bg-linear-to-r
