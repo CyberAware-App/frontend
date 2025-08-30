@@ -9,19 +9,19 @@ const contactMethods = [
 		description: "Get in touch with our support team",
 		icon: "ri:mail-line",
 		title: "Email Support",
-		value: "support@cyberaware.com",
+		value: "zonwodi@gmail.com",
 	},
 	{
 		description: "Join our community discussions",
 		icon: "ri:discord-fill",
 		title: "Discord Community",
-		value: "discord.gg/cyberaware",
+		value: "discord.gg/ryan-zayne",
 	},
 	{
 		description: "Follow us for updates and tips",
 		icon: "ri:twitter-x-fill",
 		title: "Twitter/X",
-		value: "@cyberaware_edu",
+		value: "@zayne_el_kaiser",
 	},
 ];
 
