@@ -19,7 +19,7 @@ import { Heading } from "../Heading";
 import { ExamCertSuccess } from "./ExamCertSuccess";
 import { ExamForm, ExamFormSchema } from "./ExamForm";
 import { ExamGuidelines } from "./ExamGuidelines";
-import { type ExamResultPayload, ExamResultView, type ResultStatus } from "./ExamResultView";
+import { type ExamResultPayload, ExamResultView } from "./ExamResultView";
 
 const MAX_QUESTIONS = 50;
 
@@ -61,19 +61,7 @@ function ExamPage() {
 
 	const queryClient = useQueryClient();
 
-	const [shouldDisplayWarning, toggleShouldDisplayWarning] = useToggle(true);
-
-	if (isCertified) {
-		return <ExamCertSuccess />;
-	}
-
-	if (examQueryResult.isRefetching) {
-		return <LoadingScreen text="Retaking exam..." />;
-	}
-
-	if (isExamUnaccessible || !selectedExamQuestions) {
-		return <LoadingScreen text="Loading exam..." />;
-	}
+	const [shouldShowGuidelines, toggleShouldShowGuidelines] = useToggle(true);
 
 	const uploadAnswers = async (data: z.infer<typeof ExamFormSchema>) => {
 		await callBackendApiForQuery("@post/quiz", {
@@ -123,20 +111,6 @@ function ExamPage() {
 
 	const maxAttempts = Number(examQueryResult.data?.max_attempts);
 
-	const computedResultStatus = (): ResultStatus => {
-		if (result && result.attempt_number >= maxAttempts) {
-			return "exhausted";
-		}
-
-		if (result?.passed) {
-			return "passed";
-		}
-
-		return "pending";
-	};
-
-	const resultStatus = computedResultStatus();
-
 	const isSubmitting = isSubmittingOnTimeUp || form.formState.isSubmitting;
 
 	return (
@@ -147,31 +121,53 @@ function ExamPage() {
 				<hr className="h-px w-full border-none bg-cyberaware-neutral-gray-light" />
 
 				<Switch.Root>
-					<Switch.Match when={shouldDisplayWarning}>
-						<ExamGuidelines onProceed={() => toggleShouldDisplayWarning(false)} />
+					<Switch.Match when={isExamUnaccessible}>
+						<LoadingScreen text="Loading exam..." />
+					</Switch.Match>
+
+					<Switch.Match when={examQueryResult.isRefetching}>
+						<LoadingScreen text="Retaking exam..." />
+					</Switch.Match>
+
+					<Switch.Match when={isCertified}>
+						<ExamCertSuccess />
+					</Switch.Match>
+
+					<Switch.Match when={shouldShowGuidelines}>
+						<ExamGuidelines
+							onProceed={() => {
+								toggleShouldShowGuidelines(false);
+								window.scrollTo({ behavior: "smooth", top: 0 });
+							}}
+						/>
+					</Switch.Match>
+
+					<Switch.Match when={selectedExamQuestions}>
+						{(definedSelectedExamQuestions) => (
+							<ExamForm
+								form={form}
+								isSubmitting={isSubmitting}
+								examDuration={EXAM_DURATION}
+								onTimeUp={onTimeUp}
+								onSubmit={onSubmit}
+								selectedExamQuestions={definedSelectedExamQuestions}
+							/>
+						)}
 					</Switch.Match>
 
 					<Switch.Match when={result}>
 						{(definedResult) => (
 							<ExamResultView
 								result={definedResult}
-								resultStatus={resultStatus}
 								maxAttempts={maxAttempts}
 								onRetake={onRetake}
 							/>
 						)}
 					</Switch.Match>
 
-					<Switch.Match when={resultStatus !== "exhausted"}>
-						<ExamForm
-							form={form}
-							isSubmitting={isSubmitting}
-							examDuration={EXAM_DURATION}
-							onTimeUp={onTimeUp}
-							onSubmit={onSubmit}
-							selectedExamQuestions={selectedExamQuestions}
-						/>
-					</Switch.Match>
+					<Switch.Default>
+						<LoadingScreen text="Loading exam..." />
+					</Switch.Default>
 				</Switch.Root>
 			</section>
 		</ProtectedMain>

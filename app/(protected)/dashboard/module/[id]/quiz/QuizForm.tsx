@@ -12,7 +12,7 @@ import { FootNote } from "../../FootNote";
 type QuizFormProps = {
 	onSubmit: ReturnType<UseFormReturn["handleSubmit"]>;
 	form: UseFormReturn<z.infer<typeof ExamFormSchema>>;
-	selectedModule: SelectedModule;
+	selectedModule: SelectedModule | undefined;
 	selectedQuizQuestions: SelectedQuizQuestions;
 };
 
@@ -23,7 +23,7 @@ function QuizForm(props: QuizFormProps) {
 		<>
 			<article className="flex flex-col gap-10">
 				<h3 className="text-[28px] font-semibold text-cyberaware-aeces-blue">
-					{selectedModule.title} Quiz:
+					{selectedModule?.title} Quiz:
 				</h3>
 
 				<Form.Root
@@ -113,7 +113,7 @@ function QuizForm(props: QuizFormProps) {
 						</Button>
 					</DialogAnimated.Trigger>
 
-					<FootNote selectedModule={selectedModule} />
+					{selectedModule && <FootNote selectedModule={selectedModule} />}
 				</article>
 
 				<DialogAnimated.Content

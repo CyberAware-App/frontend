@@ -96,16 +96,13 @@ function ExamGuidelines(props: ExamGuidelinesProps) {
 			</div>
 
 			<div className="flex items-center justify-center gap-4">
-				<Button theme="blue-ghost" className="gap-2.5" asChild={true}>
-					<NavLink href="/dashboard">
-						<IconBox icon="ri:close-line" className="size-5" />
-						Cancel
-					</NavLink>
+				<Button theme="blue-ghost" asChild={true}>
+					<NavLink href="/dashboard">Cancel</NavLink>
 				</Button>
 
 				<Button theme="orange" className="gap-2.5" onClick={onProceed}>
-					<IconBox icon="ri:arrow-right-line" className="size-5" />
-					Proceed to Exam
+					Proceed
+					<IconBox icon="ri:brain-2-line" className="size-5" />
 				</Button>
 			</div>
 		</article>

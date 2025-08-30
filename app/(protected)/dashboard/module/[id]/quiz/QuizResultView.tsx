@@ -25,17 +25,13 @@ export type QuizResultPayload = {
 };
 
 type QuizResultViewProps = {
-	result: QuizResultPayload | null;
+	result: QuizResultPayload;
 	nextModuleHref: string;
 	onRetake: () => void;
 };
 
 function QuizResultView(props: QuizResultViewProps) {
 	const { result, nextModuleHref, onRetake } = props;
-
-	if (!result) {
-		return null;
-	}
 
 	return (
 		<article className="flex flex-col gap-10">

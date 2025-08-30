@@ -19,13 +19,26 @@ export type ResultStatus = "passed" | "pending" | "exhausted";
 
 type ExamResultViewProps = {
 	maxAttempts: number;
-	resultStatus: ResultStatus;
 	result: ExamResultPayload;
 	onRetake: () => void;
 };
 
 function ExamResultView(props: ExamResultViewProps) {
-	const { maxAttempts, result, resultStatus, onRetake } = props;
+	const { maxAttempts, result, onRetake } = props;
+
+	const computedResultStatus = (): ResultStatus => {
+		if (result.attempt_number >= maxAttempts) {
+			return "exhausted";
+		}
+
+		if (result.passed) {
+			return "passed";
+		}
+
+		return "pending";
+	};
+
+	const resultStatus = computedResultStatus();
 
 	const certificateQueryResult = useQuery(certificateQuery());
 

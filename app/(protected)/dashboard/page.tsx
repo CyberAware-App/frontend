@@ -1,5 +1,6 @@
 "use client";
 
+import { useRouter } from "@bprogress/next";
 import { useQuery } from "@tanstack/react-query";
 import { Credits, ProtectedMain } from "@/app/-components";
 import { UserAvatar } from "@/app/-components/UserAvatar";
@@ -26,6 +27,8 @@ function DashboardPage() {
 	const ongoingModule = dashboardQueryResult.data?.modules.find((module) => module.status === "ongoing");
 	const completedModulesCount = dashboardQueryResult.data?.completed_modules_count ?? 0;
 	const isAllModulesCompleted = completedModulesCount === 10;
+
+	const router = useRouter();
 
 	const cardDetails = [
 		{
@@ -69,11 +72,11 @@ function DashboardPage() {
 			button: (
 				<Button
 					theme="orange"
-					disabled={completedModulesCount !== 10}
+					disabled={!isAllModulesCompleted}
 					className="max-w-[150px] self-end"
-					asChild={true}
+					onClick={() => router.push("/dashboard/exam")}
 				>
-					<NavLink href="#">Take Exam</NavLink>
+					Take Exam
 				</Button>
 			),
 			id: 4,
@@ -141,7 +144,6 @@ function DashboardPage() {
 				<section className="grid gap-x-3 gap-y-3.5">
 					{cardDetails.map((detail) => (
 						<div
-							id={detail.id.toString()}
 							key={detail.id}
 							className={cnJoin(
 								"flex flex-col gap-5 bg-cyberaware-neutral-gray-lighter px-5 py-6",

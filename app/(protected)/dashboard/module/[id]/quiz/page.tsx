@@ -7,7 +7,7 @@ import { use, useMemo, useState } from "react";
 import { useForm } from "react-hook-form";
 import { ProtectedMain } from "@/app/-components";
 import { LoadingScreen } from "@/app/-components/LoadingScreen";
-import { Show } from "@/components/common/show";
+import { Switch } from "@/components/common/switch";
 import { dashboardQuery, moduleQuizQuery } from "@/lib/react-query/queryOptions";
 import { shuffleArray } from "@/lib/utils/common";
 import { ExamFormSchema } from "../../../exam/ExamForm";
@@ -26,7 +26,7 @@ function QuizPage({ params }: PageProps<"/dashboard/module/[id]/quiz">) {
 		(module) => String(module.id) === moduleId
 	);
 
-	const isQuizUnaccessible = selectedModule && selectedModule.status === "locked";
+	const isQuizUnaccessible = Boolean(selectedModule && selectedModule.status === "locked");
 
 	const router = useRouter();
 
@@ -50,11 +50,9 @@ function QuizPage({ params }: PageProps<"/dashboard/module/[id]/quiz">) {
 		// eslint-disable-next-line react-hooks/exhaustive-deps
 	}, [moduleQuizQueryResult.data, result]);
 
-	if (!selectedModule || isQuizUnaccessible || !selectedQuizQuestions) {
-		return <LoadingScreen text="Loading quiz..." />;
-	}
-
 	const onSubmit = form.handleSubmit((data) => {
+		if (!selectedQuizQuestions) return;
+
 		const details = data.map((answer) => {
 			const selectedQuiz = selectedQuizQuestions.find((quiz) => quiz.question === answer.question);
 
@@ -94,22 +92,36 @@ function QuizPage({ params }: PageProps<"/dashboard/module/[id]/quiz">) {
 			<section className="flex grow flex-col gap-[50px] bg-white px-5 pt-5 pb-[50px]">
 				<hr className="h-px w-full border-none bg-cyberaware-neutral-gray-light" />
 
-				<Show.Root when={!result}>
-					<QuizForm
-						form={form}
-						onSubmit={onSubmit}
-						selectedModule={selectedModule}
-						selectedQuizQuestions={selectedQuizQuestions}
-					/>
+				<Switch.Root>
+					<Switch.Match when={isQuizUnaccessible}>
+						<LoadingScreen text="Loading quiz..." />
+					</Switch.Match>
 
-					<Show.Fallback>
-						<QuizResultView
-							nextModuleHref={`/dashboard/module/${Number(moduleId) + 1}`}
-							result={result}
-							onRetake={onRetake}
-						/>
-					</Show.Fallback>
-				</Show.Root>
+					<Switch.Match when={selectedQuizQuestions}>
+						{(definedSelectedQuizQuestions) => (
+							<QuizForm
+								form={form}
+								onSubmit={onSubmit}
+								selectedModule={selectedModule}
+								selectedQuizQuestions={definedSelectedQuizQuestions}
+							/>
+						)}
+					</Switch.Match>
+
+					<Switch.Match when={result}>
+						{(definedResult) => (
+							<QuizResultView
+								nextModuleHref={`/dashboard/module/${Number(moduleId) + 1}`}
+								result={definedResult}
+								onRetake={onRetake}
+							/>
+						)}
+					</Switch.Match>
+
+					<Switch.Default>
+						<LoadingScreen text="Loading quiz..." />
+					</Switch.Default>
+				</Switch.Root>
 			</section>
 		</ProtectedMain>
 	);
