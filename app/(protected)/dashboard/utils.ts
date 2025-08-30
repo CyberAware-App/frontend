@@ -1,11 +1,17 @@
 import type { AppRouterInstance } from "@bprogress/next";
+import type { QueryClient } from "@tanstack/react-query";
+import { toast } from "sonner";
 import { callBackendApi } from "@/lib/api/callBackendApi";
 import { authTokenObject } from "@/lib/api/callBackendApi/plugins/utils";
+import { dashboardQuery, sessionQuery } from "@/lib/react-query/queryOptions";
 
-export const logout = (router: AppRouterInstance) => {
+export const logout = (router: AppRouterInstance, queryClient: QueryClient) => {
 	const refreshToken = authTokenObject.refreshToken();
 
-	if (!refreshToken) return;
+	if (!refreshToken) {
+		toast.error("No session found!");
+		return;
+	}
 
 	void callBackendApi("@post/logout", {
 		body: { refresh: refreshToken },
@@ -13,6 +19,8 @@ export const logout = (router: AppRouterInstance) => {
 		onSuccess: () => {
 			authTokenObject.clearTokens();
 
+			queryClient.removeQueries(sessionQuery());
+			queryClient.removeQueries(dashboardQuery());
 			router.push("/");
 		},
 	});

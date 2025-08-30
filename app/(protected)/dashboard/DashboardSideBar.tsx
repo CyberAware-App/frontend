@@ -1,7 +1,7 @@
 "use client";
 
 import { useRouter } from "@bprogress/next";
-import { useQuery } from "@tanstack/react-query";
+import { useQuery, useQueryClient } from "@tanstack/react-query";
 import Image from "next/image";
 import { For } from "@/components/common/for";
 import { IconBox } from "@/components/common/IconBox";
@@ -18,6 +18,7 @@ function DashboardSideBar() {
 	const dashboardQueryResult = useQuery(dashboardQuery());
 
 	const router = useRouter();
+	const queryClient = useQueryClient();
 
 	return (
 		<Sidebar.ContextProvider
@@ -122,7 +123,7 @@ function DashboardSideBar() {
 							<Button
 								className="mt-2.5 w-fit text-cyberaware-unizik-orange"
 								unstyled={true}
-								onClick={() => logout(router)}
+								onClick={() => logout(router, queryClient)}
 							>
 								Logout
 							</Button>
