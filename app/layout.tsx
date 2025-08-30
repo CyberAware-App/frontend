@@ -13,7 +13,7 @@ const workSans = Work_Sans({
 
 export const metadata: Metadata = {
 	description:
-		"Learn how to protect your digital world in just 10 days. Designed for lecturers, staff, and students",
+		"A modern cybersecurity education platform designed to teach digital safety in just 10 modules",
 	title: "CyberAware",
 };
 

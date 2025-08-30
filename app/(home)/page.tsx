@@ -122,7 +122,7 @@ function HomePage() {
 			<section className="flex flex-col items-center bg-cyberaware-unizik-orange p-10 text-white">
 				<h2 className="text-[36px] font-bold">Ready to Stay Safe Online?</h2>
 				<p className="mt-3.5 text-[14px]">
-					Join thousands of users becoming cyber smart in just 10 days.
+					Join thousands of users becoming cyber smart in just 10 modules.
 				</p>
 				<Button theme="white" className="mt-10 h-[72px] max-w-[314px]" asChild={true}>
 					<NavLink href="/auth/signin">Get Started</NavLink>

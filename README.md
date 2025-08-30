@@ -1,6 +1,6 @@
 # CyberAware - Frontend Application
 
-A modern cybersecurity education platform designed to teach digital safety in just 10 days. Built for lecturers, staff, and students to learn essential cybersecurity skills through interactive modules and assessments.
+A modern cybersecurity education platform designed to teach digital safety in just 10 modules. Built for lecturers, staff, and students to learn essential cybersecurity skills through interactive modules and assessments.
 
 ## 🛡️ About CyberAware
 
@@ -19,22 +19,26 @@ CyberAware is an educational platform that makes cybersecurity accessible to eve
 ## 🏗️ Architecture & Tech Stack
 
 ### Frontend Framework
+
 - **Next.js 15.4.6** - React framework with App Router
 - **React 19.1.1** - Latest React with concurrent features
 - **TypeScript** - Type-safe development
 
 ### Styling & UI
+
 - **Tailwind CSS 4.1.11** - Utility-first CSS framework
 - **Custom Design System** - Consistent UI components and theming
 - **Responsive Design** - Mobile-first approach
 
 ### State Management & Data Fetching
+
 - **Zustand** - Lightweight state management with theme persistence
 - **TanStack Query** - Server state management and caching
 - **React Hook Form** - Form handling with validation
 - **@zayne-labs/callapi** - Type-safe API client with schema validation and plugin architecture
 
 ### Development Tools
+
 - **ESLint** - Code linting with custom configuration
 - **Prettier** - Code formatting
 - **Husky** - Git hooks for code quality
@@ -73,23 +77,27 @@ CyberAware is an educational platform that makes cybersecurity accessible to eve
 ## 🚀 Getting Started
 
 ### Prerequisites
+
 - Node.js 18+
 - pnpm (recommended package manager)
 
 ### Installation
 
 1. **Clone the repository**
+
    ```bash
    git clone [repository-url]
    cd cyber-aware
    ```
 
 2. **Install dependencies**
+
    ```bash
    pnpm install
    ```
 
 3. **Start development server**
+
    ```bash
    pnpm dev
    ```
@@ -125,12 +133,14 @@ The application uses a custom design system with:
 ## 📚 Learning Experience
 
 ### Dashboard Features
+
 - **Progress Tracking**: Visual progress bar showing completion percentage
 - **Module Access**: Sequential unlocking of daily modules
 - **Quiz System**: Assessment with multiple attempts (up to 5)
 - **Certificate Generation**: Digital certificates for successful completion
 
 ### Content Structure
+
 - **Day 1-10**: Progressive learning modules
 - **Interactive Elements**: Engaging content delivery
 - **Assessment**: Final quiz requiring 80% score
@@ -139,6 +149,7 @@ The application uses a custom design system with:
 ## 🏫 Institutional Partnership
 
 Powered by:
+
 - **AECES** (Association of Electronic and Computer Engineering Students)
 - **Nnamdi Azikiwe University, Awka**
 
