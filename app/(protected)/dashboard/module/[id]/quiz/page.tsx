@@ -38,17 +38,19 @@ function QuizPage({ params }: PageProps<"/dashboard/module/[id]/quiz">) {
 		})
 	);
 
-	const [result, setResult] = useState<QuizResultPayload | null>(null);
+	const [result, setResult] = useState<QuizResultPayload | null>();
 
 	const form = useForm({
 		defaultValues: [],
 		resolver: zodResolver(ExamFormSchema),
 	});
 
+	const shouldReshuffleQuestions = Boolean(result);
+
 	const selectedQuizQuestions = useMemo(() => {
 		return shuffleArray(moduleQuizQueryResult.data)?.slice(0, MAX_QUESTION);
 		// eslint-disable-next-line react-hooks/exhaustive-deps
-	}, [moduleQuizQueryResult.data, result]);
+	}, [moduleQuizQueryResult.data, shouldReshuffleQuestions]);
 
 	const onSubmit = form.handleSubmit((data) => {
 		if (!selectedQuizQuestions) return;
@@ -97,6 +99,16 @@ function QuizPage({ params }: PageProps<"/dashboard/module/[id]/quiz">) {
 						<LoadingScreen text="Loading quiz..." />
 					</Switch.Match>
 
+					<Switch.Match when={result}>
+						{(definedResult) => (
+							<QuizResultView
+								nextModuleHref={`/dashboard/module/${Number(moduleId) + 1}`}
+								result={definedResult}
+								onRetake={onRetake}
+							/>
+						)}
+					</Switch.Match>
+
 					<Switch.Match when={selectedQuizQuestions}>
 						{(definedSelectedQuizQuestions) => (
 							<QuizForm
@@ -104,16 +116,6 @@ function QuizPage({ params }: PageProps<"/dashboard/module/[id]/quiz">) {
 								onSubmit={onSubmit}
 								selectedModule={selectedModule}
 								selectedQuizQuestions={definedSelectedQuizQuestions}
-							/>
-						)}
-					</Switch.Match>
-
-					<Switch.Match when={result}>
-						{(definedResult) => (
-							<QuizResultView
-								nextModuleHref={`/dashboard/module/${Number(moduleId) + 1}`}
-								result={definedResult}
-								onRetake={onRetake}
 							/>
 						)}
 					</Switch.Match>

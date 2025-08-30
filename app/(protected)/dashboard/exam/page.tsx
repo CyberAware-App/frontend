@@ -54,10 +54,12 @@ function ExamPage() {
 
 	const [result, setResult] = useState<ExamResultPayload | null>(null);
 
+	const shouldReshuffleQuestions = examQueryResult.isRefetching;
+
 	const selectedExamQuestions = useMemo(() => {
 		return shuffleArray(examQueryResult.data?.exam_data)?.slice(0, MAX_QUESTIONS);
 		// eslint-disable-next-line react-hooks/exhaustive-deps
-	}, [examQueryResult.data, examQueryResult.isRefetching]);
+	}, [examQueryResult.data, shouldReshuffleQuestions]);
 
 	const queryClient = useQueryClient();
 
@@ -142,6 +144,16 @@ function ExamPage() {
 						/>
 					</Switch.Match>
 
+					<Switch.Match when={result}>
+						{(definedResult) => (
+							<ExamResultView
+								result={definedResult}
+								maxAttempts={maxAttempts}
+								onRetake={onRetake}
+							/>
+						)}
+					</Switch.Match>
+
 					<Switch.Match when={selectedExamQuestions}>
 						{(definedSelectedExamQuestions) => (
 							<ExamForm
@@ -151,16 +163,6 @@ function ExamPage() {
 								onTimeUp={onTimeUp}
 								onSubmit={onSubmit}
 								selectedExamQuestions={definedSelectedExamQuestions}
-							/>
-						)}
-					</Switch.Match>
-
-					<Switch.Match when={result}>
-						{(definedResult) => (
-							<ExamResultView
-								result={definedResult}
-								maxAttempts={maxAttempts}
-								onRetake={onRetake}
 							/>
 						)}
 					</Switch.Match>
