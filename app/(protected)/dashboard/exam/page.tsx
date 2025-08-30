@@ -1,10 +1,5 @@
 "use client";
 
-import { ProtectedMain } from "@/app/-components";
-import { Show } from "@/components/common/show";
-import { callBackendApiForQuery } from "@/lib/api/callBackendApi";
-import { certificateQuery, dashboardQuery, examQuery, sessionQuery } from "@/lib/react-query/queryOptions";
-import { shuffleArray } from "@/lib/utils/common";
 import { useRouter } from "@bprogress/next";
 import { zodResolver } from "@hookform/resolvers/zod";
 import { useQuery, useQueryClient } from "@tanstack/react-query";
@@ -14,9 +9,16 @@ import { useMemo, useState } from "react";
 import { useForm } from "react-hook-form";
 import { toast } from "sonner";
 import type { z } from "zod";
+import { ProtectedMain } from "@/app/-components";
+import { Switch } from "@/components/common/switch";
+import { callBackendApiForQuery } from "@/lib/api/callBackendApi";
+import { certificateQuery, dashboardQuery, examQuery, sessionQuery } from "@/lib/react-query/queryOptions";
+import { shuffleArray } from "@/lib/utils/common";
 import { LoadingScreen } from "../../../-components/LoadingScreen";
 import { Heading } from "../Heading";
+import { ExamCertSuccess } from "./ExamCertSuccess";
 import { ExamForm, ExamFormSchema } from "./ExamForm";
+import { ExamGuidelines } from "./ExamGuidelines";
 import { type ExamResultPayload, ExamResultView, type ResultStatus } from "./ExamResultView";
 
 const MAX_QUESTIONS = 50;
@@ -30,20 +32,20 @@ function ExamPage() {
 
 	const dashboardQueryResult = useQuery(dashboardQuery());
 
+	const isCertified = sessionQueryResult.data?.is_certified;
+
 	const isExamUnaccessible =
-		dashboardQueryResult.data && dashboardQueryResult.data.completed_modules_count !== 10;
+		Boolean(dashboardQueryResult.data) && dashboardQueryResult.data.completed_modules_count !== 10;
 
 	const examQueryResult = useQuery(
 		examQuery({
 			router,
-			isCertified: sessionQueryResult.data?.is_certified,
+			isCertified,
 			isUnaccessible: isExamUnaccessible,
 		})
 	);
 
-	const [isTimeUp, toggleTimeUp] = useToggle(false);
-
-	const [isSubmittingOnTimeout, toggleSubmittingOnTimeout] = useToggle(false);
+	const [isSubmittingOnTimeUp, toggleSubmittingOnTimeUp] = useToggle(false);
 
 	const form = useForm({
 		defaultValues: [],
@@ -55,9 +57,15 @@ function ExamPage() {
 	const selectedExamQuestions = useMemo(() => {
 		return shuffleArray(examQueryResult.data?.exam_data)?.slice(0, MAX_QUESTIONS);
 		// eslint-disable-next-line react-hooks/exhaustive-deps
-	}, [examQueryResult.data, result]);
+	}, [examQueryResult.data, examQueryResult.isRefetching]);
 
 	const queryClient = useQueryClient();
+
+	const [shouldDisplayWarning, toggleShouldDisplayWarning] = useToggle(true);
+
+	if (isCertified) {
+		return <ExamCertSuccess />;
+	}
 
 	if (examQueryResult.isRefetching) {
 		return <LoadingScreen text="Retaking exam..." />;
@@ -74,15 +82,15 @@ function ExamPage() {
 
 			schemaConfig: defineSchemaConfig((ctx) => ({
 				...ctx.baseSchemaConfig,
-				disableRuntimeValidation: !isTimeUp,
+				disableRuntimeValidation: true,
 			})),
 
 			onError: () => {
-				toggleSubmittingOnTimeout(false);
+				toggleSubmittingOnTimeUp(false);
 			},
 
 			onSuccess: (ctx) => {
-				toggleSubmittingOnTimeout(false);
+				toggleSubmittingOnTimeUp(false);
 				setResult(ctx.data.data);
 				void queryClient.refetchQueries(certificateQuery());
 			},
@@ -96,8 +104,7 @@ function ExamPage() {
 	const onTimeUp = () => {
 		toast.error("Exam time elapsed! Submitting your answers...");
 
-		toggleTimeUp(true);
-		toggleSubmittingOnTimeout(true);
+		toggleSubmittingOnTimeUp(true);
 
 		void uploadAnswers(
 			Object.values(form.getValues()).map((item) => ({
@@ -109,7 +116,6 @@ function ExamPage() {
 	};
 
 	const onRetake = () => {
-		toggleTimeUp(false);
 		setResult(null);
 		form.reset();
 		void queryClient.refetchQueries(examQuery());
@@ -131,7 +137,7 @@ function ExamPage() {
 
 	const resultStatus = computedResultStatus();
 
-	const isSubmitting = isSubmittingOnTimeout || form.formState.isSubmitting;
+	const isSubmitting = isSubmittingOnTimeUp || form.formState.isSubmitting;
 
 	return (
 		<ProtectedMain>
@@ -140,25 +146,33 @@ function ExamPage() {
 			<section className="flex grow flex-col gap-[50px] bg-white px-5 pt-5 pb-[50px]">
 				<hr className="h-px w-full border-none bg-cyberaware-neutral-gray-light" />
 
-				<Show.Root when={!result && resultStatus !== "exhausted"}>
-					<ExamForm
-						form={form}
-						isSubmitting={isSubmitting}
-						examDuration={EXAM_DURATION}
-						onTimeUp={onTimeUp}
-						onSubmit={onSubmit}
-						selectedExamQuestions={selectedExamQuestions}
-					/>
+				<Switch.Root>
+					<Switch.Match when={shouldDisplayWarning}>
+						<ExamGuidelines onProceed={() => toggleShouldDisplayWarning(false)} />
+					</Switch.Match>
 
-					<Show.Fallback>
-						<ExamResultView
-							result={result}
-							resultStatus={resultStatus}
-							maxAttempts={maxAttempts}
-							onRetake={onRetake}
+					<Switch.Match when={result}>
+						{(definedResult) => (
+							<ExamResultView
+								result={definedResult}
+								resultStatus={resultStatus}
+								maxAttempts={maxAttempts}
+								onRetake={onRetake}
+							/>
+						)}
+					</Switch.Match>
+
+					<Switch.Match when={resultStatus !== "exhausted"}>
+						<ExamForm
+							form={form}
+							isSubmitting={isSubmitting}
+							examDuration={EXAM_DURATION}
+							onTimeUp={onTimeUp}
+							onSubmit={onSubmit}
+							selectedExamQuestions={selectedExamQuestions}
 						/>
-					</Show.Fallback>
-				</Show.Root>
+					</Switch.Match>
+				</Switch.Root>
 			</section>
 		</ProtectedMain>
 	);

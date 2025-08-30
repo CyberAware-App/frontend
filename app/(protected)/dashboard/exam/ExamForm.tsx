@@ -33,142 +33,145 @@ function ExamForm(props: ExamFormProps) {
 			countdown={true}
 			startMs={examDuration}
 			onComplete={onTimeUp}
-			className="flex flex-col gap-[50px]"
+			asChild={true}
 		>
 			<article className="flex flex-col gap-10">
-				<header className="flex flex-col gap-5">
-					<h3 className="text-[28px] font-semibold text-cyberaware-aeces-blue">Exam:</h3>
+				<div className="flex flex-col gap-10">
+					<header className="flex flex-col gap-5">
+						<h3 className="text-[28px] font-semibold text-cyberaware-aeces-blue">Exam:</h3>
 
-					<Timer.Area
-						className="flex items-center gap-1 text-[14px] font-medium text-cyberaware-aeces-blue"
+						<Timer.Area
+							className="flex items-center gap-1 text-[14px] font-medium text-cyberaware-aeces-blue"
+						>
+							Time: <Timer.Item type="minutes" /> minutes <Timer.Item type="seconds" /> seconds
+						</Timer.Area>
+					</header>
+
+					<Form.Root
+						id="exam-form"
+						methods={form}
+						onSubmit={(event) => void onSubmit(event)}
+						className="gap-10"
 					>
-						Time: <Timer.Item type="minutes" /> minutes <Timer.Item type="seconds" /> seconds
-					</Timer.Area>
-				</header>
-
-				<Form.Root
-					id="exam-form"
-					methods={form}
-					onSubmit={(event) => void onSubmit(event)}
-					className="gap-10"
-				>
-					<For
-						each={selectedExamQuestions}
-						renderItem={(exam, examIndex) => (
-							<Form.Field
-								key={exam.question}
-								control={form.control}
-								name={`${examIndex}.question`}
-								className="flex flex-col gap-5"
-							>
-								<Form.Label className="flex gap-1.5 text-cyberaware-aeces-blue">
-									<span>{examIndex + 1}.</span> <p>{exam.question}</p>
-								</Form.Label>
-
-								<Form.Input hidden={true} type="text" value={exam.question} />
-
+						<For
+							each={selectedExamQuestions}
+							renderItem={(exam, examIndex) => (
 								<Form.Field
 									key={exam.question}
 									control={form.control}
-									name={`${examIndex}.selected_option`}
-									className="ml-3"
+									name={`${examIndex}.question`}
+									className="flex flex-col gap-5"
 								>
-									<Form.FieldController
-										render={({ field }) => (
-											<RadioGroupAnimated.Root
-												value={(field.value as string | undefined) ?? ""}
-												onValueChange={field.onChange}
-											>
-												<For
-													each={Object.entries(exam.options)}
-													renderItem={([option, value]) => (
-														<div
-															className="flex items-center gap-2 text-cyberaware-aeces-blue"
-															key={value}
-														>
-															<RadioGroupAnimated.Item
-																id={value}
-																value={option}
-																className="size-5 border-cyberaware-aeces-blue
-																	data-[state=checked]:bg-cyberaware-aeces-blue
-																	data-[state=checked]:text-white"
+									<Form.Label className="flex gap-1.5 text-cyberaware-aeces-blue">
+										<span>{examIndex + 1}.</span> <p>{exam.question}</p>
+									</Form.Label>
+
+									<Form.Input hidden={true} type="text" value={exam.question} />
+
+									<Form.Field
+										key={exam.question}
+										control={form.control}
+										name={`${examIndex}.selected_option`}
+										className="ml-3"
+									>
+										<Form.FieldController
+											render={({ field }) => (
+												<RadioGroupAnimated.Root
+													value={(field.value as string | undefined) ?? ""}
+													onValueChange={field.onChange}
+												>
+													<For
+														each={Object.entries(exam.options)}
+														renderItem={([option, value]) => (
+															<div
+																className="flex items-center gap-2
+																	text-cyberaware-aeces-blue"
+																key={value}
 															>
-																<div className="grid">
-																	<span className="[grid-area:1/1]">
-																		{option.toLowerCase()}
-																	</span>
+																<RadioGroupAnimated.Item
+																	id={value}
+																	value={option}
+																	className="size-5 border-cyberaware-aeces-blue
+																		data-[state=checked]:bg-cyberaware-aeces-blue
+																		data-[state=checked]:text-white"
+																>
+																	<div className="grid">
+																		<span className="[grid-area:1/1]">
+																			{option.toLowerCase()}
+																		</span>
 
-																	<RadioGroupAnimated.Indicator className="[grid-area:1/1]">
-																		{option.toLowerCase()}
-																	</RadioGroupAnimated.Indicator>
-																</div>
-															</RadioGroupAnimated.Item>
-															<Form.Label htmlFor={value}>{value}</Form.Label>
-														</div>
-													)}
-												/>
-											</RadioGroupAnimated.Root>
-										)}
-									/>
+																		<RadioGroupAnimated.Indicator className="[grid-area:1/1]">
+																			{option.toLowerCase()}
+																		</RadioGroupAnimated.Indicator>
+																	</div>
+																</RadioGroupAnimated.Item>
+																<Form.Label htmlFor={value}>{value}</Form.Label>
+															</div>
+														)}
+													/>
+												</RadioGroupAnimated.Root>
+											)}
+										/>
 
-									<Form.ErrorMessage />
+										<Form.ErrorMessage />
+									</Form.Field>
 								</Form.Field>
-							</Form.Field>
-						)}
-					/>
-				</Form.Root>
-			</article>
+							)}
+						/>
+					</Form.Root>
+				</div>
 
-			<DialogAnimated.Root>
-				<article className="flex flex-col gap-7">
-					<DialogAnimated.Trigger asChild={true}>
-						<Button
-							isLoading={isSubmitting}
-							isDisabled={isSubmitting}
-							theme="orange"
-							className="gap-2.5"
-						>
-							Submit
-							<IconBox icon="ri:brain-2-line" className="size-5" />
-						</Button>
-					</DialogAnimated.Trigger>
-				</article>
+				<DialogAnimated.Root>
+					<article className="flex flex-col gap-7">
+						<DialogAnimated.Trigger asChild={true}>
+							<Button
+								isLoading={isSubmitting}
+								isDisabled={isSubmitting}
+								theme="orange"
+								className="gap-2.5"
+							>
+								Submit
+								<IconBox icon="ri:brain-2-line" className="size-5" />
+							</Button>
+						</DialogAnimated.Trigger>
+					</article>
 
-				<DialogAnimated.Content
-					withCloseBtn={false}
-					classNames={{
-						base: `top-[70%] max-w-[367px] translate-y-[-70%] gap-[60px] rounded-none border-none
-						px-5.5 pt-8 pb-[170px]`,
-						overlay: "bg-[hsl(0,0%,85%)]/70 backdrop-blur-[4px]",
-					}}
-				>
-					<DialogAnimated.Header className="flex-row justify-center">
-						<DialogAnimated.Title
-							className="max-w-[240px] text-center text-[28px] font-semibold
-								text-cyberaware-aeces-blue"
-						>
-							Are you sure you want to submit?
-						</DialogAnimated.Title>
-					</DialogAnimated.Header>
+					<DialogAnimated.Content
+						withCloseBtn={false}
+						classNames={{
+							base: `top-[70%] max-w-[367px] translate-y-[-70%] gap-[60px] rounded-none border-none
+							px-5.5 pt-8 pb-[170px]`,
+							overlay: "bg-[hsl(0,0%,85%)]/70 backdrop-blur-[4px]",
+						}}
+					>
+						<DialogAnimated.Header className="flex-row justify-center">
+							<DialogAnimated.Title
+								className="max-w-[240px] text-center text-[28px] font-semibold
+									text-cyberaware-aeces-blue"
+							>
+								Are you sure you want to submit?
+							</DialogAnimated.Title>
+						</DialogAnimated.Header>
 
-					<DialogAnimated.Description className="sr-only" />
+						<DialogAnimated.Description className="sr-only" />
 
-					<DialogAnimated.Footer className="flex-row gap-4">
-						<DialogAnimated.Close asChild={true}>
-							<Button theme="blue-ghost">Cancel</Button>
-						</DialogAnimated.Close>
-
-						<Form.Submit form="exam-form" asChild={true}>
+						<DialogAnimated.Footer className="flex-row gap-4">
 							<DialogAnimated.Close asChild={true}>
-								<Button theme="orange" className="gap-2.5">
-									Submit
-									<IconBox icon="ri:brain-2-line" className="size-5" />
-								</Button>
+								<Button theme="blue-ghost">Cancel</Button>
 							</DialogAnimated.Close>
-						</Form.Submit>
-					</DialogAnimated.Footer>
-				</DialogAnimated.Content>
-			</DialogAnimated.Root>
+
+							<Form.Submit form="exam-form" asChild={true}>
+								<DialogAnimated.Close asChild={true}>
+									<Button theme="orange" className="gap-2.5">
+										Submit
+										<IconBox icon="ri:brain-2-line" className="size-5" />
+									</Button>
+								</DialogAnimated.Close>
+							</Form.Submit>
+						</DialogAnimated.Footer>
+					</DialogAnimated.Content>
+				</DialogAnimated.Root>
+			</article>
 		</Timer.Root>
 	);
 }

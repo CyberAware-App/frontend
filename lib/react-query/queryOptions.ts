@@ -3,14 +3,13 @@ import { queryOptions } from "@tanstack/react-query";
 import type { CallApiExtraOptions } from "@zayne-labs/callapi";
 import { toast } from "sonner";
 import { callBackendApiForQuery } from "../api/callBackendApi";
-import { checkAndRefreshUserSession } from "../api/callBackendApi/plugins/utils";
+import { checkUserSession } from "../api/callBackendApi/plugins/utils";
 import { getUserAvatar } from "../utils/common";
 
 export const sessionQuery = () => {
 	return queryOptions({
-		queryFn: () => checkAndRefreshUserSession(),
+		queryFn: () => checkUserSession(),
 		queryKey: ["session"],
-		// refetchInterval: 9 * 60 * 1000, // 9 minutes
 		retry: false,
 		staleTime: Infinity,
 		select: (data) => ({
@@ -103,16 +102,14 @@ export const examQuery = (options?: {
 
 	return queryOptions({
 		queryFn: () => {
-			if (isUnaccessible) {
-				const message = "You are not authorized to access this exam";
-				toast.error(message);
-				router?.push("/dashboard");
+			if (isCertified) {
+				const message = "You have already been certified!";
 				throw new Error(message);
 			}
 
-			if (isCertified) {
-				const message = "You have already been certified";
-				toast.success(message);
+			if (isUnaccessible) {
+				const message = "You are not authorized to access this exam!";
+				toast.error(message);
 				router?.push("/dashboard");
 				throw new Error(message);
 			}

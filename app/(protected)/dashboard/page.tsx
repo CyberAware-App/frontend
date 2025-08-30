@@ -31,7 +31,7 @@ function DashboardPage() {
 		{
 			body:
 				ongoingModule ? "Estimated time: 10mins" : (
-					"Warning: This exam is timed for 35mins. You will be automatically submitted after the time expires."
+					"Warning: This exam is timed for 35mins. It will be automatically submitted after the time expires."
 				),
 			button: (
 				<Button theme="orange" className="max-w-[150px] self-end" asChild={true}>

@@ -1,7 +1,7 @@
 import { callBackendApiForQuery } from "../../callBackendApi";
 
-const checkAndRefreshUserSession = () => {
+const checkUserSession = () => {
 	return callBackendApiForQuery("@get/session", { dedupeStrategy: "defer" });
 };
 
-export { checkAndRefreshUserSession };
+export { checkUserSession };

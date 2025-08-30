@@ -20,7 +20,7 @@ export type ResultStatus = "passed" | "pending" | "exhausted";
 type ExamResultViewProps = {
 	maxAttempts: number;
 	resultStatus: ResultStatus;
-	result: ExamResultPayload | null;
+	result: ExamResultPayload;
 	onRetake: () => void;
 };
 
@@ -39,7 +39,7 @@ function ExamResultView(props: ExamResultViewProps) {
 		exhausted: emojiTooBad,
 	} satisfies Record<typeof resultStatus, string>;
 
-	const attemptsLeft = maxAttempts - Number(result?.attempt_number);
+	const attemptsLeft = maxAttempts - result.attempt_number;
 
 	return (
 		<article className="flex flex-col gap-10 pb-[100px]">
@@ -56,9 +56,9 @@ function ExamResultView(props: ExamResultViewProps) {
 							:	"text-cyberaware-danger-red"
 						)}
 					>
-						{result?.correct_answers}
+						{result.correct_answers}
 					</span>
-					/<span>{result?.total_questions}</span>
+					/<span>{result.total_questions}</span>
 				</p>
 			</div>
 
@@ -72,7 +72,7 @@ function ExamResultView(props: ExamResultViewProps) {
 							isDisabled={isFetching}
 							onClick={() => downloadCertificate()}
 						>
-							Get certificate
+							Download certificate
 						</Button>
 						<p className="text-center text-[12px] font-medium text-cyberaware-aeces-blue">
 							You can click to download your certificate
