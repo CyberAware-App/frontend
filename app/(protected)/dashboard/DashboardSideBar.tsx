@@ -50,7 +50,7 @@ function DashboardSideBar() {
 				</Sidebar.Header>
 
 				<Sidebar.Content className="custom-scrollbar">
-					<Sidebar.Group className="gap-6.5 py-4 pt-4 pb-8">
+					<Sidebar.Group className="gap-6.5 px-4 pt-4 pb-8">
 						<Sidebar.GroupLabel className="px-0 text-[22px] font-semibold text-white duration-500">
 							Your Progress
 						</Sidebar.GroupLabel>

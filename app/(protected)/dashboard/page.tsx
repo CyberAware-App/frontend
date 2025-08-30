@@ -111,9 +111,9 @@ function DashboardPage() {
 		<ProtectedMain className="flex-row">
 			<DashboardSideBar />
 
-			<div className="flex flex-col gap-8 bg-white px-4 pt-[80px]">
+			<div className="flex flex-col gap-8 bg-white px-3 pt-[80px]">
 				<section className="flex flex-col gap-5">
-					<article className="flex items-center justify-between gap-5">
+					<article className="flex items-center justify-between">
 						<div className="flex flex-col gap-1">
 							<p className="text-[28px] font-semibold text-cyberaware-aeces-blue">
 								Hello, {sessionQueryResult.data?.first_name}!
@@ -125,6 +125,7 @@ function DashboardPage() {
 								}
 							</p>
 						</div>
+
 						<UserAvatar />
 					</article>
 					<article className="flex flex-col gap-3">
@@ -141,7 +142,7 @@ function DashboardPage() {
 					</article>
 				</section>
 
-				<section className="grid gap-x-3 gap-y-3.5">
+				<section className="grid w-full gap-x-3 gap-y-3.5">
 					{cardDetails.map((detail) => (
 						<div
 							key={detail.id}
@@ -162,7 +163,7 @@ function DashboardPage() {
 								<p
 									className={cnJoin(
 										detail.isSub ?
-											"text-[22px] font-semibold text-cyberaware-aeces-blue"
+											"text-[22px] font-semibold wrap-anywhere text-cyberaware-aeces-blue"
 										:	"text-[10px]"
 									)}
 								>
