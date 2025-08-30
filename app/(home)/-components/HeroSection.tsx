@@ -30,8 +30,8 @@ function HeroSection() {
 			</p>
 
 			<div className="flex items-center justify-center gap-3.5">
-				<Button theme="blue-ghost" className="max-w-[118px]">
-					Learn More
+				<Button theme="blue-ghost" className="max-w-[118px]" asChild={true}>
+					<NavLink href="/about">Learn More</NavLink>
 				</Button>
 
 				<Button className="max-w-[175px]" asChild={true}>
