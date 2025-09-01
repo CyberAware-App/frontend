@@ -23,7 +23,7 @@ const teamLeads = [
 	},
 	{
 		name: "Bello Yusuf",
-		role: "Cybersecurity Industry Expert",
+		role: "Cybersecurity Expert",
 	},
 	{
 		name: "Onwodi Zion",
@@ -54,12 +54,12 @@ function TeamPage() {
 					className="flex flex-col gap-4.5 px-4"
 					each={teamLeads}
 					renderItem={(teamLead, index) => (
-						<li className="flex gap-5 bg-white px-3 py-4 font-medium" key={teamLead.name}>
-							<h4 className="text-cyberaware-aeces-blue">
+						<li className="flex gap-4 bg-white px-3 py-4 font-medium" key={teamLead.name}>
+							<h4 className="shrink-0 text-cyberaware-aeces-blue">
 								{index + 1}. {teamLead.role}:
 							</h4>
 
-							<p>{teamLead.name}</p>
+							<p className="truncate">{teamLead.name}</p>
 						</li>
 					)}
 				/>
