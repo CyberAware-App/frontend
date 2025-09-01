@@ -117,8 +117,6 @@ export const examQuery = (options?: {
 			return callBackendApiForQuery("@get/quiz", {
 				meta: { toast: { success: false } },
 
-				onRequest: () => {},
-
 				onResponseError: (ctx) => {
 					const isMaximumError = ctx.response.status === 400 && ctx.error.message.includes("maximum");
 
