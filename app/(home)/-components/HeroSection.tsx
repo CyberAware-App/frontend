@@ -24,7 +24,7 @@ function HeroSection() {
 				.
 			</h1>
 
-			<p className="text-center text-[16px] text-cyberaware-body-color">
+			<p className="text-center text-cyberaware-body-color">
 				Learn how to protect your digital world within just 10 modules. Designed for lecturers, staff,
 				and students.
 			</p>

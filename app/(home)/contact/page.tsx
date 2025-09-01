@@ -63,7 +63,7 @@ function ContactPage() {
 			<section className="flex flex-col gap-[74px]">
 				<div className="flex flex-col gap-6 text-center">
 					<h2 className="text-[36px] font-bold text-white">Get in Touch</h2>
-					<p className="mx-auto max-w-[400px] text-[16px] text-white">
+					<p className="mx-auto max-w-[400px] text-white">
 						Have questions? We're here to help you on your cybersecurity journey.
 					</p>
 				</div>
@@ -87,9 +87,7 @@ function ContactPage() {
 										</h4>
 									</div>
 									<p className="text-[14px] text-cyberaware-body-color">{method.description}</p>
-									<p className="text-[16px] font-medium text-cyberaware-aeces-blue">
-										{method.value}
-									</p>
+									<p className="font-medium text-cyberaware-aeces-blue">{method.value}</p>
 								</li>
 							)}
 						/>
@@ -105,9 +103,7 @@ function ContactPage() {
 							each={faqs}
 							renderItem={(faq) => (
 								<li key={faq.question} className="flex flex-col gap-3 rounded-lg bg-white p-6">
-									<h4 className="text-[16px] font-semibold text-cyberaware-aeces-blue">
-										{faq.question}
-									</h4>
+									<h4 className="font-semibold text-cyberaware-aeces-blue">{faq.question}</h4>
 									<p className="text-[14px] text-cyberaware-body-color">{faq.answer}</p>
 								</li>
 							)}

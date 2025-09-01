@@ -88,9 +88,9 @@ function AboutPage() {
 			</header>
 
 			<section className="flex flex-col gap-[74px]">
-				<div className="flex flex-col gap-6 text-center">
+				<div className="flex flex-col items-center gap-6 px-10 text-center">
 					<h2 className="text-[36px] font-bold text-white">About CyberAware</h2>
-					<p className="mx-auto max-w-[500px] text-[16px] text-white">
+					<p className="leading-[1.6] text-white">
 						Empowering everyone with essential cybersecurity knowledge through accessible,
 						interactive education.
 					</p>

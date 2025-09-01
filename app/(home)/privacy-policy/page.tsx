@@ -51,7 +51,7 @@ function PrivacyPolicyPage() {
 			<section className="flex flex-col gap-[74px]">
 				<div className="flex flex-col gap-6 text-center">
 					<h2 className="text-[36px] font-bold text-white">Privacy Policy</h2>
-					<p className="mx-auto max-w-[500px] text-[16px] text-white">
+					<p className="mx-auto max-w-[500px] text-white">
 						Your privacy is important to us. This policy explains how we collect, use, and protect
 						your information.
 					</p>

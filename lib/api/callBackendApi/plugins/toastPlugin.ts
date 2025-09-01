@@ -51,7 +51,7 @@ export const toastPlugin = definePlugin(() => ({
 			if (shouldSkipErrorToast) return;
 
 			if (isHTTPError(ctx.error) && ctx.error.errorData.errors) {
-				Object.values(ctx.error.errorData.errors).forEach((message) => toast.success(message));
+				Object.values(ctx.error.errorData.errors).forEach((message) => toast.error(message));
 
 				return;
 			}

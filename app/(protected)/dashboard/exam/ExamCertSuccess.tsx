@@ -26,7 +26,7 @@ function ExamCertSuccess() {
 					You're Already Certified!
 				</h3>
 
-				<p className="max-w-[400px] text-[16px] font-medium text-cyberaware-body-color">
+				<p className="max-w-[400px] font-medium text-cyberaware-body-color">
 					Great job completing the CyberAware program.
 				</p>
 			</div>

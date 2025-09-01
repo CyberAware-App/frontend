@@ -16,10 +16,10 @@ export const logout = (queryClient: QueryClient) => {
 		body: { refresh: refreshToken },
 
 		onSuccess: () => {
+			redirectTo("/");
 			queryClient.removeQueries(sessionQuery());
 			queryClient.removeQueries(dashboardQuery());
 			authTokenObject.clearTokens();
-			redirectTo("/");
 		},
 	});
 };

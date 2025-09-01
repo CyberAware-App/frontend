@@ -70,7 +70,7 @@ function PartnersPage() {
 			<section className="flex flex-col gap-[74px]">
 				<div className="flex flex-col gap-6 text-center">
 					<h2 className="text-[36px] font-bold text-white">Our Partners</h2>
-					<p className="mx-auto max-w-[500px] text-[16px] text-white">
+					<p className="mx-auto max-w-[500px] text-white">
 						Working together with leading institutions to make cybersecurity education accessible to
 						everyone.
 					</p>

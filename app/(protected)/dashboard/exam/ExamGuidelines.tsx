@@ -20,7 +20,7 @@ function ExamGuidelines(props: ExamGuidelinesProps) {
 
 				<h3 className="text-[28px] font-semibold text-cyberaware-aeces-blue">Exam Guidelines</h3>
 
-				<p className="max-w-[400px] text-[16px] font-medium text-cyberaware-body-color">
+				<p className="max-w-[400px] font-medium text-cyberaware-body-color">
 					You are about to take the final cybersecurity exam. Please read the following information
 					carefully:
 				</p>
