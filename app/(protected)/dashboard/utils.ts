@@ -1,8 +1,7 @@
 import type { QueryClient } from "@tanstack/react-query";
-import { hardNavigate } from "@zayne-labs/toolkit-core";
 import { toast } from "sonner";
 import { callBackendApi } from "@/lib/api/callBackendApi";
-import { authTokenObject } from "@/lib/api/callBackendApi/plugins/utils";
+import { authTokenObject, redirectTo } from "@/lib/api/callBackendApi/plugins/utils";
 import { dashboardQuery, sessionQuery } from "@/lib/react-query/queryOptions";
 
 export const logout = (queryClient: QueryClient) => {
@@ -20,7 +19,7 @@ export const logout = (queryClient: QueryClient) => {
 			queryClient.removeQueries(sessionQuery());
 			queryClient.removeQueries(dashboardQuery());
 			authTokenObject.clearTokens();
-			hardNavigate("/");
+			redirectTo("/");
 		},
 	});
 };

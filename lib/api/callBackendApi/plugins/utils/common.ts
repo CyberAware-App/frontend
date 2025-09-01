@@ -1,9 +1,7 @@
 import type { CallApiResultErrorVariant } from "@zayne-labs/callapi";
 import { isHTTPError } from "@zayne-labs/callapi/utils";
 import { hardNavigate, isBrowser } from "@zayne-labs/toolkit-core";
-import { toast } from "sonner";
 import type { BaseApiErrorResponse } from "../../apiSchema";
-import { redirectionRoute, routesToIncludeForRedirection } from "../authPlugin";
 
 type ErrorWithCodeAndDetail = CallApiResultErrorVariant<BaseApiErrorResponse>["error"] & {
 	errorData: { code: string; detail: string } | { code?: never; detail: string };
@@ -39,27 +37,11 @@ export const authTokenObject = {
 };
 /* eslint-enable ts-eslint/no-unnecessary-condition */
 
-const defaultRedirectionMessage = "Session is missing! Redirecting to login...";
-
-export const isDefaultRedirectionMessage = (
-	error: CallApiResultErrorVariant<Record<string, unknown>>["error"]
-) => {
-	return error.message === defaultRedirectionMessage;
+export const redirectTo = (route: AppRoutes) => {
+	setTimeout(() => hardNavigate(route), 1500);
 };
 
-export const redirectAndThrow = (message = defaultRedirectionMessage) => {
-	const containsProtectedRoute = routesToIncludeForRedirection.some((route) => isMatchedRoute(route));
-
-	if (containsProtectedRoute) {
-		toast.error(message);
-
-		setTimeout(() => hardNavigate(redirectionRoute), 1500);
-	}
-
-	throw new Error(message);
-};
-
-export const isMatchedRoute = (route: string) => {
+export const isPathnameMatchingRoute = (route: string) => {
 	if (!isBrowser()) {
 		return false;
 	}

@@ -70,43 +70,45 @@ function DashboardSideBar() {
 												asChild={true}
 											>
 												<CollapsibleAnimated.Trigger>
-													<Switch.Root>
-														<Switch.Match when={sidebarItem.status === "complete"}>
-															<IconBox icon="ri:check-line" />
-														</Switch.Match>
-														<Switch.Match when={sidebarItem.status === "ongoing"}>
-															<IconBox
-																icon="ri:arrow-right-s-line"
-																className="transition-transform duration-200
-																	group-data-[state=open]/collapsible:rotate-90"
-															/>
-														</Switch.Match>
-														<Switch.Match when={sidebarItem.status === "locked"}>
-															<IconBox icon="ri:lock-line" />
-														</Switch.Match>
-													</Switch.Root>
+													<span className="block size-4">
+														<Switch.Root>
+															<Switch.Match when={sidebarItem.status === "complete"}>
+																<IconBox icon="ri:check-line" className="size-full" />
+															</Switch.Match>
+															<Switch.Match when={sidebarItem.status === "ongoing"}>
+																<IconBox
+																	icon="ri:arrow-right-s-line"
+																	className="size-full transition-transform duration-200
+																		group-data-[state=open]/collapsible:rotate-90"
+																/>
+															</Switch.Match>
+															<Switch.Match when={sidebarItem.status === "locked"}>
+																<IconBox icon="ri:lock-line" className="size-full" />
+															</Switch.Match>
+														</Switch.Root>
+													</span>
 
 													<span>{sidebarItem.title}</span>
 												</CollapsibleAnimated.Trigger>
 											</Button>
 
-											<Sidebar.MenuSub className="border-none">
+											<Sidebar.MenuSub className="mx-0 border-none px-0">
 												<CollapsibleAnimated.Content>
 													<Sidebar.MenuSubItem className="group/menu-item">
 														<NavLink
 															href={`/dashboard/module/${sidebarItem.id}`}
-															className="flex items-center gap-3 px-4 py-2.5 text-[14px]"
+															className="flex items-center gap-3 px-5 py-2.5 text-[14px]"
 														>
-															{sidebarItem.module_type === "video" ?
+															<span className="block size-4 shrink-0">
 																<IconBox
-																	icon="ri:play-circle-line"
-																	className="size-4 shrink-0"
+																	icon={
+																		sidebarItem.module_type === "video" ?
+																			"ri:play-circle-line"
+																		:	"ri:file-text-line"
+																	}
+																	className="size-full"
 																/>
-															:	<IconBox
-																	icon="ri:file-text-line"
-																	className="size-4 shrink-0"
-																/>
-															}
+															</span>
 
 															<span className="line-clamp-2">{sidebarItem.name}</span>
 														</NavLink>

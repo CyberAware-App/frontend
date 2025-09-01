@@ -3,7 +3,7 @@ import { queryOptions } from "@tanstack/react-query";
 import type { CallApiExtraOptions } from "@zayne-labs/callapi";
 import { toast } from "sonner";
 import { callBackendApiForQuery } from "../api/callBackendApi";
-import { checkUserSession } from "../api/callBackendApi/plugins/utils";
+import { checkUserSession } from "../api/callBackendApi/plugins/utils/session";
 import { getUserAvatar } from "../utils/common";
 
 export const sessionQuery = () => {
@@ -140,7 +140,7 @@ export const certificateQuery = () => {
 	return queryOptions({
 		queryFn: () => {
 			return callBackendApiForQuery("@get/certificate", {
-				meta: { toast: { error: false, success: false } },
+				meta: { toast: { errorAndSuccess: false } },
 			});
 		},
 		select: (data) => data.data,

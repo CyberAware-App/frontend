@@ -1,27 +1,27 @@
 import { definePlugin, type ResponseErrorContext } from "@zayne-labs/callapi";
 import { isHTTPError } from "@zayne-labs/callapi/utils";
-import { isBrowser } from "@zayne-labs/toolkit-core";
 import type { BaseApiErrorResponse } from "../apiSchema";
-import { callBackendApi } from "../callBackendApi";
 import {
 	authTokenObject,
 	isAuthTokenRelatedError,
-	isMatchedRoute,
+	isPathnameMatchingRoute,
 	type PossibleAuthToken,
-	redirectAndThrow,
+	redirectTo,
 } from "./utils";
+import { getNewUserSession } from "./utils/session";
 
 export type AuthPluginMeta = {
 	auth?: {
 		authTokenToAdd?: PossibleAuthToken;
+		routesToIncludeForRedirectionOnError?: Array<`/${string}` | `/${string}/**`>;
 		routesToExemptFromHeaderAddition?: Array<`/${string}` | `/${string}/**`>;
 		skipHeaderAddition?: boolean;
 	};
 };
 
-export const routesToIncludeForRedirection = ["/dashboard/**"];
+const signInRoute = "/auth/signin" satisfies AppRoutes;
 
-export const redirectionRoute = "/auth/signin";
+const defaultRedirectionMessage = "Session is missing! Redirecting to login...";
 
 export const authPlugin = definePlugin(() => ({
 	id: "auth-plugin",
@@ -29,20 +29,27 @@ export const authPlugin = definePlugin(() => ({
 
 	hooks: {
 		onRequest: (ctx) => {
-			if (!isBrowser()) return;
-
 			const authMeta = ctx.options.meta?.auth;
 
-			const shouldSkipAuthHeaderAddition =
-				authMeta?.routesToExemptFromHeaderAddition?.some(
-					(route) => isMatchedRoute(route)
-					// eslint-disable-next-line ts-eslint/prefer-nullish-coalescing
-				) || authMeta?.skipHeaderAddition;
+			const isExemptedRoute = Boolean(
+				authMeta?.routesToExemptFromHeaderAddition?.some((route) => isPathnameMatchingRoute(route))
+			);
+
+			const shouldSkipAuthHeaderAddition = isExemptedRoute || authMeta?.skipHeaderAddition;
 
 			if (shouldSkipAuthHeaderAddition) return;
 
+			const isProtectedRoute = authMeta?.routesToIncludeForRedirectionOnError?.some((route) =>
+				isPathnameMatchingRoute(route)
+			);
+
 			if (authTokenObject.refreshToken() === null) {
-				return redirectAndThrow();
+				isProtectedRoute && redirectTo(signInRoute);
+
+				// == Turn off error toast if route is not protected
+				!isProtectedRoute && ctx.options.meta?.toast && (ctx.options.meta.toast.error = false);
+
+				throw new Error(defaultRedirectionMessage);
 			}
 
 			const selectedAuthToken = authTokenObject[authMeta?.authTokenToAdd ?? "accessToken"]();
@@ -51,27 +58,31 @@ export const authPlugin = definePlugin(() => ({
 		},
 
 		onResponseError: async (ctx: ResponseErrorContext<BaseApiErrorResponse>) => {
-			if (!isBrowser()) return;
+			const authMeta = ctx.options.meta?.auth;
 
 			// NOTE: Only call refreshUserSession on auth token related errors, and remake the request
 			const shouldRefreshToken = ctx.response.status === 401 && isAuthTokenRelatedError(ctx.error);
 
 			if (!shouldRefreshToken) return;
 
+			const isProtectedRoute = authMeta?.routesToIncludeForRedirectionOnError?.some((route) =>
+				isPathnameMatchingRoute(route)
+			);
+
 			const refreshToken = authTokenObject.refreshToken();
 
-			if (!refreshToken) {
-				return redirectAndThrow();
+			if (refreshToken === null) {
+				isProtectedRoute && redirectTo(signInRoute);
+
+				throw new Error(defaultRedirectionMessage);
 			}
 
-			const result = await callBackendApi("@post/token-refresh", {
-				body: { refresh: refreshToken },
-				dedupeStrategy: "defer",
-				meta: { auth: { skipHeaderAddition: true } },
-			});
+			const result = await getNewUserSession(refreshToken);
 
 			if (isHTTPError(result.error)) {
-				return redirectAndThrow("Session invalid or expired! Redirecting to login...");
+				isProtectedRoute && redirectTo(signInRoute);
+
+				throw new Error("Session invalid or expired! Redirecting to login...");
 			}
 
 			result.data?.data && localStorage.setItem("accessToken", result.data.data.access);

@@ -1,7 +1,7 @@
 import { createFetchClient, defineBaseConfig } from "@zayne-labs/callapi";
 import { apiSchema } from "./apiSchema";
 import { type AuthPluginMeta, authPlugin, type ToastPluginMeta, toastPlugin } from "./plugins";
-import { isAuthTokenRelatedError, isDefaultRedirectionMessage } from "./plugins/utils";
+import { isAuthTokenRelatedError } from "./plugins/utils";
 
 type GlobalMeta = AuthPluginMeta & ToastPluginMeta;
 
@@ -38,6 +38,7 @@ const sharedBaseCallApiConfig = defineBaseConfig((instanceCtx) => ({
 		...instanceCtx.options.meta,
 
 		auth: {
+			routesToIncludeForRedirectionOnError: ["/dashboard/**"],
 			// routesToExemptFromHeaderAddition: ["/auth/**"],
 			...instanceCtx.options.meta?.auth,
 		},
@@ -47,11 +48,9 @@ const sharedBaseCallApiConfig = defineBaseConfig((instanceCtx) => ({
 				errorAndSuccess: ["/token-refresh"],
 				success: ["/session"],
 			},
-			error: true,
+			errorAndSuccess: true,
 			errorsToSkip: ["AbortError"],
-			errorsToSkipCondition: (error) =>
-				isAuthTokenRelatedError(error) || isDefaultRedirectionMessage(error),
-			success: true,
+			errorsToSkipCondition: (error) => isAuthTokenRelatedError(error),
 			...instanceCtx.options.meta?.toast,
 		},
 	} satisfies GlobalMeta,
