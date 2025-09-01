@@ -119,7 +119,9 @@ function MobileNavigation(props: MobileNavProps) {
 								href={linkItem.href}
 								className="flex items-center gap-2"
 							>
-								<IconBox icon={linkItem.icon} />
+								<div className="size-5">
+									<IconBox icon={linkItem.icon} className="size-full" />
+								</div>
 								{linkItem.title}
 							</NavLink>
 						)}
