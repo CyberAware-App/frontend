@@ -9,13 +9,14 @@ import { useMemo, useState } from "react";
 import { useForm } from "react-hook-form";
 import { toast } from "sonner";
 import type { z } from "zod";
-import { ProtectedMain } from "@/app/-components";
+import { Main } from "@/app/-components";
 import { Switch } from "@/components/common/switch";
 import { callBackendApiForQuery } from "@/lib/api/callBackendApi";
 import { certificateQuery, dashboardQuery, examQuery, sessionQuery } from "@/lib/react-query/queryOptions";
 import { shuffleArray } from "@/lib/utils/common";
 import { LoadingScreen } from "../../../-components/LoadingScreen";
-import { Heading } from "../Heading";
+import { withProtection } from "../../-components/withProtection";
+import { DashboardHeading } from "../DashboardHeading";
 import { ExamCertSuccess } from "./ExamCertSuccess";
 import { ExamForm, ExamFormSchema } from "./ExamForm";
 import { ExamGuidelines } from "./ExamGuidelines";
@@ -116,8 +117,8 @@ function ExamPage() {
 	const isSubmitting = isSubmittingOnTimeUp || form.formState.isSubmitting;
 
 	return (
-		<ProtectedMain>
-			<Heading />
+		<Main>
+			<DashboardHeading />
 
 			<section className="flex grow flex-col gap-[50px] bg-white px-5 pt-5 pb-[50px]">
 				<hr className="h-px w-full border-none bg-cyberaware-neutral-gray-light" />
@@ -172,8 +173,8 @@ function ExamPage() {
 					</Switch.Default>
 				</Switch.Root>
 			</section>
-		</ProtectedMain>
+		</Main>
 	);
 }
 
-export default ExamPage;
+export default withProtection(ExamPage);

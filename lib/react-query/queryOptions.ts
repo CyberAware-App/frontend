@@ -3,12 +3,12 @@ import { queryOptions } from "@tanstack/react-query";
 import type { CallApiExtraOptions } from "@zayne-labs/callapi";
 import { toast } from "sonner";
 import { callBackendApiForQuery } from "../api/callBackendApi";
-import { checkUserSession } from "../api/callBackendApi/plugins/utils/session";
+import { checkUserSessionForQuery } from "../api/callBackendApi/plugins/utils/session";
 import { getUserAvatar } from "../utils/common";
 
 export const sessionQuery = () => {
 	return queryOptions({
-		queryFn: () => checkUserSession(),
+		queryFn: () => checkUserSessionForQuery(),
 		queryKey: ["session"],
 		retry: false,
 		staleTime: Infinity,
@@ -152,7 +152,7 @@ const forceDownload = (data: Blob, id: string) => {
 
 	const link = document.createElement("a");
 	link.href = blobUrl;
-	link.download = `certificate-${id}.pdf`;
+	link.download = `${id}.pdf`;
 	link.click();
 
 	window.URL.revokeObjectURL(blobUrl);

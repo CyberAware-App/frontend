@@ -5,13 +5,13 @@ import { zodResolver } from "@hookform/resolvers/zod";
 import { useQuery } from "@tanstack/react-query";
 import { use, useMemo, useState } from "react";
 import { useForm } from "react-hook-form";
-import { ProtectedMain } from "@/app/-components";
+import { Main } from "@/app/-components";
 import { LoadingScreen } from "@/app/-components/LoadingScreen";
 import { Switch } from "@/components/common/switch";
 import { dashboardQuery, moduleQuizQuery } from "@/lib/react-query/queryOptions";
 import { shuffleArray } from "@/lib/utils/common";
+import { DashboardHeading } from "../../../DashboardHeading";
 import { ExamFormSchema } from "../../../exam/ExamForm";
-import { Heading } from "../../../Heading";
 import { QuizForm } from "./QuizForm";
 import { type QuizResultPayload, QuizResultView } from "./QuizResultView";
 
@@ -88,8 +88,8 @@ function QuizPage({ params }: PageProps<"/dashboard/module/[id]/quiz">) {
 	};
 
 	return (
-		<ProtectedMain>
-			<Heading />
+		<Main>
+			<DashboardHeading />
 
 			<section className="flex grow flex-col gap-[50px] bg-white px-5 pt-5 pb-[50px]">
 				<hr className="h-px w-full border-none bg-cyberaware-neutral-gray-light" />
@@ -125,7 +125,7 @@ function QuizPage({ params }: PageProps<"/dashboard/module/[id]/quiz">) {
 					</Switch.Default>
 				</Switch.Root>
 			</section>
-		</ProtectedMain>
+		</Main>
 	);
 }
 

@@ -1,7 +1,9 @@
 "use client";
 
 import { useQuery, useQueryClient } from "@tanstack/react-query";
+import { useClickOutside } from "@zayne-labs/toolkit-react";
 import Image from "next/image";
+import { useRef } from "react";
 import { For } from "@/components/common/for";
 import { IconBox } from "@/components/common/IconBox";
 import { NavLink } from "@/components/common/NavLink";
@@ -18,15 +20,21 @@ function DashboardSideBar() {
 
 	const queryClient = useQueryClient();
 
+	const triggerRef = useRef<HTMLButtonElement>(null);
+
+	const { ref: rootRef } = useClickOutside<HTMLDivElement>({
+		onClick: () => triggerRef.current?.click(),
+	});
+
 	return (
 		<Sidebar.ContextProvider
-			defaultOpen={false}
 			sidebarWidth="250px"
 			sidebarWidthIcon="60px"
 			withMobileBreakpoint={false}
 			className="max-w-(--sidebar-width-icon) shrink-0"
 		>
 			<Sidebar.Root
+				ref={rootRef}
 				collapsible="icon"
 				variant="sidebar-unfixed"
 				classNames={{ inner: "gap-8 bg-cyberaware-aeces-blue text-white" }}
@@ -42,7 +50,7 @@ function DashboardSideBar() {
 						</h3>
 					</NavLink>
 
-					<Sidebar.Trigger className="size-6">
+					<Sidebar.Trigger ref={triggerRef} className="size-6">
 						<HamburgerIcon />
 					</Sidebar.Trigger>
 				</Sidebar.Header>

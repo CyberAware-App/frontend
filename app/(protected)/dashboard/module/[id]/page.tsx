@@ -3,15 +3,16 @@
 import MuxPlayer from "@mux/mux-player-react";
 import { useQuery, useQueryClient } from "@tanstack/react-query";
 import { use, useState } from "react";
-import { ProtectedMain } from "@/app/-components";
+import { Main } from "@/app/-components";
 import { LoadingScreen } from "@/app/-components/LoadingScreen";
+import { withProtection } from "@/app/(protected)/-components/withProtection";
 import { IconBox } from "@/components/common/IconBox";
 import { NavLink } from "@/components/common/NavLink";
 import { Button } from "@/components/ui/button";
 import { callBackendApi } from "@/lib/api/callBackendApi";
 import { usePageBlocker } from "@/lib/hooks";
 import { dashboardQuery } from "@/lib/react-query/queryOptions";
-import { Heading } from "../../Heading";
+import { DashboardHeading } from "../../DashboardHeading";
 import { FootNote } from "../FootNote";
 
 function ModulePage({ params }: PageProps<"/dashboard/module/[id]">) {
@@ -42,8 +43,8 @@ function ModulePage({ params }: PageProps<"/dashboard/module/[id]">) {
 	}
 
 	return (
-		<ProtectedMain>
-			<Heading />
+		<Main>
+			<DashboardHeading />
 
 			<section className="flex grow flex-col gap-[50px] bg-white px-5 pt-5 pb-[50px]">
 				<hr className="h-px w-full border-none bg-cyberaware-neutral-gray-light" />
@@ -104,8 +105,8 @@ function ModulePage({ params }: PageProps<"/dashboard/module/[id]">) {
 					<FootNote selectedModule={selectedModule} />
 				</article>
 			</section>
-		</ProtectedMain>
+		</Main>
 	);
 }
 
-export default ModulePage;
+export default withProtection(ModulePage);

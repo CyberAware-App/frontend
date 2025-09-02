@@ -10,7 +10,7 @@ import { Progress } from "@/components/ui/progress-animated";
 import { dashboardQuery } from "@/lib/react-query/queryOptions";
 import { logoSmall } from "@/public/assets";
 
-function Heading() {
+function DashboardHeading() {
 	const dashboardQueryResult = useQuery(dashboardQuery());
 
 	const testPaths = ["/quiz", "/exam"];
@@ -59,4 +59,5 @@ function Heading() {
 		</header>
 	);
 }
-export { Heading };
+
+export { DashboardHeading };

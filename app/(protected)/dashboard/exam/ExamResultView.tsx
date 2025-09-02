@@ -96,7 +96,7 @@ function ExamResultView(props: ExamResultViewProps) {
 				<Switch.Match when={resultStatus === "pending"}>
 					<div className="flex flex-col items-center gap-6">
 						<Button theme="orange" onClick={onRetake} className="gap-2.5">
-							Retake Quiz
+							Retake Exam
 							<IconBox icon="ri:brain-2-line" className="size-5" />
 						</Button>
 

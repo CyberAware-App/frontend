@@ -2,7 +2,7 @@
 
 import { useRouter } from "@bprogress/next";
 import { useQuery } from "@tanstack/react-query";
-import { Credits, ProtectedMain } from "@/app/-components";
+import { Credits, Main } from "@/app/-components";
 import { UserAvatar } from "@/app/-components/UserAvatar";
 import { IconBox } from "@/components/common/IconBox";
 import { NavLink } from "@/components/common/NavLink";
@@ -13,6 +13,7 @@ import { certificateQuery, dashboardQuery, sessionQuery } from "@/lib/react-quer
 import { useDownloadCertificate } from "@/lib/react-query/useDownloadCertificate";
 import { cnJoin, cnMerge } from "@/lib/utils/cn";
 import { LoadingScreen } from "../../-components/LoadingScreen";
+import { withProtection } from "../-components/withProtection";
 import { DashboardSideBar } from "./DashboardSideBar";
 
 function DashboardPage() {
@@ -108,7 +109,7 @@ function DashboardPage() {
 	}
 
 	return (
-		<ProtectedMain className="flex-row">
+		<Main className="flex-row">
 			<DashboardSideBar />
 
 			<div className="flex flex-col gap-8 bg-white px-3 pt-[80px]">
@@ -180,8 +181,8 @@ function DashboardPage() {
 					<Credits />
 				</footer>
 			</div>
-		</ProtectedMain>
+		</Main>
 	);
 }
 
-export default DashboardPage;
+export default withProtection(DashboardPage);
