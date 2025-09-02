@@ -4,7 +4,7 @@ import { useQuery } from "@tanstack/react-query";
 import { sessionQuery } from "@/lib/react-query/queryOptions";
 import { LoadingScreen } from "../-components/LoadingScreen";
 
-function ProtectedLayout({ children }: { children: React.ReactNode }) {
+function ProtectedTemplate({ children }: { children: React.ReactNode }) {
 	const sessionQueryResult = useQuery(sessionQuery());
 
 	if (sessionQueryResult.data) {
@@ -14,4 +14,4 @@ function ProtectedLayout({ children }: { children: React.ReactNode }) {
 	return <LoadingScreen />;
 }
 
-export default ProtectedLayout;
+export default ProtectedTemplate;
