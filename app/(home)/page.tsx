@@ -64,9 +64,7 @@ function HomePage() {
 
 			<section className="mt-12 flex px-4">
 				<span className="block w-[15px] shrink-0 bg-cyberaware-unizik-orange" />
-				<div>
-					<Image src={modelOne} alt="Model One" />
-				</div>
+				<Image src={modelOne} width={368} height={410} alt="Model One" />
 			</section>
 
 			<section className="mt-13 flex flex-col gap-10 px-[72px]">
@@ -79,7 +77,13 @@ function HomePage() {
 					each={reasons}
 					renderItem={(item) => (
 						<li key={item.title} className="flex flex-col gap-3 bg-white px-6 py-4">
-							<Image src={item.icon.src} alt={item.title} className={item.icon.size} />
+							<Image
+								src={item.icon.src}
+								alt={item.title}
+								width={383}
+								height={429}
+								className={item.icon.size}
+							/>
 							<h4 className="text-[22px] font-semibold text-cyberaware-aeces-blue">{item.title}</h4>
 							<p className="text-[14px]">{item.description}</p>
 						</li>

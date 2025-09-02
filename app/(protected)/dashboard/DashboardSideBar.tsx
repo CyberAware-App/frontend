@@ -3,7 +3,7 @@
 import { useQuery, useQueryClient } from "@tanstack/react-query";
 import { useClickOutside } from "@zayne-labs/toolkit-react";
 import Image from "next/image";
-import { useRef } from "react";
+import { useState } from "react";
 import { For } from "@/components/common/for";
 import { IconBox } from "@/components/common/IconBox";
 import { NavLink } from "@/components/common/NavLink";
@@ -20,14 +20,16 @@ function DashboardSideBar() {
 
 	const queryClient = useQueryClient();
 
-	const triggerRef = useRef<HTMLButtonElement>(null);
+	const [isOpen, setIsOpen] = useState(false);
 
 	const { ref: rootRef } = useClickOutside<HTMLDivElement>({
-		onClick: () => triggerRef.current?.click(),
+		onClick: () => setIsOpen(false),
 	});
 
 	return (
 		<Sidebar.ContextProvider
+			open={isOpen}
+			onOpenChange={setIsOpen}
 			sidebarWidth="250px"
 			sidebarWidthIcon="60px"
 			withMobileBreakpoint={false}
@@ -50,7 +52,7 @@ function DashboardSideBar() {
 						</h3>
 					</NavLink>
 
-					<Sidebar.Trigger ref={triggerRef} className="size-6">
+					<Sidebar.Trigger className="size-6">
 						<HamburgerIcon />
 					</Sidebar.Trigger>
 				</Sidebar.Header>
