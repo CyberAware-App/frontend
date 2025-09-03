@@ -64,7 +64,7 @@ function DashboardPage() {
 		{
 			body:
 				isAllModulesCompleted ?
-					`Module ${completedModulesCount - 2}`
+					`Module ${completedModulesCount}`
 				:	`Module ${completedModulesCount + 2}`,
 			button: null,
 			id: 3,

@@ -30,15 +30,12 @@ function SigninPage() {
 			meta: { auth: { skipHeaderAddition: true } },
 
 			onResponseError: (ctx) => {
-				if (
-					ctx.error.errorData.errors?.email
-					&& ctx.error.errorData.errors.email === "User is not verified."
-				) {
+				if (ctx.error.errorData.errors?.email?.includes("not verified")) {
 					localStorage.setItem("email", data.email);
 
 					resendOtp(data.email);
 
-					router.push("/auth/verify-account");
+					// router.push("/auth/verify-account");
 				}
 			},
 
