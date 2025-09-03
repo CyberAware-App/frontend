@@ -44,7 +44,8 @@ function ExamResultView(props: ExamResultViewProps) {
 
 	const certificateId = certificateQueryResult.data?.certificate_id;
 
-	const { downloadCertificate, isFetching } = useDownloadCertificate(certificateId);
+	const { downloadCertificate, isFetching, invalidateCertificateQuery } =
+		useDownloadCertificate(certificateId);
 
 	const emojiMap = {
 		passed: emojiPassed,
@@ -111,7 +112,9 @@ function ExamResultView(props: ExamResultViewProps) {
 				<Switch.Match when={resultStatus === "exhausted"}>
 					<div className="flex flex-col items-center gap-6">
 						<Button theme="danger" className="gap-2.5" asChild={true}>
-							<NavLink href="/dashboard">Exit</NavLink>
+							<NavLink href="/dashboard" onClick={() => invalidateCertificateQuery()}>
+								Exit
+							</NavLink>
 						</Button>
 
 						<div>

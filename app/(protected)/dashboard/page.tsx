@@ -49,7 +49,10 @@ function DashboardPage() {
 			title: ongoingModule ? `${ongoingModule.title}: ${ongoingModule.name}` : "Exam",
 		},
 		{
-			body: isAllModulesCompleted ? "Complete" : `Module ${completedModulesCount + 1}`,
+			body:
+				isAllModulesCompleted ?
+					`Module ${completedModulesCount - 1}`
+				:	`Module ${completedModulesCount + 1}`,
 			button: null,
 			id: 2,
 			isSub: true,
@@ -59,7 +62,10 @@ function DashboardPage() {
 				:	<LockIcon />,
 		},
 		{
-			body: isAllModulesCompleted ? "Complete" : `Module ${completedModulesCount + 2}`,
+			body:
+				isAllModulesCompleted ?
+					`Module ${completedModulesCount - 2}`
+				:	`Module ${completedModulesCount + 2}`,
 			button: null,
 			id: 3,
 			isSub: true,
@@ -149,7 +155,7 @@ function DashboardPage() {
 							key={detail.id}
 							className={cnJoin(
 								"flex flex-col gap-5 bg-cyberaware-neutral-gray-lighter px-5 py-6",
-								detail.isSub ? "col-span-1 cursor-not-allowed" : "col-span-2"
+								detail.isSub ? "col-span-1" : "col-span-2"
 							)}
 						>
 							<div

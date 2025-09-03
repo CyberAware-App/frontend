@@ -64,7 +64,7 @@ function HomePage() {
 
 			<section className="mt-12 flex px-4">
 				<span className="block w-[15px] shrink-0 bg-cyberaware-unizik-orange" />
-				<Image src={modelOne} width={368} height={410} alt="Model One" />
+				<Image src={modelOne} priority={true} width={368} height={410} alt="Model One" />
 			</section>
 
 			<section className="mt-13 flex flex-col gap-10 px-[72px]">
@@ -101,7 +101,7 @@ function HomePage() {
 				<div className="flex">
 					<span className="block w-[15px] shrink-0 bg-cyberaware-unizik-orange" />
 					<div>
-						<Image src={modelTwo} alt="Model Two" />
+						<Image src={modelTwo} priority={true} alt="Model Two" />
 					</div>
 				</div>
 

@@ -38,13 +38,13 @@ function ExamPage() {
 	const isExamUnaccessible =
 		Boolean(dashboardQueryResult.data) && dashboardQueryResult.data.completed_modules_count !== 10;
 
-	const examQueryResult = useQuery(
-		examQuery({
-			router,
-			isCertified,
-			isUnaccessible: isExamUnaccessible,
-		})
-	);
+	const examQueryInstance = examQuery({
+		router,
+		isCertified,
+		isUnaccessible: isExamUnaccessible,
+	});
+
+	const examQueryResult = useQuery(examQueryInstance);
 
 	const [isSubmittingOnTimeUp, toggleSubmittingOnTimeUp] = useToggle(false);
 
@@ -109,7 +109,7 @@ function ExamPage() {
 	const onRetake = () => {
 		setResult(null);
 		form.reset();
-		void queryClient.refetchQueries(examQuery());
+		void queryClient.refetchQueries(examQueryInstance);
 	};
 
 	const maxAttempts = Number(examQueryResult.data?.max_attempts);

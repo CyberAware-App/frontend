@@ -16,7 +16,12 @@ const useDownloadCertificate = (id: string | undefined) => {
 		void queryClient.refetchQueries(downloadCertificateQueryObject);
 	};
 
+	const invalidateCertificateQuery = () => {
+		void queryClient.invalidateQueries(downloadCertificateQueryObject);
+	};
+
 	return {
+		invalidateCertificateQuery,
 		downloadCertificate,
 		isFetching: downloadCertificateQueryResult.isFetching,
 	};
