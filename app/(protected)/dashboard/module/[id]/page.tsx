@@ -7,13 +7,13 @@ import { Main } from "@/app/-components";
 import { LoadingScreen } from "@/app/-components/LoadingScreen";
 import { withProtection } from "@/app/(protected)/-components/withProtection";
 import { IconBox } from "@/components/common/IconBox";
-import { NavLink } from "@/components/common/NavLink";
 import { Button } from "@/components/ui/button";
 import { callBackendApi } from "@/lib/api/callBackendApi";
 import { usePageBlocker } from "@/lib/hooks";
 import { dashboardQuery } from "@/lib/react-query/queryOptions";
 import { DashboardHeading } from "../../DashboardHeading";
 import { FootNote } from "../FootNote";
+import { useRouter } from "@bprogress/next";
 
 function ModulePage({ params }: PageProps<"/dashboard/module/[id]">) {
 	const dashboardQueryResult = useQuery(dashboardQuery());
@@ -23,6 +23,8 @@ function ModulePage({ params }: PageProps<"/dashboard/module/[id]">) {
 	const selectedModule = dashboardQueryResult.data?.modules.find(
 		(module) => String(module.id) === moduleId
 	);
+
+	const router = useRouter();
 
 	const [isModuleMarkedAsCompleted, setIsModuleMarkedAsCompleted] = useState(false);
 
@@ -93,13 +95,13 @@ function ModulePage({ params }: PageProps<"/dashboard/module/[id]">) {
 					<Button
 						theme="orange"
 						disabled={selectedModule.status !== "complete"}
+						onClick={() =>
+							router.push(isFinalModule ? "/dashboard/exam" : `/dashboard/module/${moduleId}/quiz`)
+						}
 						className="max-w-[160px] gap-2.5"
-						asChild={true}
 					>
-						<NavLink href={isFinalModule ? "/dashboard/exam" : `/dashboard/module/${moduleId}/quiz`}>
-							Take {isFinalModule ? "Exam" : "Quiz"}
-							<IconBox icon="ri:brain-2-line" className="size-5" />
-						</NavLink>
+						Take {isFinalModule ? "Exam" : "Quiz"}
+						<IconBox icon="ri:brain-2-line" className="size-5" />
 					</Button>
 
 					<FootNote selectedModule={selectedModule} />

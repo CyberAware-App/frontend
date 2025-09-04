@@ -35,7 +35,7 @@ function SigninPage() {
 
 					resendOtp(data.email);
 
-					// router.push("/auth/verify-account");
+					router.push("/auth/verify-account");
 				}
 			},
 
