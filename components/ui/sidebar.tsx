@@ -155,7 +155,8 @@ export function SidebarContextProvider(
 				<div
 					data-slot="sidebar-wrapper"
 					className={cnMerge(
-						"group/sidebar-wrapper flex min-h-svh w-full has-data-[variant=inset]:bg-shadcn-sidebar",
+						`group/sidebar-wrapper flex min-h-screen w-full
+						has-data-[variant=inset]:bg-shadcn-sidebar`,
 						className
 					)}
 					style={

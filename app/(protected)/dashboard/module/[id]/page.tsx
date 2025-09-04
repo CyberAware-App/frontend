@@ -1,5 +1,6 @@
 "use client";
 
+import { useRouter } from "@bprogress/next";
 import MuxPlayer from "@mux/mux-player-react";
 import { useQuery, useQueryClient } from "@tanstack/react-query";
 import { use, useState } from "react";
@@ -13,7 +14,6 @@ import { usePageBlocker } from "@/lib/hooks";
 import { dashboardQuery } from "@/lib/react-query/queryOptions";
 import { DashboardHeading } from "../../DashboardHeading";
 import { FootNote } from "../FootNote";
-import { useRouter } from "@bprogress/next";
 
 function ModulePage({ params }: PageProps<"/dashboard/module/[id]">) {
 	const dashboardQueryResult = useQuery(dashboardQuery());
@@ -36,7 +36,7 @@ function ModulePage({ params }: PageProps<"/dashboard/module/[id]">) {
 
 	usePageBlocker({
 		condition: isModuleUnaccessible,
-		message: "Module not found",
+		message: "This module is currently inaccessible. Please ensure you complete the previous module.",
 		redirectPath: "/dashboard",
 	});
 
