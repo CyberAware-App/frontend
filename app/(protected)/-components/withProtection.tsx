@@ -7,7 +7,7 @@ import { sessionQuery } from "@/lib/react-query/queryOptions";
 
 // eslint-disable-next-line ts-eslint/no-explicit-any
 function withProtection(WrappedComponent: React.ComponentType<any>) {
-	return function AuthComponent(props: UnknownObject) {
+	return function ProtectedComponent(props: UnknownObject) {
 		const sessionQueryResult = useQuery(sessionQuery());
 
 		if (sessionQueryResult.data) {

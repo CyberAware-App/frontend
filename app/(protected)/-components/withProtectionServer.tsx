@@ -7,7 +7,7 @@ function withProtectionServer(WrappedComponent: React.ComponentType, pathname: A
 		const { error } = await checkUserSession();
 
 		if (error) {
-			redirect(pathname);
+			return redirect(pathname);
 		}
 
 		return <WrappedComponent {...props} />;
