@@ -1,3 +1,5 @@
+"use client";
+
 import { useQuery } from "@tanstack/react-query";
 import type { UnknownObject } from "@zayne-labs/toolkit-type-helpers";
 import { LoadingScreen } from "@/app/-components/LoadingScreen";
