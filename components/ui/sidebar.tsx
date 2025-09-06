@@ -155,7 +155,7 @@ export function SidebarContextProvider(
 				<div
 					data-slot="sidebar-wrapper"
 					className={cnMerge(
-						`group/sidebar-wrapper flex min-h-screen w-full
+						`group/sidebar-wrapper flex min-h-svh w-full flex-col
 						has-data-[variant=inset]:bg-shadcn-sidebar`,
 						className
 					)}
@@ -204,7 +204,7 @@ function SidebarRoot(
 			<aside
 				data-slot="sidebar-root"
 				className={cnMerge(
-					"flex h-full w-(--sidebar-width) bg-shadcn-sidebar text-shadcn-sidebar-foreground",
+					"flex w-(--sidebar-width) grow bg-shadcn-sidebar text-shadcn-sidebar-foreground",
 					className,
 					classNames?.root
 				)}
@@ -223,7 +223,7 @@ function SidebarRoot(
 					data-sidebar="sidebar"
 					data-mobile="true"
 					className={cnMerge(
-						`w-(--sidebar-width) bg-shadcn-sidebar p-0 text-shadcn-sidebar-foreground
+						`w-(--sidebar-width) grow bg-shadcn-sidebar p-0 text-shadcn-sidebar-foreground
 						[&>button]:hidden`,
 						className,
 						classNames?.root
@@ -248,7 +248,7 @@ function SidebarRoot(
 	return (
 		<aside
 			className={cnMerge(
-				"group peer relative inset-y-0 text-shadcn-sidebar-foreground data-[side=right]:order-last",
+				"group peer grow text-shadcn-sidebar-foreground data-[side=right]:order-last",
 				className,
 				classNames?.root
 			)}

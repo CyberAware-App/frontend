@@ -1,6 +1,7 @@
 import type { AppRouterInstance } from "@bprogress/next";
 import { queryOptions } from "@tanstack/react-query";
 import type { CallApiExtraOptions } from "@zayne-labs/callapi";
+import { createFileUrl } from "@zayne-labs/toolkit-core";
 // import { createImagePreview } from "@zayne-labs/toolkit-core";
 import { toast } from "sonner";
 import { callBackendApiForQuery } from "../api/callBackendApi";
@@ -149,14 +150,16 @@ export const certificateQuery = () => {
 };
 
 const forceDownload = (data: Blob, id: string) => {
-	const blobUrl = window.URL.createObjectURL(data);
+	createFileUrl(data, {
+		onSuccess: (ctx) => {
+			const link = document.createElement("a");
+			link.href = ctx.result;
+			link.download = `${id}.pdf`;
+			link.click();
 
-	const link = document.createElement("a");
-	link.href = blobUrl;
-	link.download = `${id}.pdf`;
-	link.click();
-
-	window.URL.revokeObjectURL(blobUrl);
+			URL.revokeObjectURL(ctx.result);
+		},
+	});
 };
 
 export const downloadCertificateQuery = (
