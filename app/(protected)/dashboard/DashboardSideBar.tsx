@@ -107,7 +107,8 @@ function DashboardSideBar() {
 													<Sidebar.MenuSubItem className="group/menu-item">
 														<NavLink
 															href={`/dashboard/module/${sidebarItem.id}`}
-															className="flex items-center gap-3 px-6 py-2.5 text-[14px]"
+															className="flex items-center gap-3 py-2.5 pr-6 pl-10
+																text-[14px]"
 														>
 															<span className="block size-4 shrink-0">
 																<IconBox
