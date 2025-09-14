@@ -6,9 +6,6 @@ const makeQueryClient = () => {
 		defaultOptions: {
 			queries: {
 				retry: 1,
-				// refetchOnWindowFocus: false,
-				// refetchOnMount: false,
-				// refetchOnReconnect: false,
 				// With SSR, we usually want to set some default staleTime
 				// above 0 to avoid refetching immediately on the client
 				staleTime: 2 * 60 * 1000,
@@ -32,7 +29,6 @@ const makeQueryClient = () => {
 	});
 };
 
-// Use a more robust caching strategy for production
 let browserQueryClient: QueryClient | undefined;
 
 export const getQueryClient = () => {

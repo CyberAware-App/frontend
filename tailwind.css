@@ -37,13 +37,15 @@
 	--breakpoint-lg: 1000px;
 	--breakpoint-xl: 1280px;
 
-	--animate-nav-show: nav-show 350ms ease forwards;
-	--animate-nav-close: nav-close 500ms ease forwards;
+	--nav-width: 82%;
 
-	--animate-fade-in: fade-in 300ms ease forwards;
-	--animate-fade-out: fade-out 300ms ease forwards;
+	--animate-nav-show: nav-show 350ms ease;
+	--animate-nav-close: nav-close 500ms ease;
 
-	--animate-sidebar-in: sidebar-in 250ms ease;
+	--animate-fade-in: fade-in 300ms ease;
+	--animate-fade-out: fade-out 300ms ease;
+
+	--animate-sidebar-in: sidebar-in 350ms ease;
 	--animate-sidebar-out: sidebar-out 250ms ease;
 
 	--animate-text-gradient: text-gradient 1.3s linear infinite;
@@ -51,26 +53,40 @@
 	@keyframes nav-show {
 		from {
 			width: 0;
-			visibility: hidden;
 		}
 		to {
-			width: 82%;
-			visibility: visible;
+			width: var(--nav-width);
 		}
 	}
 
 	@keyframes nav-close {
 		from {
-			width: 82%;
-			visibility: visible;
+			width: var(--nav-width);
 		}
 		to {
 			width: 0;
-			visibility: hidden;
 		}
 	}
 
 	@keyframes fade-in {
+		from {
+			opacity: 0;
+		}
+		to {
+			opacity: 1;
+		}
+	}
+
+	@keyframes fade-out {
+		from {
+			opacity: 1;
+		}
+		to {
+			opacity: 0;
+		}
+	}
+
+	/* @keyframes fade-in {
 		from {
 			opacity: 0;
 			visibility: hidden;
@@ -90,7 +106,7 @@
 			opacity: 0;
 			visibility: hidden;
 		}
-	}
+	} */
 
 	@keyframes sidebar-in {
 		from {

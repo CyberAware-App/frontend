@@ -1,8 +1,8 @@
 "use client";
 
-import { Presence } from "@radix-ui/react-presence";
 import { useToggle } from "@zayne-labs/toolkit-react";
 import { ForWithWrapper } from "@zayne-labs/ui-react/common/for";
+import { Presence } from "@zayne-labs/ui-react/common/presence";
 import Image from "next/image";
 import { usePathname } from "next/navigation";
 import { IconBox } from "@/components/common/IconBox";
@@ -94,13 +94,16 @@ function MobileNavigation(props: MobileNavProps) {
 				/>
 			</Presence>
 
-			<Presence present={isNavShow}>
+			<Presence present={isNavShow} forceMount={true}>
 				<aside
 					className={cnMerge(
 						`absolute inset-[4px_auto_4px_4px] z-200 flex max-w-[380px] flex-col items-center gap-7
 						overflow-x-hidden bg-cyberaware-aeces-blue pt-[150px] text-white shadow-lg
-						shadow-cyberaware-light-orange`,
-						isNavShow ? "animate-nav-show" : "animate-nav-close",
+						shadow-cyberaware-light-orange [--nav-width:82%]`,
+						// "transition-[width] ease-initial",
+						// isNavShow ? "w-(--nav-width) duration-350" : "w-0 duration-500",
+						// isNavShow ? "w-(--nav-width) animate-sidebar-in" : "w-(--nav-width) animate-sidebar-out",
+						isNavShow ? "w-(--nav-width) animate-nav-show" : "w-0 animate-nav-close",
 						className
 					)}
 					onClick={(event) => {
