@@ -29,8 +29,10 @@ jobs:
               node-version: ${{ matrix.node-version }}
               cache: pnpm
 
-         - name: Install dependencies and run tests
+         - name: Install dependencies
+           run: pnpm install --frozen-lockfile
+
+         - name: Run tests
            run: |
-              pnpm install --frozen-lockfile
               pnpm lint:type-check
               pnpm lint:eslint
