@@ -12,8 +12,8 @@ import { getNewUserSession } from "./utils/session";
 
 export type AuthPluginMeta = {
 	auth?: {
-		authTokenToAdd?: PossibleAuthToken;
-		routesToIncludeForRedirectionOnError?: Array<`/${string}` | `/${string}/**`>;
+		tokenToAdd?: PossibleAuthToken;
+		routesToIncludeForRedirectionOnAuthError?: Array<`/${string}` | `/${string}/**`>;
 		routesToExemptFromHeaderAddition?: Array<`/${string}` | `/${string}/**`>;
 		skipHeaderAddition?: boolean;
 	};
@@ -39,11 +39,11 @@ export const authPlugin = definePlugin(() => ({
 
 			if (shouldSkipAuthHeaderAddition) return;
 
-			const isProtectedRoute = authMeta?.routesToIncludeForRedirectionOnError?.some((route) =>
+			const isProtectedRoute = authMeta?.routesToIncludeForRedirectionOnAuthError?.some((route) =>
 				isPathnameMatchingRoute(route)
 			);
 
-			if (authTokenObject.refreshToken() === null) {
+			if (authTokenObject.getRefreshToken() === null) {
 				isProtectedRoute && redirectTo(signInRoute);
 
 				// == Turn off error toast if route is not protected
@@ -52,7 +52,7 @@ export const authPlugin = definePlugin(() => ({
 				throw new Error(defaultRedirectionMessage);
 			}
 
-			const selectedAuthToken = authTokenObject[authMeta?.authTokenToAdd ?? "accessToken"]();
+			const selectedAuthToken = authTokenObject[authMeta?.tokenToAdd ?? "getAccessToken"]();
 
 			ctx.options.auth = selectedAuthToken;
 		},
@@ -65,11 +65,11 @@ export const authPlugin = definePlugin(() => ({
 
 			if (!shouldRefreshToken) return;
 
-			const isProtectedRoute = authMeta?.routesToIncludeForRedirectionOnError?.some((route) =>
+			const isProtectedRoute = authMeta?.routesToIncludeForRedirectionOnAuthError?.some((route) =>
 				isPathnameMatchingRoute(route)
 			);
 
-			const refreshToken = authTokenObject.refreshToken();
+			const refreshToken = authTokenObject.getRefreshToken();
 
 			if (refreshToken === null) {
 				isProtectedRoute && redirectTo(signInRoute);
@@ -85,7 +85,7 @@ export const authPlugin = definePlugin(() => ({
 				throw new Error("Session invalid or expired! Redirecting to login...");
 			}
 
-			result.data?.data && localStorage.setItem("accessToken", result.data.data.access);
+			result.data?.data && authTokenObject.setAccessToken({ access: result.data.data.access });
 
 			// NOTE: This will not work for requests made via react query, which in that case retries are up to react query
 			ctx.options.retryAttempts = 1;

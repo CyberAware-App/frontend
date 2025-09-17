@@ -5,7 +5,7 @@ import { authTokenObject, redirectTo } from "@/lib/api/callBackendApi/plugins/ut
 import { dashboardQuery, sessionQuery } from "@/lib/react-query/queryOptions";
 
 export const logout = (queryClient: QueryClient) => {
-	const refreshToken = authTokenObject.refreshToken();
+	const refreshToken = authTokenObject.getRefreshToken();
 
 	if (!refreshToken) {
 		toast.error("No session found!");

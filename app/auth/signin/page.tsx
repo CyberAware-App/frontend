@@ -8,6 +8,7 @@ import { Main } from "@/app/-components";
 import { NavLink } from "@/components/common/NavLink";
 import { Button } from "@/components/ui/button";
 import { apiSchema, callBackendApiForQuery } from "@/lib/api/callBackendApi";
+import { authTokenObject } from "@/lib/api/callBackendApi/plugins/utils";
 import { resendOtp } from "../verify-account/utils";
 
 const SigninSchema = apiSchema.routes["@post/login"].body;
@@ -40,8 +41,10 @@ function SigninPage() {
 			},
 
 			onSuccess: (ctx) => {
-				localStorage.setItem("accessToken", ctx.data.data.access);
-				localStorage.setItem("refreshToken", ctx.data.data.refresh);
+				authTokenObject.setTokens({
+					access: ctx.data.data.access,
+					refresh: ctx.data.data.refresh,
+				});
 
 				router.push("/dashboard");
 			},

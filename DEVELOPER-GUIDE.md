@@ -55,6 +55,7 @@ New to the project? Start here:
 ## 🌟 Key Features
 
 ### 🏠 Landing Page & Marketing
+
 - **Hero Section**: Compelling introduction with call-to-action buttons
 - **How It Works**: Interactive ladder-style flow showing the 3-step learning process
 - **Team Leads Page**: Dedicated page showcasing project team members and roles
@@ -62,6 +63,7 @@ New to the project? Start here:
 - **Footer Credits**: Institution branding and project acknowledgments
 
 ### 🔐 Authentication & Security
+
 - **User Registration**: Email-based signup with comprehensive form validation
 - **Email Verification**: OTP-based account verification with resend functionality
 - **Secure Login**: JWT-based authentication with automatic token refresh
@@ -70,6 +72,7 @@ New to the project? Start here:
 - **Session Persistence**: Automatic session refresh and logout handling
 
 ### 📚 Learning Management System
+
 - **10-Day Program**: Progressive module unlocking system with clear learning path
 - **Video Content**: Mux-powered video streaming with custom player controls
 - **Progress Tracking**: Automatic completion tracking based on 80% video watch time
@@ -78,6 +81,7 @@ New to the project? Start here:
 - **Sidebar Navigation**: Collapsible sidebar with module progress visualization
 
 ### 🎯 Assessment System
+
 - **Module Quizzes**: Individual quizzes for each learning module with immediate feedback
 - **Final Exam**: Comprehensive 50-question exam with randomized question selection
 - **Time Management**: 35-minute countdown timer with automatic submission
@@ -86,6 +90,7 @@ New to the project? Start here:
 - **Results Display**: Instant pass/fail results with detailed scoring information
 
 ### 🏆 Certification & Progress
+
 - **Digital Certificates**: PDF certificate generation for 80%+ exam scores
 - **Progress Visualization**: Animated progress bars with percentage completion
 - **Achievement System**: Module completion badges and status indicators
@@ -93,6 +98,7 @@ New to the project? Start here:
 - **Completion Tracking**: Real-time progress updates across the application
 
 ### 🎨 User Experience & Design
+
 - **Responsive Design**: Mobile-first approach with adaptive layouts for all screen sizes
 - **Animated UI**: Smooth transitions, micro-interactions, and loading animations
 - **Loading States**: Comprehensive loading indicators, skeleton screens, and auth loaders
@@ -101,6 +107,7 @@ New to the project? Start here:
 - **Theme System**: Consistent color palette and typography throughout the application
 
 ### 🔧 Technical Features
+
 - **Server-Side Rendering**: Next.js App Router with optimized performance
 - **State Management**: React Query for server state, Zustand for client state
 - **Type Safety**: Full TypeScript integration with runtime validation
@@ -179,26 +186,31 @@ The CyberAware project is organized to make it easy to find and work with differ
 Understanding these technologies will help you work effectively with the codebase:
 
 ### Frontend Framework
+
 - **Next.js 15** - React framework with file-based routing
 - **React 19** - UI library for building components
 - **TypeScript** - Adds type safety to JavaScript
 
 ### Styling
+
 - **Tailwind CSS** - Utility-first CSS framework for styling
 - **Custom Design System** - Consistent colors, fonts, and components
 
 ### State Management
+
 - **React Query** - Manages server data (API calls, caching)
 - **Zustand** - Manages client data (theme, user preferences)
 - **React Hook Form** - Handles form validation and submission
 
 ### API Integration
+
 - **CallAPI** - Type-safe HTTP client for backend communication
 - **Zod** - Schema validation for API requests and responses
 
 ## 🏗️ How Components Work
 
 ### Component Structure
+
 Components in this project follow a consistent pattern:
 
 ```tsx
@@ -219,11 +231,13 @@ function MyComponent(props: { title: string; className?: string }) {
 ```
 
 ### Component Types
+
 - **Layout Components** (`app/-components/`): Structure the page layout
 - **UI Components** (`components/ui/`): Reusable buttons, forms, etc.
 - **Common Components** (`components/common/`): Shared utilities and helpers
 
 ### Styling Pattern
+
 We use Tailwind CSS with helper functions:
 
 ```tsx
@@ -237,6 +251,7 @@ className={cnJoin("class1", "class2")}
 ## 🎨 Design System
 
 ### Colors
+
 The app uses a consistent color palette. Here are the main colors you'll work with:
 
 | Color | Usage | Tailwind Class |
@@ -248,17 +263,21 @@ The app uses a consistent color palette. Here are the main colors you'll work wi
 | **Gray Light** | Borders, subtle text | `text-cyberaware-neutral-gray-light` |
 
 ### Typography
+
 - **Font**: Work Sans (defined in `app/layout.tsx`)
 - **Weights**: 400 (regular), 500 (medium), 600 (semibold), 700 (bold)
 
 ### Responsive Design
+
 The app is mobile-first with these breakpoints:
+
 - **sm**: 480px and up
 - **md**: 780px and up
 - **lg**: 1000px and up
 - **xl**: 1280px and up
 
 ### Custom Utilities
+
 - **`custom-scrollbar`**: Branded scrollbars for scrollable content
 - **`cnMerge()`**: Combines Tailwind classes intelligently
 - **`cnJoin()`**: Simple class joining without conflict resolution
@@ -301,6 +320,7 @@ The Button component is your go-to for all clickable actions. Here's how to use 
 ### Common Patterns
 
 **Form Submit Button:**
+
 ```tsx
 <Button
   type="submit"
@@ -312,6 +332,7 @@ The Button component is your go-to for all clickable actions. Here's how to use 
 ```
 
 **Navigation Button:**
+
 ```tsx
 <Button asChild>
   <NavLink href="/next-page">Continue</NavLink>
@@ -319,6 +340,7 @@ The Button component is your go-to for all clickable actions. Here's how to use 
 ```
 
 **Conditional Button:**
+
 ```tsx
 <Button
   theme={isPrimary ? "orange" : "blue-ghost"}
@@ -439,6 +461,7 @@ We use **CallAPI** ([docs](https://zayne-labs-callapi.netlify.app/)) for all bac
 ### Why CallAPI?
 
 Instead of writing repetitive fetch code and validation, CallAPI lets us:
+
 1. Define our API once with schemas
 2. Get automatic TypeScript types
 3. Handle errors consistently
@@ -461,6 +484,7 @@ lib/api/callBackendApi/
 ### API Schema - The Heart of Type Safety
 
 The API schema (`lib/api/callBackendApi/apiSchema.ts`) defines every endpoint our app can call. This ensures:
+
 - **Consistent data shapes** between frontend and backend
 - **Automatic validation** of requests and responses
 - **TypeScript types** generated automatically
@@ -704,7 +728,7 @@ const refreshUserSession = async () => {
   }
 
   // Update access token in localStorage
-  result.data?.data && localStorage.setItem("accessToken", result.data.data.access);
+  result.data?.data && authTokenObject.setAccessToken({ access: result.data.data.access });
 };
 ```
 
@@ -829,6 +853,7 @@ const withBaseErrorResponse = <TSchemaObject extends z.ZodType = typeof BaseErro
 ### Adding a New Page
 
 1. **Create the page file** in the appropriate `app/` directory:
+
    ```tsx
    // app/my-new-page/page.tsx
    function MyNewPage() {
@@ -838,6 +863,7 @@ const withBaseErrorResponse = <TSchemaObject extends z.ZodType = typeof BaseErro
    ```
 
 2. **Add navigation** if needed:
+
    ```tsx
    <NavLink href="/my-new-page">Go to My Page</NavLink>
    ```
@@ -845,6 +871,7 @@ const withBaseErrorResponse = <TSchemaObject extends z.ZodType = typeof BaseErro
 ### Creating a New Component
 
 1. **Create the component file** in `components/ui/` or `components/common/`:
+
    ```tsx
    // components/ui/my-component.tsx
    import { cnMerge } from "@/lib/utils/cn";
@@ -864,6 +891,7 @@ const withBaseErrorResponse = <TSchemaObject extends z.ZodType = typeof BaseErro
    ```
 
 2. **Export it** from the appropriate index file:
+
    ```tsx
    // components/ui/index.ts
    export { MyComponent } from "./my-component";
@@ -872,6 +900,7 @@ const withBaseErrorResponse = <TSchemaObject extends z.ZodType = typeof BaseErro
 ### Making API Calls
 
 1. **For simple data fetching** (like dashboard data):
+
    ```tsx
    import { useQuery } from "@tanstack/react-query";
    import { dashboardQuery } from "@/lib/react-query/queryOptions";
@@ -887,6 +916,7 @@ const withBaseErrorResponse = <TSchemaObject extends z.ZodType = typeof BaseErro
    ```
 
 2. **For form submissions** (like registration):
+
    ```tsx
    import { callBackendApi } from "@/lib/api/callBackendApi";
 
@@ -908,6 +938,7 @@ const withBaseErrorResponse = <TSchemaObject extends z.ZodType = typeof BaseErro
 ### Working with Forms
 
 1. **Reuse API schemas** for validation:
+
    ```tsx
    import { apiSchema } from "@/lib/api/callBackendApi";
 
@@ -916,6 +947,7 @@ const withBaseErrorResponse = <TSchemaObject extends z.ZodType = typeof BaseErro
    ```
 
 2. **Set up the form**:
+
    ```tsx
    const form = useForm({
      resolver: zodResolver(FormSchema),
@@ -926,6 +958,7 @@ const withBaseErrorResponse = <TSchemaObject extends z.ZodType = typeof BaseErro
 ### Styling Components
 
 1. **Use existing design tokens**:
+
    ```tsx
    <div className="bg-cyberaware-unizik-orange text-white p-4">
      Orange button style
@@ -933,6 +966,7 @@ const withBaseErrorResponse = <TSchemaObject extends z.ZodType = typeof BaseErro
    ```
 
 2. **Combine classes safely**:
+
    ```tsx
    import { cnMerge } from "@/lib/utils/cn";
 
@@ -1068,36 +1102,42 @@ This pattern provides several key advantages:
 ## ✅ Best Practices
 
 ### 🎯 Component Guidelines
+
 - **Keep it simple**: One component, one purpose
 - **Reuse schemas**: Use API schemas for form validation
 - **Use TypeScript**: Let types guide you to correct usage
 - **Follow naming**: Use descriptive names for components and props
 
 ### 🎨 Styling Guidelines
+
 - **Use design tokens**: Stick to the defined color palette
 - **Mobile-first**: Design for mobile, enhance for desktop
 - **Use `cnMerge()`**: For combining Tailwind classes safely
 - **Consistent spacing**: Follow the existing spacing patterns
 
 ### 🔄 State Management
+
 - **Server data**: Use React Query for API calls and caching
 - **Client data**: Use Zustand for app-wide state (like theme)
 - **Form data**: Use React Hook Form with schema validation
 - **Local state**: Use `useState` for component-specific data
 
 ### 🔐 Security & Auth
+
 - **Protected routes**: Use the `(protected)` route group for auth-required pages
 - **Let plugins handle auth**: Don't manually add auth headers
 - **Handle errors gracefully**: Show user-friendly error messages
 - **Validate everything**: Trust the schema validation
 
 ### 🚀 Performance Tips
+
 - **Use React Query**: It handles caching and background updates
 - **Optimize images**: Use Next.js `Image` component
 - **Lazy load**: Only load what's needed when it's needed
 - **Monitor bundle size**: Keep dependencies reasonable
 
 ### 🎯 User Experience
+
 - **Show loading states**: Users should know something is happening
 - **Handle errors well**: Clear, actionable error messages
 - **Use toast notifications**: For success/error feedback
@@ -1151,25 +1191,30 @@ Since there are no automated tests, developers rely on:
 When adding tests to this project, consider implementing:
 
 #### Unit Tests
+
 ```bash
 # Recommended setup
 npm install --save-dev jest @testing-library/react @testing-library/jest-dom
 ```
 
 **What to test:**
+
 - Utility functions (like `cnMerge`)
 - Component rendering and props
 - Form validation logic
 - API schema validation
 
 #### Integration Tests
+
 **What to test:**
+
 - Form submission flows
 - Authentication workflows
 - API integration with CallAPI
 - Component interactions
 
 #### End-to-End Tests
+
 ```bash
 # Recommended tools
 npm install --save-dev playwright
@@ -1178,6 +1223,7 @@ npm install --save-dev cypress
 ```
 
 **What to test:**
+
 - Complete user journeys (signup → verification → dashboard)
 - Learning module progression
 - Quiz and exam flows
@@ -1211,6 +1257,7 @@ describe('API Schema Validation', () => {
 Until automated tests are implemented, use this checklist:
 
 #### 🔐 Authentication Flow
+
 - [ ] User registration with valid/invalid data
 - [ ] Email verification process
 - [ ] Login with correct/incorrect credentials
@@ -1218,6 +1265,7 @@ Until automated tests are implemented, use this checklist:
 - [ ] Session persistence and refresh
 
 #### 📚 Learning Platform
+
 - [ ] Module navigation and unlocking
 - [ ] Video playback and progress tracking
 - [ ] Quiz completion and scoring
@@ -1225,17 +1273,20 @@ Until automated tests are implemented, use this checklist:
 - [ ] Certificate generation and download
 
 #### 📱 Responsive Design
+
 - [ ] Mobile navigation (sidebar collapse)
 - [ ] Form layouts on small screens
 - [ ] Video player responsiveness
 - [ ] Button and component scaling
 
 #### 🎨 UI Components
+
 - [ ] Button states (loading, disabled, hover)
 - [ ] Form validation messages
 - [ ] Toast notifications
 - [ ] Progress indicators
 - [ ] Theme switching (if implemented)
+
 3. **Test Loading States**: Verify loading indicators appear during API calls
 4. **Test Error Scenarios**: Test with network failures and invalid API responses
 5. **Test Authentication**: Verify protected routes redirect properly when not authenticated
@@ -1316,6 +1367,7 @@ const nextConfig: NextConfig = {
 ```
 
 Key configuration features:
+
 - **Typed Routes**: Enables type-safe routing with Next.js App Router
 - **Turbopack**: Fast bundler for development (experimental)
 - **Development Indicators**: Shows build status in bottom-right corner
@@ -1422,6 +1474,7 @@ const BACKEND_HOST =
 ```
 
 **Environment Configuration:**
+
 - **Development**: Points to local Django server at `http://127.0.0.1:8000`
 - **Production**: Points to deployed API at `https://cyberaware-api-mx7u.onrender.com`
 
@@ -1432,11 +1485,13 @@ const BACKEND_HOST =
 The application is configured for easy deployment:
 
 **Frontend Deployment:**
+
 - Optimized for platforms like Vercel, Netlify, or similar
 - Automatic environment detection
 - Build-time optimizations enabled
 
 **API Integration:**
+
 - Automatic switching between development and production APIs
 - No manual configuration needed for different environments
 - CORS handling built into the backend
@@ -1521,6 +1576,7 @@ The application is configured for easy deployment:
 6. **Verify environment** - check if `NODE_ENV` is set correctly
 
 **Common API Issues:**
+
 ```bash
 # Backend not running
 Error: fetch failed (connection refused)
@@ -1608,6 +1664,7 @@ Common patterns and examples can be found throughout this guide. Key sections to
 ### Recommended Improvements
 
 #### Testing Implementation
+
 ```bash
 # Add testing framework
 pnpm add -D jest @testing-library/react @testing-library/jest-dom
@@ -1615,6 +1672,7 @@ pnpm add -D playwright  # for e2e tests
 ```
 
 #### Code Quality
+
 ```bash
 # Remove build error ignoring
 # In next.config.ts, remove:
@@ -1623,11 +1681,13 @@ pnpm add -D playwright  # for e2e tests
 ```
 
 #### CI/CD Pipeline
+
 - Add GitHub Actions for automated testing
 - Implement pre-commit hooks for code quality
 - Add automated deployment checks
 
 #### Performance Monitoring
+
 - Add performance monitoring tools
 - Implement error tracking
 - Add analytics for user behavior

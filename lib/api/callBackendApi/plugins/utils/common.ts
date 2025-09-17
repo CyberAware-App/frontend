@@ -21,18 +21,39 @@ export const isAuthTokenRelatedError = (
 		|| ("detail" in errorData && errorData.detail === "Authentication credentials were not provided.")
 	);
 };
-export type PossibleAuthToken = "accessToken" | "refreshToken";
+export type PossibleAuthToken = "getAccessToken" | "getRefreshToken";
 
 const refreshTokenKey = "refreshToken";
 const accessTokenKey = "accessToken";
 
 /* eslint-disable ts-eslint/no-unnecessary-condition */
 export const authTokenObject = {
-	accessToken: () => globalThis.localStorage?.getItem(accessTokenKey),
-	refreshToken: () => globalThis.localStorage?.getItem(refreshTokenKey),
 	clearTokens: () => {
 		globalThis.localStorage?.removeItem(accessTokenKey);
 		globalThis.localStorage?.removeItem(refreshTokenKey);
+	},
+
+	getAccessToken: () => globalThis.localStorage?.getItem(accessTokenKey),
+
+	getRefreshToken: () => globalThis.localStorage?.getItem(refreshTokenKey),
+
+	setAccessToken: (options: { access: string }) => {
+		const { access } = options;
+
+		globalThis.localStorage?.setItem(accessTokenKey, access);
+	},
+
+	setRefreshToken: (options: { refresh: string }) => {
+		const { refresh } = options;
+
+		globalThis.localStorage?.setItem(refreshTokenKey, refresh);
+	},
+
+	setTokens: (options: { access: string; refresh: string }) => {
+		const { access, refresh } = options;
+
+		globalThis.localStorage?.setItem(accessTokenKey, access);
+		globalThis.localStorage?.setItem(refreshTokenKey, refresh);
 	},
 };
 /* eslint-enable ts-eslint/no-unnecessary-condition */
