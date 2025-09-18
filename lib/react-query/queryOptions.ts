@@ -149,16 +149,16 @@ export const certificateQuery = () => {
 };
 
 const forceDownload = (data: Blob, id: string) => {
-	createFileUrl(data, {
-		onSuccess: (ctx) => {
-			const link = document.createElement("a");
-			link.href = ctx.result;
-			link.download = `${id}.pdf`;
-			link.click();
+	const fileUrl = createFileUrl(data);
 
-			URL.revokeObjectURL(ctx.result);
-		},
-	});
+	if (!fileUrl) return;
+
+	const link = document.createElement("a");
+	link.href = fileUrl;
+	link.download = `${id}.pdf`;
+	link.click();
+
+	URL.revokeObjectURL(fileUrl);
 };
 
 export const downloadCertificateQuery = (
