@@ -58,8 +58,11 @@ const sharedBaseCallApiConfig = defineBaseConfig((instanceCtx) => ({
 
 export const callBackendApi = createFetchClient(sharedBaseCallApiConfig);
 
-export const callBackendApiForQuery = createFetchClient((instanceCtx) => ({
-	...sharedBaseCallApiConfig(instanceCtx),
-	resultMode: "onlySuccessWithException",
-	throwOnError: true,
-}));
+export const callBackendApiForQuery = createFetchClient(
+	(instanceCtx) =>
+		({
+			...sharedBaseCallApiConfig(instanceCtx),
+			resultMode: "onlyData",
+			throwOnError: true,
+		}) satisfies ReturnType<typeof defineBaseConfig>
+);

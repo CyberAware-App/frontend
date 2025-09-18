@@ -106,7 +106,10 @@ function VerifyAccountPage() {
 						<Button
 							unstyled={true}
 							className="font-semibold text-white"
-							onClick={() => resendOtp(email)}
+							onClick={() => {
+								resendOtp(email);
+								form.reset();
+							}}
 						>
 							Request again
 						</Button>
