@@ -19,7 +19,6 @@ export type ToastPluginMeta = {
 		};
 		error?: boolean;
 		errorAndSuccess?: boolean;
-		errorMessageField?: string;
 		errorsToSkip?: Array<CallApiResultErrorVariant<unknown>["error"]["name"]>;
 		errorsToSkipCondition?: (
 			error: CallApiResultErrorVariant<BaseApiErrorResponse>["error"]
@@ -28,7 +27,7 @@ export type ToastPluginMeta = {
 	};
 };
 
-export const toastPlugin = definePlugin(() => ({
+export const toastPlugin = definePlugin((toastOptions?: ToastPluginMeta["toast"]) => ({
 	id: "toast-plugin",
 	name: "toastPlugin",
 
@@ -36,16 +35,16 @@ export const toastPlugin = definePlugin(() => ({
 		onError: (ctx: ErrorContext<BaseApiErrorResponse>) => {
 			if (!isBrowser()) return;
 
-			const toastMeta = ctx.options.meta?.toast ?? {};
+			const toastMeta = toastOptions ?? ctx.options.meta?.toast;
 
 			/* eslint-disable ts-eslint/prefer-nullish-coalescing */
 			const shouldSkipErrorToast =
-				(isBoolean(toastMeta.error) && !toastMeta.error)
-				|| (isBoolean(toastMeta.errorAndSuccess) && !toastMeta.errorAndSuccess)
-				|| toastMeta.endpointsToSkip?.error?.includes(ctx.options.initURLNormalized)
-				|| toastMeta.endpointsToSkip?.errorAndSuccess?.includes(ctx.options.initURLNormalized)
-				|| toastMeta.errorsToSkip?.includes(ctx.error.name)
-				|| toastMeta.errorsToSkipCondition?.(ctx.error);
+				(isBoolean(toastMeta?.error) && !toastMeta.error)
+				|| (isBoolean(toastMeta?.errorAndSuccess) && !toastMeta.errorAndSuccess)
+				|| toastMeta?.endpointsToSkip?.error?.includes(ctx.options.initURLNormalized)
+				|| toastMeta?.endpointsToSkip?.errorAndSuccess?.includes(ctx.options.initURLNormalized)
+				|| toastMeta?.errorsToSkip?.includes(ctx.error.name)
+				|| toastMeta?.errorsToSkipCondition?.(ctx.error);
 			/* eslint-enable ts-eslint/prefer-nullish-coalescing */
 
 			if (shouldSkipErrorToast) return;
@@ -62,14 +61,14 @@ export const toastPlugin = definePlugin(() => ({
 		onSuccess: (ctx: SuccessContext<BaseApiSuccessResponse>) => {
 			if (!isBrowser()) return;
 
-			const toastMeta = ctx.options.meta?.toast ?? {};
+			const toastMeta = toastOptions ?? ctx.options.meta?.toast;
 
 			/* eslint-disable ts-eslint/prefer-nullish-coalescing */
 			const shouldSkipSuccessToast =
-				(isBoolean(toastMeta.success) && !toastMeta.success)
-				|| (isBoolean(toastMeta.errorAndSuccess) && !toastMeta.errorAndSuccess)
-				|| toastMeta.endpointsToSkip?.success?.includes(ctx.options.initURLNormalized)
-				|| toastMeta.endpointsToSkip?.errorAndSuccess?.includes(ctx.options.initURLNormalized);
+				(isBoolean(toastMeta?.success) && !toastMeta.success)
+				|| (isBoolean(toastMeta?.errorAndSuccess) && !toastMeta.errorAndSuccess)
+				|| toastMeta?.endpointsToSkip?.success?.includes(ctx.options.initURLNormalized)
+				|| toastMeta?.endpointsToSkip?.errorAndSuccess?.includes(ctx.options.initURLNormalized);
 			/* eslint-enable ts-eslint/prefer-nullish-coalescing */
 
 			if (shouldSkipSuccessToast) return;

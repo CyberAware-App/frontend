@@ -12,10 +12,10 @@ import { getNewUserSession } from "./utils/session";
 
 export type AuthPluginMeta = {
 	auth?: {
-		tokenToAdd?: PossibleAuthToken;
-		routesToIncludeForRedirectionOnAuthError?: Array<`/${string}` | `/${string}/**`>;
-		routesToExemptFromHeaderAddition?: Array<`/${string}` | `/${string}/**`>;
+		routesToExemptFromHeaderAddition?: Array<`/${string}/**` | `/${string}`>;
+		routesToIncludeForRedirectionOnAuthError?: Array<`/${string}/**` | `/${string}`>;
 		skipHeaderAddition?: boolean;
+		tokenToAdd?: PossibleAuthToken;
 	};
 };
 
@@ -23,13 +23,13 @@ const signInRoute = "/auth/signin" satisfies AppRoutes;
 
 const defaultRedirectionMessage = "Session is missing! Redirecting to login...";
 
-export const authPlugin = definePlugin(() => ({
+export const authPlugin = definePlugin((authOptions?: AuthPluginMeta["auth"]) => ({
 	id: "auth-plugin",
 	name: "authPlugin",
 
 	hooks: {
 		onRequest: (ctx) => {
-			const authMeta = ctx.options.meta?.auth;
+			const authMeta = authOptions ?? ctx.options.meta?.auth;
 
 			const isExemptedRoute = Boolean(
 				authMeta?.routesToExemptFromHeaderAddition?.some((route) => isPathnameMatchingRoute(route))
@@ -58,7 +58,7 @@ export const authPlugin = definePlugin(() => ({
 		},
 
 		onResponseError: async (ctx: ResponseErrorContext<BaseApiErrorResponse>) => {
-			const authMeta = ctx.options.meta?.auth;
+			const authMeta = authOptions ?? ctx.options.meta?.auth;
 
 			// NOTE: Only call refreshUserSession on auth token related errors, and remake the request
 			const shouldRefreshToken = ctx.response.status === 401 && isAuthTokenRelatedError(ctx.error);
