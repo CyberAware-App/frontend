@@ -14,17 +14,18 @@ import { Button } from "@/components/ui/button";
 import { dashboardQuery } from "@/lib/react-query/queryOptions";
 import { logoSmall } from "@/public/assets";
 import { logout } from "./utils";
+import { useRouter } from "@bprogress/next";
 
 function DashboardSideBar() {
 	const dashboardQueryResult = useQuery(dashboardQuery());
 
 	const queryClient = useQueryClient();
 
+	const router = useRouter();
+
 	const [isOpen, setIsOpen] = useState(false);
 
-	const { ref: rootRef } = useClickOutside<HTMLDivElement>({
-		onClick: () => setIsOpen(false),
-	});
+	const { ref: rootRef } = useClickOutside<HTMLDivElement>({ onClick: () => setIsOpen(false) });
 
 	return (
 		<Sidebar.ContextProvider
@@ -134,7 +135,7 @@ function DashboardSideBar() {
 							<Button
 								className="mt-2.5 w-fit text-cyberaware-unizik-orange"
 								unstyled={true}
-								onClick={() => logout(queryClient)}
+								onClick={() => logout(queryClient, router)}
 							>
 								Logout
 							</Button>

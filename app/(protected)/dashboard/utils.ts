@@ -1,10 +1,11 @@
 import type { QueryClient } from "@tanstack/react-query";
 import { toast } from "sonner";
 import { callBackendApi } from "@/lib/api/callBackendApi";
-import { authTokenObject, redirectTo } from "@/lib/api/callBackendApi/plugins/utils";
+import { authTokenObject } from "@/lib/api/callBackendApi/plugins/utils";
 import { dashboardQuery, sessionQuery } from "@/lib/react-query/queryOptions";
+import type { AppRouterInstance } from "@bprogress/next";
 
-export const logout = (queryClient: QueryClient) => {
+export const logout = (queryClient: QueryClient, router: AppRouterInstance) => {
 	const refreshToken = authTokenObject.getRefreshToken();
 
 	if (!refreshToken) {
@@ -16,7 +17,7 @@ export const logout = (queryClient: QueryClient) => {
 		body: { refresh: refreshToken },
 
 		onSuccess: () => {
-			redirectTo("/");
+			router.push("/");
 			queryClient.removeQueries(sessionQuery());
 			queryClient.removeQueries(dashboardQuery());
 			authTokenObject.clearTokens();

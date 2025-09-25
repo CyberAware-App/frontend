@@ -71,16 +71,16 @@ export const authPlugin = definePlugin((authOptions?: AuthPluginMeta["auth"]) =>
 
 			if (!shouldRefreshToken) return;
 
-			const shouldSkipRouteFromRedirect = authMeta?.routesToExemptFromRedirectOnAuthError?.some(
+			const refreshToken = authTokenObject.getRefreshToken();
+
+			const shouldExemptRouteFromRedirect = authMeta?.routesToExemptFromRedirectOnAuthError?.some(
 				(route) => isPathnameMatchingRoute(route)
 			);
-
-			const refreshToken = authTokenObject.getRefreshToken();
 
 			const redirectFn = authMeta?.redirectFn ?? redirectTo;
 
 			if (refreshToken === null) {
-				!shouldSkipRouteFromRedirect && void redirectFn(signInRoute);
+				!shouldExemptRouteFromRedirect && void redirectFn(signInRoute);
 
 				throw new Error(defaultRedirectionMessage);
 			}
@@ -88,7 +88,7 @@ export const authPlugin = definePlugin((authOptions?: AuthPluginMeta["auth"]) =>
 			const result = await getNewUserSession(refreshToken);
 
 			if (isHTTPError(result.error)) {
-				shouldSkipRouteFromRedirect && void redirectFn(signInRoute);
+				!shouldExemptRouteFromRedirect && void redirectFn(signInRoute);
 
 				throw new Error("Session invalid or expired! Redirecting to login...");
 			}
