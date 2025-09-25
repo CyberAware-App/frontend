@@ -1,6 +1,7 @@
-import path from "node:path";
 import { fileURLToPath } from "node:url";
 import type { NextConfig } from "next";
+
+const getRoot = (rootPath = "/") => fileURLToPath(new URL(rootPath, import.meta.url));
 
 const nextConfig: NextConfig = {
 	devIndicators: {
@@ -9,8 +10,14 @@ const nextConfig: NextConfig = {
 
 	typedRoutes: true,
 
+	logging: {
+		fetches: {
+			fullUrl: true,
+		},
+	},
+
 	turbopack: {
-		root: path.dirname(fileURLToPath(import.meta.url)),
+		root: getRoot(),
 	},
 
 	eslint: {

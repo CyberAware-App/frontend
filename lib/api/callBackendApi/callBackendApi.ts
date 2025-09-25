@@ -1,6 +1,6 @@
 import { createFetchClient, defineBaseConfig } from "@zayne-labs/callapi";
 import { apiSchema } from "./apiSchema";
-import { type AuthPluginMeta, authPlugin, type ToastPluginMeta, toastPlugin } from "./plugins";
+import { type AuthPluginMeta, type ToastPluginMeta, authPlugin, toastPlugin } from "./plugins";
 import { isAuthTokenRelatedError } from "./plugins/utils";
 
 type GlobalMeta = AuthPluginMeta & ToastPluginMeta;
@@ -21,7 +21,7 @@ const BACKEND_HOST = REMOTE_BACKEND_HOST;
 
 const BASE_API_URL = `${BACKEND_HOST}/api`;
 
-const sharedBaseCallApiConfig = defineBaseConfig((instanceCtx) => ({
+const sharedBaseConfig = defineBaseConfig((instanceCtx) => ({
 	baseURL: BASE_API_URL,
 
 	dedupeCacheScope: "global",
@@ -38,8 +38,9 @@ const sharedBaseCallApiConfig = defineBaseConfig((instanceCtx) => ({
 		...instanceCtx.options.meta,
 
 		auth: {
-			routesToIncludeForRedirectionOnAuthError: ["/dashboard/**"],
 			// routesToExemptFromHeaderAddition: ["/auth/**"],
+			routesToExemptFromRedirectOnAuthError: ["/", "/auth/**"],
+			// navigateFn: redirectTo,
 			...instanceCtx.options.meta?.auth,
 		},
 
@@ -56,12 +57,12 @@ const sharedBaseCallApiConfig = defineBaseConfig((instanceCtx) => ({
 	} satisfies GlobalMeta,
 }));
 
-export const callBackendApi = createFetchClient(sharedBaseCallApiConfig);
+export const callBackendApi = createFetchClient(sharedBaseConfig);
 
 export const callBackendApiForQuery = createFetchClient(
 	(instanceCtx) =>
 		({
-			...sharedBaseCallApiConfig(instanceCtx),
+			...sharedBaseConfig(instanceCtx),
 			resultMode: "onlyData",
 			throwOnError: true,
 		}) satisfies ReturnType<typeof defineBaseConfig>

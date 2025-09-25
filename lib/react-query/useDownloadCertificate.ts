@@ -1,6 +1,6 @@
 import { useQuery, useQueryClient } from "@tanstack/react-query";
 import { useToggle } from "@zayne-labs/toolkit-react";
-import { downloadCertificateQuery } from "./queryOptions";
+import { downloadCertificateQuery } from "./mutationOptions";
 
 const useDownloadCertificate = (id: string | undefined) => {
 	const [shouldStartFetch, toggleShouldStartFetch] = useToggle(false);
