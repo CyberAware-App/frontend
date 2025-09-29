@@ -1,10 +1,9 @@
 "use client";
 
-import { createCustomContext, useCallbackRef, useToggle } from "@zayne-labs/toolkit-react";
+import { createCustomContext, useCallbackRef, useControllableState } from "@zayne-labs/toolkit-react";
 import { composeEventHandlers, type InferProps } from "@zayne-labs/toolkit-react/utils";
-import { isFunction } from "@zayne-labs/toolkit-type-helpers";
 import { Dialog as DialogPrimitive } from "radix-ui";
-import { useCallback, useMemo } from "react";
+import { useMemo } from "react";
 import { cnMerge } from "@/lib/utils/cn";
 import { IconBox } from "../common/IconBox";
 
@@ -12,42 +11,27 @@ type ContextValue = {
 	isOpen: boolean;
 	onClose: () => void;
 	onOpen: () => void;
-	setOpen: (open: boolean) => void;
+	setIsOpen: (open: boolean) => void;
 };
 
 const [DialogContextProvider, useDialogContext] = createCustomContext<ContextValue>();
 
 function DialogRoot(props: InferProps<typeof DialogPrimitive.Root>) {
 	// eslint-disable-next-line ts-eslint/unbound-method
-	const { defaultOpen, onOpenChange: setOpenProp, open: openProp, ...restOfProps } = props;
+	const { defaultOpen, onOpenChange, open, ...restOfProps } = props;
 
-	const savedSetOpenProp = useCallbackRef(setOpenProp);
+	const [isOpen, setIsOpen] = useControllableState({
+		defaultValue: defaultOpen,
+		value: open,
+		onChange: onOpenChange,
+	});
 
-	const [internalOpen, toggleInternalOpen] = useToggle(defaultOpen);
-
-	// == Use the open prop if it is provided
-	// == Otherwise, use the internal open state
-	const isOpen = openProp ?? internalOpen;
-
-	const setOpen = useCallback(
-		(value: boolean | ((value: boolean) => boolean)) => {
-			const resolvedValue = isFunction(value) ? value(isOpen) : value;
-
-			// == Call the onOpenChange prop if the openProp is provided
-			// == Otherwise, toggle the internal open state
-			const selectedOpenChange = openProp ? savedSetOpenProp : toggleInternalOpen;
-
-			selectedOpenChange(resolvedValue);
-		},
-		[isOpen, openProp, savedSetOpenProp, toggleInternalOpen]
-	);
-
-	const onClose = useCallbackRef(() => setOpen(false));
-	const onOpen = useCallbackRef(() => setOpen(true));
+	const onClose = useCallbackRef(() => setIsOpen(false));
+	const onOpen = useCallbackRef(() => setIsOpen(true));
 
 	const contextValue = useMemo(
-		() => ({ isOpen, onClose, onOpen, setOpen }) satisfies ContextValue,
-		[onClose, onOpen, isOpen, setOpen]
+		() => ({ isOpen, onClose, onOpen, setIsOpen }) satisfies ContextValue,
+		[onClose, onOpen, isOpen, setIsOpen]
 	);
 
 	return (
@@ -56,7 +40,7 @@ function DialogRoot(props: InferProps<typeof DialogPrimitive.Root>) {
 				{...restOfProps}
 				data-slot="dialog-root"
 				open={isOpen}
-				onOpenChange={setOpen}
+				onOpenChange={setIsOpen}
 			/>
 		</DialogContextProvider>
 	);
