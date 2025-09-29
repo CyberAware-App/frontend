@@ -8,14 +8,16 @@ import { cnMerge } from "@/lib/utils/cn";
 
 type AvatarProps = InferProps<typeof TooltipAnimated.Root> & {
 	children: React.ReactNode;
-	zIndex: number;
 	transition: Transition;
-	translate: string | number;
+	translate: number | string;
+	zIndex: number;
 };
 
-function AvatarContainer({ children, zIndex, transition, translate, ...props }: AvatarProps) {
+function AvatarContainer(props: AvatarProps) {
+	const { children, transition, translate, zIndex, ...restOfProps } = props;
+
 	return (
-		<TooltipAnimated.Root {...props}>
+		<TooltipAnimated.Root {...restOfProps}>
 			<TooltipAnimated.Trigger>
 				<motion.div
 					data-slot="avatar-container"
@@ -27,8 +29,8 @@ function AvatarContainer({ children, zIndex, transition, translate, ...props }: 
 				>
 					<motion.div
 						variants={{
-							initial: { y: 0 },
 							hover: { y: translate },
+							initial: { y: 0 },
 						}}
 						transition={transition}
 					>
@@ -46,21 +48,21 @@ function AvatarGroupTooltip(props: InferProps<typeof TooltipAnimated.Content>) {
 
 type AvatarGroupProps = Omit<React.ComponentProps<"div">, "translate"> & {
 	children: React.ReactNode;
-	transition?: Transition;
 	invertOverlap?: boolean;
-	translate?: string | number;
 	tooltipProps?: Omit<InferProps<typeof TooltipAnimated.Root>, "children">;
+	transition?: Transition;
+	translate?: number | string;
 };
 
 function AvatarGroupRoot(props: AvatarGroupProps) {
 	const {
-		ref,
 		children,
 		className,
-		transition,
 		invertOverlap = false,
-		translate = "-30%",
+		ref,
 		tooltipProps,
+		transition,
+		translate = "-30%",
 		...restOfProps
 	} = props;
 
@@ -76,10 +78,10 @@ function AvatarGroupRoot(props: AvatarGroupProps) {
 			>
 				{childrenArray.map((child, index) => (
 					<AvatarContainer
-						// eslint-disable-next-line react/no-array-index-key
+						// eslint-disable-next-line react-x/no-array-index-key
 						key={index}
 						zIndex={invertOverlap ? childrenArray.length - index : index}
-						transition={transition ?? { type: "spring", stiffness: 300, damping: 17 }}
+						transition={transition ?? { damping: 17, stiffness: 300, type: "spring" }}
 						translate={translate}
 						{...(tooltipProps ?? { side: "top", sideOffset: 24 })}
 					>

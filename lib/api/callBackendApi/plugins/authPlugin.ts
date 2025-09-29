@@ -1,5 +1,6 @@
 import { definePlugin, type ResponseErrorContext } from "@zayne-labs/callapi";
 import { isHTTPError } from "@zayne-labs/callapi/utils";
+import type { Awaitable, CallbackFn } from "@zayne-labs/toolkit-type-helpers";
 import type { BaseApiErrorResponse } from "../apiSchema";
 import {
 	authTokenObject,
@@ -9,7 +10,6 @@ import {
 	redirectTo,
 } from "./utils";
 import { getNewUserSession } from "./utils/session";
-import type { Awaitable, CallbackFn } from "@zayne-labs/toolkit-type-helpers";
 
 export type AuthPluginMeta = {
 	auth?: {
@@ -17,11 +17,12 @@ export type AuthPluginMeta = {
 		routesToExemptFromRedirectOnAuthError?: Array<AppRoutes | `${string}/**`>;
 		skipHeaderAddition?: boolean;
 		redirectFn?: CallbackFn<AppRoutes, Awaitable<void>>;
+		signInRoute?: AppRoutes;
 		tokenToAdd?: PossibleAuthToken;
 	};
 };
 
-const signInRoute = "/auth/signin" satisfies AppRoutes;
+const defaultSignInRoute = "/auth/signin" satisfies Required<AuthPluginMeta>["auth"]["signInRoute"];
 
 const defaultRedirectionMessage = "Session is missing! Redirecting to login...";
 
@@ -45,9 +46,10 @@ export const authPlugin = definePlugin((authOptions?: AuthPluginMeta["auth"]) =>
 				(route) => isPathnameMatchingRoute(route)
 			);
 
-			if (authTokenObject.getRefreshToken() === null) {
-				const redirectFn = authMeta?.redirectFn ?? redirectTo;
+			const redirectFn = authMeta?.redirectFn ?? redirectTo;
+			const signInRoute = authMeta?.signInRoute ?? defaultSignInRoute;
 
+			if (authTokenObject.getRefreshToken() === null) {
 				!shouldSkipRouteFromRedirect && void redirectFn(signInRoute);
 
 				// == Turn off error toast if redirect is skipped
@@ -78,6 +80,7 @@ export const authPlugin = definePlugin((authOptions?: AuthPluginMeta["auth"]) =>
 			);
 
 			const redirectFn = authMeta?.redirectFn ?? redirectTo;
+			const signInRoute = authMeta?.signInRoute ?? defaultSignInRoute;
 
 			if (refreshToken === null) {
 				!shouldExemptRouteFromRedirect && void redirectFn(signInRoute);

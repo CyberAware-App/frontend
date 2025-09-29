@@ -1,5 +1,6 @@
 "use client";
 
+import { useIsHydrated } from "@zayne-labs/toolkit-react";
 import { AnimatePresence, LayoutGroup, motion, type Transition } from "motion/react";
 import {
 	cloneElement,
@@ -15,27 +16,27 @@ import {
 import { createPortal } from "react-dom";
 import { cnMerge } from "@/lib/utils/cn";
 
-type Side = "top" | "bottom" | "left" | "right";
+type Side = "bottom" | "left" | "right" | "top";
 
-type Align = "start" | "center" | "end";
+type Align = "center" | "end" | "start";
 
 type TooltipData = {
+	align: Align;
+	alignOffset: number;
+	arrow: boolean;
 	content: React.ReactNode;
+	id: string;
 	rect: DOMRect;
 	side: Side;
 	sideOffset: number;
-	align: Align;
-	alignOffset: number;
-	id: string;
-	arrow: boolean;
 };
 
 type GlobalTooltipContextType = {
-	showTooltip: (data: TooltipData) => void;
-	hideTooltip: () => void;
 	currentTooltip: TooltipData | null;
-	transition: Transition;
 	globalId: string;
+	hideTooltip: () => void;
+	showTooltip: (data: TooltipData) => void;
+	transition: Transition;
 };
 
 const GlobalTooltipContext = createContext<GlobalTooltipContextType | null>(null);
@@ -50,127 +51,127 @@ export const useGlobalTooltip = () => {
 };
 
 type TooltipPosition = {
+	initial: { x?: number; y?: number };
+	transform: string;
 	x: number;
 	y: number;
-	transform: string;
-	initial: { x?: number; y?: number };
 };
 
 function getTooltipPosition({
+	align,
+	alignOffset,
 	rect,
 	side,
 	sideOffset,
-	align,
-	alignOffset,
 }: {
+	align: Align;
+	alignOffset: number;
 	rect: DOMRect;
 	side: Side;
 	sideOffset: number;
-	align: Align;
-	alignOffset: number;
 }): TooltipPosition {
 	switch (side) {
-		case "top": {
-			if (align === "start") {
-				return {
-					x: rect.left + alignOffset,
-					y: rect.top - sideOffset,
-					transform: "translate(0, -100%)",
-					initial: { y: 15 },
-				};
-			}
-			if (align === "end") {
-				return {
-					x: rect.right + alignOffset,
-					y: rect.top - sideOffset,
-					transform: "translate(-100%, -100%)",
-					initial: { y: 15 },
-				};
-			}
-			// center
-			return {
-				x: rect.left + rect.width / 2,
-				y: rect.top - sideOffset,
-				transform: "translate(-50%, -100%)",
-				initial: { y: 15 },
-			};
-		}
-
 		case "bottom": {
 			if (align === "start") {
 				return {
+					initial: { y: -15 },
+					transform: "translate(0, 0)",
 					x: rect.left + alignOffset,
 					y: rect.bottom + sideOffset,
-					transform: "translate(0, 0)",
-					initial: { y: -15 },
 				};
 			}
 			if (align === "end") {
 				return {
+					initial: { y: -15 },
+					transform: "translate(-100%, 0)",
 					x: rect.right + alignOffset,
 					y: rect.bottom + sideOffset,
-					transform: "translate(-100%, 0)",
-					initial: { y: -15 },
 				};
 			}
 			// center
 			return {
+				initial: { y: -15 },
+				transform: "translate(-50%, 0)",
 				x: rect.left + rect.width / 2,
 				y: rect.bottom + sideOffset,
-				transform: "translate(-50%, 0)",
-				initial: { y: -15 },
 			};
 		}
 
 		case "left": {
 			if (align === "start") {
 				return {
+					initial: { x: 15 },
+					transform: "translate(-100%, 0)",
 					x: rect.left - sideOffset,
 					y: rect.top + alignOffset,
-					transform: "translate(-100%, 0)",
-					initial: { x: 15 },
 				};
 			}
 			if (align === "end") {
 				return {
+					initial: { x: 15 },
+					transform: "translate(-100%, -100%)",
 					x: rect.left - sideOffset,
 					y: rect.bottom + alignOffset,
-					transform: "translate(-100%, -100%)",
-					initial: { x: 15 },
 				};
 			}
 			// center
 			return {
+				initial: { x: 15 },
+				transform: "translate(-100%, -50%)",
 				x: rect.left - sideOffset,
 				y: rect.top + rect.height / 2,
-				transform: "translate(-100%, -50%)",
-				initial: { x: 15 },
 			};
 		}
 
 		case "right": {
 			if (align === "start") {
 				return {
+					initial: { x: -15 },
+					transform: "translate(0, 0)",
 					x: rect.right + sideOffset,
 					y: rect.top + alignOffset,
-					transform: "translate(0, 0)",
-					initial: { x: -15 },
 				};
 			}
 			if (align === "end") {
 				return {
+					initial: { x: -15 },
+					transform: "translate(0, -100%)",
 					x: rect.right + sideOffset,
 					y: rect.bottom + alignOffset,
-					transform: "translate(0, -100%)",
-					initial: { x: -15 },
 				};
 			}
 			// center
 			return {
+				initial: { x: -15 },
+				transform: "translate(0, -50%)",
 				x: rect.right + sideOffset,
 				y: rect.top + rect.height / 2,
-				transform: "translate(0, -50%)",
-				initial: { x: -15 },
+			};
+		}
+
+		case "top": {
+			if (align === "start") {
+				return {
+					initial: { y: 15 },
+					transform: "translate(0, -100%)",
+					x: rect.left + alignOffset,
+					y: rect.top - sideOffset,
+				};
+			}
+			if (align === "end") {
+				return {
+					initial: { y: 15 },
+					transform: "translate(-100%, -100%)",
+					x: rect.right + alignOffset,
+					y: rect.top - sideOffset,
+				};
+			}
+			// center
+			return {
+				initial: { y: 15 },
+				transform: "translate(-50%, -100%)",
+				x: rect.left + rect.width / 2,
+				y: rect.top - sideOffset,
 			};
 		}
 
@@ -183,13 +184,13 @@ function getTooltipPosition({
 
 type TooltipProviderProps = {
 	children: React.ReactNode;
-	openDelay?: number;
 	closeDelay?: number;
+	openDelay?: number;
 	transition?: Transition;
 };
 
 function TooltipContextProvider(props: TooltipProviderProps) {
-	const { children, openDelay = 700, closeDelay = 300, transition } = props;
+	const { children, closeDelay = 300, openDelay = 700, transition } = props;
 
 	const globalId = useId();
 	const [currentTooltip, setCurrentTooltip] = useState<TooltipData | null>(null);
@@ -231,11 +232,11 @@ function TooltipContextProvider(props: TooltipProviderProps) {
 
 	const value = useMemo<GlobalTooltipContextType>(
 		() => ({
-			showTooltip,
-			hideTooltip,
 			currentTooltip,
-			transition: transition ?? { type: "spring", stiffness: 300, damping: 25 },
 			globalId,
+			hideTooltip,
+			showTooltip,
+			transition: transition ?? { damping: 25, stiffness: 300, type: "spring" },
 		}),
 		[showTooltip, hideTooltip, currentTooltip, transition, globalId]
 	);
@@ -272,25 +273,22 @@ function TooltipArrow(props: TooltipArrowProps) {
 function TooltipPortal(props: { children: React.ReactNode }) {
 	const { children } = props;
 
-	const [isMounted, setIsMounted] = useState(false);
+	const isHydrated = useIsHydrated();
 
-	// eslint-disable-next-line react-hooks-extra/no-direct-set-state-in-use-effect
-	useEffect(() => setIsMounted(true), []);
-
-	return isMounted ? createPortal(children, document.body) : null;
+	return isHydrated ? createPortal(children, document.body) : null;
 }
 
 function TooltipOverlay() {
-	const { currentTooltip, transition, globalId } = useGlobalTooltip();
+	const { currentTooltip, globalId, transition } = useGlobalTooltip();
 
 	const position = useMemo(() => {
 		if (!currentTooltip) return null;
 		return getTooltipPosition({
+			align: currentTooltip.align,
+			alignOffset: currentTooltip.alignOffset,
 			rect: currentTooltip.rect,
 			side: currentTooltip.side,
 			sideOffset: currentTooltip.sideOffset,
-			align: currentTooltip.align,
-			alignOffset: currentTooltip.alignOffset,
 		});
 	}, [currentTooltip]);
 
@@ -304,8 +302,8 @@ function TooltipOverlay() {
 						data-slot="tooltip-overlay-container"
 						className="fixed z-50"
 						style={{
-							top: position?.y,
 							left: position?.x,
+							top: position?.y,
 							transform: position?.transform,
 						}}
 					>
@@ -331,15 +329,15 @@ function TooltipOverlay() {
 }
 
 type TooltipContextType = {
-	content: React.ReactNode;
-	setContent: React.Dispatch<React.SetStateAction<React.ReactNode>>;
-	arrow: boolean;
-	setArrow: React.Dispatch<React.SetStateAction<boolean>>;
-	side: Side;
-	sideOffset: number;
 	align: Align;
 	alignOffset: number;
+	arrow: boolean;
+	content: React.ReactNode;
 	id: string;
+	setArrow: React.Dispatch<React.SetStateAction<boolean>>;
+	setContent: React.Dispatch<React.SetStateAction<React.ReactNode>>;
+	side: Side;
+	sideOffset: number;
 };
 
 const TooltipContext = createContext<TooltipContextType | undefined>(undefined);
@@ -353,15 +351,15 @@ const useTooltip = () => {
 };
 
 type TooltipProps = {
+	align?: Align;
+	alignOffset?: number;
 	children: React.ReactNode;
 	side?: Side;
 	sideOffset?: number;
-	align?: Align;
-	alignOffset?: number;
 };
 
 function TooltipRoot(props: TooltipProps) {
-	const { children, side = "top", sideOffset = 14, align = "center", alignOffset = 0 } = props;
+	const { align = "center", alignOffset = 0, children, side = "top", sideOffset = 14 } = props;
 
 	const id = useId();
 	const [content, setContent] = useState<React.ReactNode>(null);
@@ -369,15 +367,15 @@ function TooltipRoot(props: TooltipProps) {
 
 	const value = useMemo<TooltipContextType>(
 		() => ({
-			content,
-			setContent,
-			arrow,
-			setArrow,
-			side,
-			sideOffset,
 			align,
 			alignOffset,
+			arrow,
+			content,
 			id,
+			setArrow,
+			setContent,
+			side,
+			sideOffset,
 		}),
 		[content, setContent, arrow, setArrow, side, sideOffset, align, alignOffset, id]
 	);
@@ -386,14 +384,14 @@ function TooltipRoot(props: TooltipProps) {
 }
 
 type TooltipContentProps = {
-	children: React.ReactNode;
 	arrow?: boolean;
+	children: React.ReactNode;
 };
 
 function TooltipContent(props: TooltipContentProps) {
-	const { children, arrow = true } = props;
+	const { arrow = true, children } = props;
 
-	const { setContent, setArrow } = useTooltip();
+	const { setArrow, setContent } = useTooltip();
 
 	useEffect(() => {
 		setContent(children);
@@ -409,22 +407,22 @@ type TooltipTriggerProps = {
 
 function TooltipTrigger(props: TooltipTriggerProps) {
 	const { children } = props;
-	const { content, side, sideOffset, align, alignOffset, id, arrow } = useTooltip();
-	const { showTooltip, hideTooltip, currentTooltip } = useGlobalTooltip();
+	const { align, alignOffset, arrow, content, id, side, sideOffset } = useTooltip();
+	const { currentTooltip, hideTooltip, showTooltip } = useGlobalTooltip();
 	const triggerRef = useRef<HTMLElement>(null);
 
 	const handleOpen = useCallback(() => {
 		if (!triggerRef.current) return;
 		const rect = triggerRef.current.getBoundingClientRect();
 		showTooltip({
+			align,
+			alignOffset,
+			arrow,
 			content,
+			id,
 			rect,
 			side,
 			sideOffset,
-			align,
-			alignOffset,
-			id,
-			arrow,
 		});
 	}, [showTooltip, content, side, sideOffset, align, alignOffset, id, arrow]);
 
@@ -468,28 +466,28 @@ function TooltipTrigger(props: TooltipTriggerProps) {
 
 		const rect = triggerRef.current.getBoundingClientRect();
 		showTooltip({
+			align,
+			alignOffset,
+			arrow,
 			content,
+			id,
 			rect,
 			side,
 			sideOffset,
-			align,
-			alignOffset,
-			id,
-			arrow,
 		});
 		// eslint-disable-next-line react-hooks/exhaustive-deps
 	}, [content, arrow, currentTooltip?.id]);
 
 	return cloneElement(children, {
-		ref: triggerRef,
+		"data-align": align,
+		"data-side": side,
+		"data-slot": "tooltip-trigger",
+		"data-state": currentTooltip?.id === id ? "open" : "closed",
+		onBlur: handleBlur,
+		onFocus: handleFocus,
 		onMouseEnter: handleMouseEnter,
 		onMouseLeave: handleMouseLeave,
-		onFocus: handleFocus,
-		onBlur: handleBlur,
-		"data-state": currentTooltip?.id === id ? "open" : "closed",
-		"data-side": side,
-		"data-align": align,
-		"data-slot": "tooltip-trigger",
+		ref: triggerRef,
 	} as React.HTMLAttributes<HTMLElement>);
 }
 

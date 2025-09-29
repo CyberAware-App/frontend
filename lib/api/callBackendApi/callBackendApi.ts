@@ -1,6 +1,6 @@
 import { createFetchClient, defineBaseConfig } from "@zayne-labs/callapi";
 import { apiSchema } from "./apiSchema";
-import { type AuthPluginMeta, type ToastPluginMeta, authPlugin, toastPlugin } from "./plugins";
+import { type AuthPluginMeta, authPlugin, type ToastPluginMeta, toastPlugin } from "./plugins";
 import { isAuthTokenRelatedError } from "./plugins/utils";
 
 type GlobalMeta = AuthPluginMeta & ToastPluginMeta;
@@ -40,6 +40,7 @@ const sharedBaseConfig = defineBaseConfig((instanceCtx) => ({
 		auth: {
 			// routesToExemptFromHeaderAddition: ["/auth/**"],
 			routesToExemptFromRedirectOnAuthError: ["/", "/auth/**"],
+			signInRoute: "/auth/signin",
 			// navigateFn: redirectTo,
 			...instanceCtx.options.meta?.auth,
 		},

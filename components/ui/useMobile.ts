@@ -22,7 +22,6 @@ const useIsMobile = ({
 
 		mql.addEventListener("change", onChange, { signal: abortController.signal });
 
-		// eslint-disable-next-line react-hooks-extra/no-direct-set-state-in-use-effect
 		setIsMobile(window.innerWidth < mobileBreakpoint);
 
 		return () => abortController.abort();
