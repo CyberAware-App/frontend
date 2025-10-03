@@ -43,7 +43,7 @@ function SigninPage() {
 			onSuccess: (ctx) => {
 				authTokenObject.setTokens({ access: ctx.data.data.access, refresh: ctx.data.data.refresh });
 
-				router.push("/dashboard");
+				router.replace("/dashboard");
 			},
 		});
 	});

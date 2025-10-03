@@ -47,6 +47,16 @@ function DialogRoot(props: InferProps<typeof DialogPrimitive.Root>) {
 	);
 }
 
+type RenderFn = (props: ContextValue) => React.ReactNode;
+
+function DialogContext(props: { children: RenderFn }) {
+	const { children } = props;
+
+	const dialogCtx = useDialogContext();
+
+	return children(dialogCtx);
+}
+
 function DialogTrigger(props: InferProps<typeof DialogPrimitive.Trigger>) {
 	const { onClick, ...restOfProps } = props;
 	const { onOpen } = useDialogContext();
@@ -226,16 +236,6 @@ function DialogDescription(props: InferProps<typeof DialogPrimitive.Description>
 			{...restOfProps}
 		/>
 	);
-}
-
-type RenderFn = (props: ContextValue) => React.ReactNode;
-
-function DialogContext(props: { children: RenderFn }) {
-	const { children } = props;
-
-	const dialogCtx = useDialogContext();
-
-	return children(dialogCtx);
 }
 
 export const Root = DialogRoot;
