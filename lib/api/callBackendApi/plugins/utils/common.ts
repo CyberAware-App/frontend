@@ -27,7 +27,7 @@ const refreshTokenKey = "refreshToken";
 const accessTokenKey = "accessToken";
 
 /* eslint-disable ts-eslint/no-unnecessary-condition */
-export const authTokenObject = {
+export const authTokenStore = {
 	clearTokens: () => {
 		globalThis.localStorage?.removeItem(accessTokenKey);
 		globalThis.localStorage?.removeItem(refreshTokenKey);

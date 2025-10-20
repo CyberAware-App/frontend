@@ -11,7 +11,7 @@ import { Main } from "@/app/-components";
 import { InputOTP } from "@/components/ui";
 import { Button } from "@/components/ui/button";
 import { apiSchema, callBackendApiForQuery } from "@/lib/api/callBackendApi";
-import { authTokenObject } from "@/lib/api/callBackendApi/plugins/utils";
+import { authTokenStore } from "@/lib/api/callBackendApi/plugins/utils";
 import { usePageBlocker } from "@/lib/hooks";
 import { resendOtp } from "./utils";
 
@@ -50,7 +50,7 @@ function VerifyAccountPage() {
 			},
 
 			onSuccess: (ctx) => {
-				authTokenObject.setTokens({
+				authTokenStore.setTokens({
 					access: ctx.data.data.access,
 					refresh: ctx.data.data.refresh,
 				});

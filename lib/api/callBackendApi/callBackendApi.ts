@@ -24,8 +24,10 @@ const BASE_API_URL = `${BACKEND_HOST}/api`;
 const sharedBaseConfig = defineBaseConfig((instanceCtx) => ({
 	baseURL: BASE_API_URL,
 
-	dedupeCacheScope: "global",
-	dedupeCacheScopeKey: instanceCtx.options.baseURL,
+	dedupe: {
+		cacheScope: "global",
+		cacheScopeKey: instanceCtx.options.baseURL,
+	},
 
 	plugins: [authPlugin(), toastPlugin()],
 	schema: apiSchema,

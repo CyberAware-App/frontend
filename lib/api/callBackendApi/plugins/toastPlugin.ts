@@ -28,52 +28,56 @@ export type ToastPluginMeta = {
 };
 
 export const toastPlugin = definePlugin((toastOptions?: ToastPluginMeta["toast"]) => ({
-	hooks: {
-		onError: (ctx: ErrorContext<BaseApiErrorResponse>) => {
-			if (!isBrowser()) return;
-
-			const toastMeta = toastOptions ?? ctx.options.meta?.toast;
-
-			/* eslint-disable ts-eslint/prefer-nullish-coalescing */
-			const shouldSkipErrorToast =
-				(isBoolean(toastMeta?.error) && !toastMeta.error)
-				|| (isBoolean(toastMeta?.errorAndSuccess) && !toastMeta.errorAndSuccess)
-				|| toastMeta?.endpointsToSkip?.error?.includes(ctx.options.initURLNormalized)
-				|| toastMeta?.endpointsToSkip?.errorAndSuccess?.includes(ctx.options.initURLNormalized)
-				|| toastMeta?.errorsToSkip?.includes(ctx.error.name)
-				|| toastMeta?.errorsToSkipCondition?.(ctx.error);
-			/* eslint-enable ts-eslint/prefer-nullish-coalescing */
-
-			if (shouldSkipErrorToast) return;
-
-			if (isHTTPError(ctx.error) && ctx.error.errorData.errors) {
-				Object.values(ctx.error.errorData.errors).forEach((message) => toast.error(message));
-
-				return;
-			}
-
-			toast.error(ctx.error.message);
-		},
-
-		onSuccess: (ctx: SuccessContext<BaseApiSuccessResponse>) => {
-			if (!isBrowser()) return;
-
-			const toastMeta = toastOptions ?? ctx.options.meta?.toast;
-
-			/* eslint-disable ts-eslint/prefer-nullish-coalescing */
-			const shouldSkipSuccessToast =
-				(isBoolean(toastMeta?.success) && !toastMeta.success)
-				|| (isBoolean(toastMeta?.errorAndSuccess) && !toastMeta.errorAndSuccess)
-				|| toastMeta?.endpointsToSkip?.success?.includes(ctx.options.initURLNormalized)
-				|| toastMeta?.endpointsToSkip?.errorAndSuccess?.includes(ctx.options.initURLNormalized);
-			/* eslint-enable ts-eslint/prefer-nullish-coalescing */
-
-			if (shouldSkipSuccessToast) return;
-
-			toast.success(ctx.data.message);
-		},
-	},
 	id: "toast-plugin",
-
 	name: "toastPlugin",
+
+	// eslint-disable-next-line perfectionist/sort-objects
+	hooks: (setupCtx) => {
+		const toastMeta =
+			toastOptions ?
+				{ ...toastOptions, ...setupCtx.options.meta?.toast }
+			:	setupCtx.options.meta?.toast;
+
+		return {
+			onError: (ctx: ErrorContext<BaseApiErrorResponse>) => {
+				if (!isBrowser()) return;
+
+				/* eslint-disable ts-eslint/prefer-nullish-coalescing */
+				const shouldSkipErrorToast =
+					(isBoolean(toastMeta?.error) && !toastMeta.error)
+					|| (isBoolean(toastMeta?.errorAndSuccess) && !toastMeta.errorAndSuccess)
+					|| toastMeta?.endpointsToSkip?.error?.includes(ctx.options.initURLNormalized)
+					|| toastMeta?.endpointsToSkip?.errorAndSuccess?.includes(ctx.options.initURLNormalized)
+					|| toastMeta?.errorsToSkip?.includes(ctx.error.name)
+					|| toastMeta?.errorsToSkipCondition?.(ctx.error);
+				/* eslint-enable ts-eslint/prefer-nullish-coalescing */
+
+				if (shouldSkipErrorToast) return;
+
+				if (isHTTPError(ctx.error) && ctx.error.errorData.errors) {
+					Object.values(ctx.error.errorData.errors).forEach((message) => toast.error(message));
+
+					return;
+				}
+
+				toast.error(ctx.error.message);
+			},
+
+			onSuccess: (ctx: SuccessContext<BaseApiSuccessResponse>) => {
+				if (!isBrowser()) return;
+
+				/* eslint-disable ts-eslint/prefer-nullish-coalescing */
+				const shouldSkipSuccessToast =
+					(isBoolean(toastMeta?.success) && !toastMeta.success)
+					|| (isBoolean(toastMeta?.errorAndSuccess) && !toastMeta.errorAndSuccess)
+					|| toastMeta?.endpointsToSkip?.success?.includes(ctx.options.initURLNormalized)
+					|| toastMeta?.endpointsToSkip?.errorAndSuccess?.includes(ctx.options.initURLNormalized);
+				/* eslint-enable ts-eslint/prefer-nullish-coalescing */
+
+				if (shouldSkipSuccessToast) return;
+
+				toast.success(ctx.data.message);
+			},
+		};
+	},
 }));

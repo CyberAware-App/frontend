@@ -3,7 +3,7 @@ import { isHTTPError } from "@zayne-labs/callapi/utils";
 import type { Awaitable, CallbackFn } from "@zayne-labs/toolkit-type-helpers";
 import type { BaseApiErrorResponse } from "../apiSchema";
 import {
-	authTokenObject,
+	authTokenStore,
 	isAuthTokenRelatedError,
 	isPathnameMatchingRoute,
 	type PossibleAuthToken,
@@ -27,79 +27,75 @@ const defaultSignInRoute = "/auth/signin" satisfies Required<AuthPluginMeta>["au
 const defaultRedirectionMessage = "Session is missing! Redirecting to login...";
 
 export const authPlugin = definePlugin((authOptions?: AuthPluginMeta["auth"]) => ({
-	hooks: {
-		onRequest: (ctx) => {
-			const authMeta = authOptions ?? ctx.options.meta?.auth;
-
-			const isExemptedRoute = Boolean(
-				authMeta?.routesToExemptFromHeaderAddition?.some((route) => isPathnameMatchingRoute(route))
-			);
-
-			const shouldSkipAuthHeaderAddition = isExemptedRoute || authMeta?.skipHeaderAddition;
-
-			if (shouldSkipAuthHeaderAddition) return;
-
-			const shouldSkipRouteFromRedirect = authMeta?.routesToExemptFromRedirectOnAuthError?.some(
-				(route) => isPathnameMatchingRoute(route)
-			);
-
-			const redirectFn = authMeta?.redirectFn ?? redirectTo;
-			const signInRoute = authMeta?.signInRoute ?? defaultSignInRoute;
-
-			if (authTokenObject.getRefreshToken() === null) {
-				!shouldSkipRouteFromRedirect && void redirectFn(signInRoute);
-
-				// == Turn off error toast if redirect is skipped
-				shouldSkipRouteFromRedirect
-					&& ctx.options.meta?.toast
-					&& (ctx.options.meta.toast.error = false);
-
-				throw new Error(defaultRedirectionMessage);
-			}
-
-			const selectedAuthToken = authTokenObject[authMeta?.tokenToAdd ?? "getAccessToken"]();
-
-			ctx.options.auth = selectedAuthToken;
-		},
-
-		onResponseError: async (ctx: ResponseErrorContext<BaseApiErrorResponse>) => {
-			const authMeta = authOptions ?? ctx.options.meta?.auth;
-
-			// NOTE: Only call refreshUserSession on auth token related errors, and remake the request
-			const shouldRefreshToken = ctx.response.status === 401 && isAuthTokenRelatedError(ctx.error);
-
-			if (!shouldRefreshToken) return;
-
-			const refreshToken = authTokenObject.getRefreshToken();
-
-			const shouldExemptRouteFromRedirect = authMeta?.routesToExemptFromRedirectOnAuthError?.some(
-				(route) => isPathnameMatchingRoute(route)
-			);
-
-			const redirectFn = authMeta?.redirectFn ?? redirectTo;
-			const signInRoute = authMeta?.signInRoute ?? defaultSignInRoute;
-
-			if (refreshToken === null) {
-				!shouldExemptRouteFromRedirect && void redirectFn(signInRoute);
-
-				throw new Error(defaultRedirectionMessage);
-			}
-
-			const result = await getNewUserSession(refreshToken);
-
-			if (isHTTPError(result.error)) {
-				!shouldExemptRouteFromRedirect && void redirectFn(signInRoute);
-
-				throw new Error("Session invalid or expired! Redirecting to login...");
-			}
-
-			result.data?.data && authTokenObject.setAccessToken({ access: result.data.data.access });
-
-			// NOTE: This will not work for requests made via react query, which in that case retries are up to react query
-			ctx.options.retryAttempts = 1;
-		},
-	},
 	id: "auth-plugin",
-
 	name: "authPlugin",
+
+	// eslint-disable-next-line perfectionist/sort-objects
+	hooks: (setupCtx) => {
+		const authMeta =
+			authOptions ? { ...authOptions, ...setupCtx.options.meta?.auth } : setupCtx.options.meta?.auth;
+
+		const redirectFn = authMeta?.redirectFn ?? redirectTo;
+		const signInRoute = authMeta?.signInRoute ?? defaultSignInRoute;
+
+		const isExemptedRoute = Boolean(
+			authMeta?.routesToExemptFromHeaderAddition?.some((route) => isPathnameMatchingRoute(route))
+		);
+
+		const shouldSkipAuthHeaderAddition = isExemptedRoute || authMeta?.skipHeaderAddition;
+
+		const shouldSkipRouteFromRedirect = authMeta?.routesToExemptFromRedirectOnAuthError?.some((route) =>
+			isPathnameMatchingRoute(route)
+		);
+
+		return {
+			onRequest: (ctx) => {
+				if (shouldSkipAuthHeaderAddition) return;
+
+				if (authTokenStore.getRefreshToken() === null) {
+					!shouldSkipRouteFromRedirect && void redirectFn(signInRoute);
+
+					// == Turn off error toast if redirect is skipped
+					shouldSkipRouteFromRedirect
+						&& ctx.options.meta?.toast
+						&& (ctx.options.meta.toast.error = false);
+
+					throw new Error(defaultRedirectionMessage);
+				}
+
+				const selectedAuthToken = authTokenStore[authMeta?.tokenToAdd ?? "getAccessToken"]();
+
+				ctx.options.auth = selectedAuthToken;
+			},
+
+			onResponseError: async (ctx: ResponseErrorContext<BaseApiErrorResponse>) => {
+				if (shouldSkipAuthHeaderAddition) return;
+
+				// NOTE: Only call refreshUserSession on auth token related errors, and remake the request
+				const shouldRefreshToken = ctx.response.status === 401 && isAuthTokenRelatedError(ctx.error);
+
+				if (!shouldRefreshToken) return;
+
+				const refreshToken = authTokenStore.getRefreshToken();
+
+				if (refreshToken === null) {
+					!shouldSkipRouteFromRedirect && void redirectFn(signInRoute);
+
+					throw new Error(defaultRedirectionMessage);
+				}
+
+				const result = await getNewUserSession(refreshToken);
+
+				if (isHTTPError(result.error)) {
+					!shouldSkipRouteFromRedirect && void redirectFn(signInRoute);
+
+					throw new Error("Session invalid or expired! Redirecting to login...");
+				}
+
+				result.data?.data && authTokenStore.setAccessToken({ access: result.data.data.access });
+
+				ctx.options.retryAttempts = 1;
+			},
+		};
+	},
 }));
