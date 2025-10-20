@@ -13,11 +13,11 @@ import { getNewUserSession } from "./utils/session";
 
 export type AuthPluginMeta = {
 	auth?: {
-		routesToExemptFromHeaderAddition?: Array<AppRoutes | `${string}/**`>;
-		routesToExemptFromRedirectOnAuthError?: Array<AppRoutes | `${string}/**`>;
-		skipHeaderAddition?: boolean;
 		redirectFn?: CallbackFn<AppRoutes, Awaitable<void>>;
+		routesToExemptFromHeaderAddition?: Array<`${string}/**` | AppRoutes>;
+		routesToExemptFromRedirectOnAuthError?: Array<`${string}/**` | AppRoutes>;
 		signInRoute?: AppRoutes;
+		skipHeaderAddition?: boolean;
 		tokenToAdd?: PossibleAuthToken;
 	};
 };
@@ -27,9 +27,6 @@ const defaultSignInRoute = "/auth/signin" satisfies Required<AuthPluginMeta>["au
 const defaultRedirectionMessage = "Session is missing! Redirecting to login...";
 
 export const authPlugin = definePlugin((authOptions?: AuthPluginMeta["auth"]) => ({
-	id: "auth-plugin",
-	name: "authPlugin",
-
 	hooks: {
 		onRequest: (ctx) => {
 			const authMeta = authOptions ?? ctx.options.meta?.auth;
@@ -102,4 +99,7 @@ export const authPlugin = definePlugin((authOptions?: AuthPluginMeta["auth"]) =>
 			ctx.options.retryAttempts = 1;
 		},
 	},
+	id: "auth-plugin",
+
+	name: "authPlugin",
 }));

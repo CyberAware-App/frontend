@@ -24,12 +24,12 @@ const SIDEBAR_KEYBOARD_SHORTCUT = "b";
 type SidebarContextType = {
 	isMobile: boolean;
 	open: boolean;
-	sidebarWidth?: string;
-	sidebarWidthIcon?: string;
-	sidebarWidthMobile?: string;
 	openMobile: boolean;
 	setOpen: (open: boolean) => void;
 	setOpenMobile: (open: boolean) => void;
+	sidebarWidth?: string;
+	sidebarWidthIcon?: string;
+	sidebarWidthMobile?: string;
 	state: "collapsed" | "expanded";
 	toggleSidebar: () => void;
 };
@@ -50,23 +50,23 @@ export function useSidebarContext() {
 export function SidebarContextProvider(
 	props: InferProps<"div">
 		& Pick<SidebarContextType, "sidebarWidth" | "sidebarWidthIcon" | "sidebarWidthMobile"> & {
-			withMobileBreakpoint?: boolean;
 			defaultOpen?: boolean;
 			onOpenChange?: (open: boolean) => void;
 			open?: boolean;
+			withMobileBreakpoint?: boolean;
 		}
 ) {
 	const {
 		children,
 		className,
-		sidebarWidth = SIDEBAR_WIDTH,
-		sidebarWidthIcon = SIDEBAR_WIDTH_ICON,
-		sidebarWidthMobile = SIDEBAR_WIDTH_MOBILE,
-		withMobileBreakpoint = true,
 		defaultOpen = true,
 		onOpenChange: setOpenProp,
 		open: openProp,
+		sidebarWidth = SIDEBAR_WIDTH,
+		sidebarWidthIcon = SIDEBAR_WIDTH_ICON,
+		sidebarWidthMobile = SIDEBAR_WIDTH_MOBILE,
 		style,
+		withMobileBreakpoint = true,
 		...restOfProps
 	} = props;
 
@@ -177,14 +177,14 @@ export function SidebarContextProvider(
 
 function SidebarRoot(
 	props: InferProps<"div"> & {
-		collapsible?: "icon" | "none" | "offcanvas";
-		side?: "left" | "right";
-		variant?: "floating" | "inset" | "sidebar" | "sidebar-unfixed";
 		classNames?: {
-			root?: string;
 			container?: string;
 			inner?: string;
+			root?: string;
 		};
+		collapsible?: "icon" | "none" | "offcanvas";
+		side?: "left" | "right";
+		variant?: "floating" | "inset" | "sidebar-unfixed" | "sidebar";
 	}
 ) {
 	const {
@@ -320,7 +320,7 @@ function SidebarRoot(
 }
 
 function SidebarTrigger(props: InferProps<"button">) {
-	const { className, onClick, children, ...restOfProps } = props;
+	const { children, className, onClick, ...restOfProps } = props;
 	const { toggleSidebar } = useSidebarContext();
 
 	return (

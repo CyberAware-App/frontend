@@ -1,8 +1,8 @@
 import type { UseFormReturn } from "react-hook-form";
 import { z } from "zod";
+import { DialogAnimated, RadioGroupAnimated } from "@/components/animated/ui";
 import { For } from "@/components/common/for";
 import { IconBox } from "@/components/common/IconBox";
-import { DialogAnimated, RadioGroupAnimated } from "@/components/ui";
 import { Button } from "@/components/ui/button";
 import { Form } from "@/components/ui/form";
 import type { SelectedModule, SelectedQuizQuestions } from "@/lib/react-query/queryOptions";
@@ -10,14 +10,14 @@ import type { ExamFormSchema } from "../../../exam/ExamForm";
 import { FootNote } from "../../FootNote";
 
 type QuizFormProps = {
-	onSubmit: ReturnType<UseFormReturn["handleSubmit"]>;
 	form: UseFormReturn<z.infer<typeof ExamFormSchema>>;
+	onSubmit: ReturnType<UseFormReturn["handleSubmit"]>;
 	selectedModule: SelectedModule | undefined;
 	selectedQuizQuestions: SelectedQuizQuestions;
 };
 
 function QuizForm(props: QuizFormProps) {
-	const { form, selectedModule, onSubmit, selectedQuizQuestions } = props;
+	const { form, onSubmit, selectedModule, selectedQuizQuestions } = props;
 
 	return (
 		<>
@@ -117,7 +117,7 @@ function QuizForm(props: QuizFormProps) {
 				</article>
 
 				<DialogAnimated.Content
-					withCloseBtn={false}
+					withCloseButton={false}
 					classNames={{
 						base: `top-[70%] max-w-[367px] translate-y-[-70%] gap-[60px] rounded-none border-none
 						px-5.5 pt-8 pb-[170px]`,

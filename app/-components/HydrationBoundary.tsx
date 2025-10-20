@@ -9,8 +9,8 @@ import { getQueryClient } from "@/lib/react-query/queryClient";
 
 type HydrationBoundaryProps = {
 	children: React.ReactNode;
-	queryClient?: QueryClient;
 	onPrefetch?: (queryClient: QueryClient) => Awaitable<void>;
+	queryClient?: QueryClient;
 };
 
 function HydrationBoundary(props: HydrationBoundaryProps) {

@@ -1,12 +1,8 @@
 import { useEffect, useState } from "react";
 
-const useIsMobile = ({
-	mobileBreakpoint = 768,
-	enable = true,
-}: {
-	mobileBreakpoint?: number;
-	enable?: boolean;
-} = {}) => {
+const useIsMobile = (options: { enable?: boolean; mobileBreakpoint?: number }) => {
+	const { enable = true, mobileBreakpoint = 768 } = options;
+
 	const [isMobile, setIsMobile] = useState<boolean | undefined>();
 
 	useEffect(() => {
@@ -22,6 +18,7 @@ const useIsMobile = ({
 
 		mql.addEventListener("change", onChange, { signal: abortController.signal });
 
+		// eslint-disable-next-line react-hooks/set-state-in-effect
 		setIsMobile(window.innerWidth < mobileBreakpoint);
 
 		return () => abortController.abort();

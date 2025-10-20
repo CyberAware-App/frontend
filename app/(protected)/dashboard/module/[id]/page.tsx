@@ -79,8 +79,8 @@ function ModulePage({ params }: PageProps<"/dashboard/module/[id]">) {
 								setIsModuleMarkedAsCompleted(true);
 
 								void callBackendApi("@post/module/:id/complete", {
-									params: { id: moduleId },
 									onSuccess: () => queryClient.refetchQueries(dashboardQuery()),
+									params: { id: moduleId },
 								});
 							}}
 						/>

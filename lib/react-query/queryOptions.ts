@@ -10,15 +10,15 @@ export const sessionQuery = () => {
 		queryFn: () => checkUserSessionForQuery(),
 		queryKey: ["session"],
 		retry: false,
-		staleTime: Infinity,
 		select: (data) => ({
 			...data.data,
 			avatar: getUserAvatar(data.data.first_name, data.data.last_name),
 		}),
+		staleTime: Infinity,
 	});
 };
 
-type ModuleStatus = "complete" | "ongoing" | "locked";
+type ModuleStatus = "complete" | "locked" | "ongoing";
 
 const computeModuleStatus = (moduleId: number, completedModules: number | undefined = 0): ModuleStatus => {
 	if (moduleId === completedModules + 1) {
@@ -40,6 +40,7 @@ export const dashboardQuery = () => {
 				meta: { toast: { success: false } },
 			});
 		},
+		queryKey: ["dashboard"],
 		select: (data) => ({
 			...data.data,
 			completed_modules_count:
@@ -48,11 +49,10 @@ export const dashboardQuery = () => {
 				:	data.data.completed_modules + 1,
 			modules: data.data.modules.map((module) => ({
 				...module,
-				title: `Module ${module.id}`,
 				status: computeModuleStatus(module.id, data.data.completed_modules),
+				title: `Module ${module.id}`,
 			})),
 		}),
-		queryKey: ["dashboard"],
 		staleTime: Infinity,
 	});
 };
@@ -62,11 +62,11 @@ export type SelectedModule = Awaited<
 >["modules"][number];
 
 export const moduleQuizQuery = (options?: {
+	isUnaccessible: boolean | undefined;
 	moduleId: string;
 	router: AppRouterInstance;
-	isUnaccessible: boolean | undefined;
 }) => {
-	const { moduleId = "", router, isUnaccessible } = options ?? {};
+	const { isUnaccessible, moduleId = "", router } = options ?? {};
 
 	return queryOptions({
 		queryFn: () => {
@@ -78,12 +78,12 @@ export const moduleQuizQuery = (options?: {
 			}
 
 			return callBackendApiForQuery("@get/module/:id/quiz", {
-				params: { id: moduleId },
 				meta: { toast: { success: false } },
+				params: { id: moduleId },
 			});
 		},
-		select: (data) => data.data,
 		queryKey: ["module-quiz", moduleId, { isUnaccessible }],
+		select: (data) => data.data,
 		staleTime: Infinity,
 	});
 };
@@ -93,11 +93,11 @@ export type SelectedQuizQuestions = Awaited<
 >;
 
 export const examQuery = (options?: {
-	router: AppRouterInstance;
 	isCertified: boolean | undefined;
 	isUnaccessible: boolean | undefined;
+	router: AppRouterInstance;
 }) => {
-	const { router, isCertified, isUnaccessible } = options ?? {};
+	const { isCertified, isUnaccessible, router } = options ?? {};
 
 	return queryOptions({
 		queryFn: () => {
@@ -125,8 +125,8 @@ export const examQuery = (options?: {
 				},
 			});
 		},
-		select: (data) => data.data,
 		queryKey: ["exam", { isCertified, isUnaccessible }],
+		select: (data) => data.data,
 		staleTime: Infinity,
 	});
 };
@@ -140,8 +140,8 @@ export const certificateQuery = () => {
 				meta: { toast: { errorAndSuccess: false } },
 			});
 		},
-		select: (data) => data.data,
 		queryKey: ["certificate"],
+		select: (data) => data.data,
 		staleTime: Infinity,
 	});
 };

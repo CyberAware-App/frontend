@@ -22,8 +22,8 @@ function DialogRoot(props: InferProps<typeof DialogPrimitive.Root>) {
 
 	const [isOpen, setIsOpen] = useControllableState({
 		defaultValue: defaultOpen,
-		value: open,
 		onChange: onOpenChange,
+		value: open,
 	});
 
 	const onClose = useCallbackRef(() => setIsOpen(false));

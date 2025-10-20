@@ -4,11 +4,11 @@ import { useRouter } from "@bprogress/next";
 import { useQuery } from "@tanstack/react-query";
 import { Credits, Main } from "@/app/-components";
 import { UserAvatar } from "@/app/-components/UserAvatar";
+import { ProgressAnimated } from "@/components/animated/ui";
 import { IconBox } from "@/components/common/IconBox";
 import { NavLink } from "@/components/common/NavLink";
 import { LockIcon } from "@/components/icons/LockIcon";
 import { Button } from "@/components/ui/button";
-import { Progress } from "@/components/ui/progress-animated";
 import { certificateQuery, dashboardQuery, sessionQuery } from "@/lib/react-query/queryOptions";
 import { useDownloadCertificate } from "@/lib/react-query/useDownloadCertificate";
 import { cnJoin, cnMerge } from "@/lib/utils/cn";
@@ -135,8 +135,9 @@ function DashboardPage() {
 
 						<UserAvatar />
 					</article>
+
 					<article className="flex flex-col gap-3">
-						<Progress
+						<ProgressAnimated.Root
 							value={dashboardQueryResult.data.percentage_completed}
 							classNames={{
 								base: "h-3 rounded-[20px] bg-[hsl(0,0%,85%)]",

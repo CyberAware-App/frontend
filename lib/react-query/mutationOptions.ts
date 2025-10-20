@@ -17,20 +17,20 @@ const forceDownload = (data: Blob, id: string) => {
 };
 
 export const downloadCertificateQuery = (
-	options: { id: string | undefined; enabled: boolean } & Pick<CallApiExtraOptions, "onResponse">
+	options: Pick<CallApiExtraOptions, "onResponse"> & { enabled: boolean; id: string | undefined; }
 ) => {
-	const { id = "", enabled, onResponse } = options;
+	const { enabled, id = "", onResponse } = options;
 
 	return queryOptions({
 		queryFn:
 			enabled ?
 				() => {
 					return callBackendApiForQuery("@get/certificate/:id/download", {
-						params: { id },
 						meta: { toast: { success: false } },
-						responseType: "blob",
 						onResponse,
 						onSuccess: (ctx) => forceDownload(ctx.data, id),
+						params: { id },
+						responseType: "blob",
 					});
 				}
 			:	skipToken,

@@ -26,15 +26,15 @@ function QuizPage({ params }: PageProps<"/dashboard/module/[id]/quiz">) {
 		(module) => String(module.id) === moduleId
 	);
 
-	const isQuizUnaccessible = Boolean(selectedModule && selectedModule.status === "locked");
+	const isQuizUnaccessible = selectedModule?.status === "locked";
 
 	const router = useRouter();
 
 	const moduleQuizQueryResult = useQuery(
 		moduleQuizQuery({
+			isUnaccessible: isQuizUnaccessible,
 			moduleId,
 			router,
-			isUnaccessible: isQuizUnaccessible,
 		})
 	);
 
@@ -65,11 +65,11 @@ function QuizPage({ params }: PageProps<"/dashboard/module/[id]/quiz">) {
 			const isCorrect = answer.selected_option === selectedQuiz.correct_answer;
 
 			return {
-				question: selectedQuiz.question,
-				options: selectedQuiz.options,
-				userAnswer: answer.selected_option,
 				correctAnswer: selectedQuiz.correct_answer,
 				isCorrect,
+				options: selectedQuiz.options,
+				question: selectedQuiz.question,
+				userAnswer: answer.selected_option,
 			} satisfies QuizResultPayload["details"][number];
 		});
 
@@ -79,7 +79,7 @@ function QuizPage({ params }: PageProps<"/dashboard/module/[id]/quiz">) {
 
 		const isPassed = percentage >= 80;
 
-		setResult({ score, total: selectedQuizQuestions.length, percentage, isPassed, details });
+		setResult({ details, isPassed, percentage, score, total: selectedQuizQuestions.length });
 	});
 
 	const onRetake = () => {

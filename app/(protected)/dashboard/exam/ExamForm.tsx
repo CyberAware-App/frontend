@@ -1,9 +1,9 @@
 import { Timer } from "@ark-ui/react";
 import type { UseFormReturn } from "react-hook-form";
 import { z } from "zod";
+import { DialogAnimated, RadioGroupAnimated } from "@/components/animated/ui";
 import { For } from "@/components/common/for";
 import { IconBox } from "@/components/common/IconBox";
-import { DialogAnimated, RadioGroupAnimated } from "@/components/ui";
 import { Button } from "@/components/ui/button";
 import { Form } from "@/components/ui/form";
 import { apiSchema } from "@/lib/api/callBackendApi";
@@ -16,16 +16,16 @@ const ExamSchemaRecord = z.record(z.string(), QuizBodySchema.unwrap()) as unknow
 export const ExamFormSchema = ExamSchemaRecord.transform((data) => Object.values(data));
 
 type ExamFormProps = {
-	onSubmit: ReturnType<UseFormReturn["handleSubmit"]>;
 	examDuration: number;
-	onTimeUp: () => void;
 	form: UseFormReturn<z.infer<typeof ExamFormSchema>>;
 	isSubmitting: boolean;
+	onSubmit: ReturnType<UseFormReturn["handleSubmit"]>;
+	onTimeUp: () => void;
 	selectedExamQuestions: SelectedExamDetails["exam_data"];
 };
 
 function ExamForm(props: ExamFormProps) {
-	const { form, onSubmit, examDuration, onTimeUp, isSubmitting, selectedExamQuestions } = props;
+	const { examDuration, form, isSubmitting, onSubmit, onTimeUp, selectedExamQuestions } = props;
 
 	return (
 		<Timer.Root
@@ -137,7 +137,7 @@ function ExamForm(props: ExamFormProps) {
 					</article>
 
 					<DialogAnimated.Content
-						withCloseBtn={false}
+						withCloseButton={false}
 						classNames={{
 							base: `top-[70%] max-w-[367px] translate-y-[-70%] gap-[60px] rounded-none border-none
 							px-5.5 pt-8 pb-[170px]`,

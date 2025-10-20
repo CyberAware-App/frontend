@@ -1,5 +1,3 @@
-"use client";
-
 import { Avatar as AvatarPrimitive } from "radix-ui";
 import { cnMerge } from "@/lib/utils/cn";
 
@@ -16,6 +14,7 @@ function AvatarRoot(props: React.ComponentProps<typeof AvatarPrimitive.Root>) {
 
 function AvatarImage(props: React.ComponentProps<typeof AvatarPrimitive.Image>) {
 	const { className, ...restOfProps } = props;
+
 	return (
 		<AvatarPrimitive.Image
 			data-slot="avatar-image"

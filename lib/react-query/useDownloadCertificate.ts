@@ -5,7 +5,7 @@ import { downloadCertificateQuery } from "./mutationOptions";
 const useDownloadCertificate = (id: string | undefined) => {
 	const [shouldStartFetch, toggleShouldStartFetch] = useToggle(false);
 
-	const downloadCertificateQueryObject = downloadCertificateQuery({ id, enabled: shouldStartFetch });
+	const downloadCertificateQueryObject = downloadCertificateQuery({ enabled: shouldStartFetch, id });
 
 	const downloadCertificateQueryResult = useQuery(downloadCertificateQueryObject);
 
@@ -21,8 +21,8 @@ const useDownloadCertificate = (id: string | undefined) => {
 	};
 
 	return {
-		invalidateCertificateQuery,
 		downloadCertificate,
+		invalidateCertificateQuery,
 		isFetching: downloadCertificateQueryResult.isFetching,
 	};
 };

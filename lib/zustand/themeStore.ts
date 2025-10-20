@@ -21,12 +21,6 @@ const getPrefersDarkMode = () => {
 
 // Store Object Initialization
 const themeStoreObjectFn: StateCreator<ThemeStore> = (set, get) => ({
-	isDarkMode: getPrefersDarkMode(),
-
-	systemTheme: getPrefersDarkMode() ? "dark" : "light",
-
-	theme: "system",
-
 	actions: {
 		initThemeOnLoad: () => {
 			const { systemTheme, theme: persistedTheme } = get();
@@ -51,6 +45,12 @@ const themeStoreObjectFn: StateCreator<ThemeStore> = (set, get) => ({
 			actions.setTheme(newTheme);
 		},
 	},
+
+	isDarkMode: getPrefersDarkMode(),
+
+	systemTheme: getPrefersDarkMode() ? "dark" : "light",
+
+	theme: "system",
 });
 
 // Store hook Creation

@@ -28,9 +28,6 @@ export type ToastPluginMeta = {
 };
 
 export const toastPlugin = definePlugin((toastOptions?: ToastPluginMeta["toast"]) => ({
-	id: "toast-plugin",
-	name: "toastPlugin",
-
 	hooks: {
 		onError: (ctx: ErrorContext<BaseApiErrorResponse>) => {
 			if (!isBrowser()) return;
@@ -76,4 +73,7 @@ export const toastPlugin = definePlugin((toastOptions?: ToastPluginMeta["toast"]
 			toast.success(ctx.data.message);
 		},
 	},
+	id: "toast-plugin",
+
+	name: "toastPlugin",
 }));

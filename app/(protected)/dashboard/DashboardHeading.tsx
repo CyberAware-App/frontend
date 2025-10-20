@@ -4,18 +4,19 @@ import { useQuery } from "@tanstack/react-query";
 import Image from "next/image";
 import { usePathname } from "next/navigation";
 import { UserAvatar } from "@/app/-components/UserAvatar";
+import { ProgressAnimated } from "@/components/animated/ui";
 import { IconBox } from "@/components/common/IconBox";
 import { NavLink } from "@/components/common/NavLink";
-import { Progress } from "@/components/ui/progress-animated";
 import { dashboardQuery } from "@/lib/react-query/queryOptions";
 import { logoSmall } from "@/public/assets";
+
+const testPaths = ["/quiz", "/exam"];
 
 function DashboardHeading() {
 	const dashboardQueryResult = useQuery(dashboardQuery());
 
-	const testPaths = ["/quiz", "/exam"];
-
 	const pathName = usePathname();
+
 	const testPath = testPaths.find((path) => pathName.endsWith(path));
 
 	const isTestPage = Boolean(testPath);
@@ -48,7 +49,7 @@ function DashboardHeading() {
 					{dashboardQueryResult.data?.total_modules}
 				</p>
 
-				<Progress
+				<ProgressAnimated.Root
 					value={dashboardQueryResult.data?.percentage_completed}
 					classNames={{
 						base: "h-3 rounded-[20px] bg-[hsl(0,0%,85%)]",

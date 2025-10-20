@@ -50,24 +50,24 @@ const keyFeatures = [
 
 const stats = [
 	{
+		icon: "ri:book-open-line",
 		label: "Modules",
 		value: "10",
-		icon: "ri:book-open-line",
 	},
 	{
+		icon: "ri:time-line",
 		label: "Days to Complete",
 		value: "10",
-		icon: "ri:time-line",
 	},
 	{
+		icon: "ri:check-double-line",
 		label: "Passing Score",
 		value: "80%",
-		icon: "ri:check-double-line",
 	},
 	{
+		icon: "ri:medal-line",
 		label: "Certificate",
 		value: "Free",
-		icon: "ri:medal-line",
 	},
 ];
 

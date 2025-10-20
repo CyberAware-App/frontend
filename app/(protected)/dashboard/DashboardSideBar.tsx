@@ -1,20 +1,21 @@
 "use client";
 
+import { useRouter } from "@bprogress/next";
 import { useQuery, useQueryClient } from "@tanstack/react-query";
 import { useClickOutside } from "@zayne-labs/toolkit-react";
 import Image from "next/image";
 import { useState } from "react";
+import { CollapsibleAnimated } from "@/components/animated/ui";
 import { For } from "@/components/common/for";
 import { IconBox } from "@/components/common/IconBox";
 import { NavLink } from "@/components/common/NavLink";
 import { Switch } from "@/components/common/switch";
 import { HamburgerIcon } from "@/components/icons";
-import { CollapsibleAnimated, Sidebar } from "@/components/ui";
+import { Sidebar } from "@/components/ui";
 import { Button } from "@/components/ui/button";
 import { dashboardQuery } from "@/lib/react-query/queryOptions";
 import { logoSmall } from "@/public/assets";
 import { logout } from "./utils";
-import { useRouter } from "@bprogress/next";
 
 function DashboardSideBar() {
 	const dashboardQueryResult = useQuery(dashboardQuery());

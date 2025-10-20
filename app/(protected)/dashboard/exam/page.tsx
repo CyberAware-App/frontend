@@ -39,9 +39,9 @@ function ExamPage() {
 		Boolean(dashboardQueryResult.data) && dashboardQueryResult.data.completed_modules_count !== 10;
 
 	const examQueryInstance = examQuery({
-		router,
 		isCertified,
 		isUnaccessible: isExamUnaccessible,
+		router,
 	});
 
 	const examQueryResult = useQuery(examQueryInstance);
@@ -71,11 +71,6 @@ function ExamPage() {
 			body: data,
 			meta: { toast: { success: false } },
 
-			schemaConfig: defineSchemaConfig((ctx) => ({
-				...ctx.baseSchemaConfig,
-				disableRuntimeValidation: true,
-			})),
-
 			onError: () => {
 				toggleSubmittingOnTimeUp(false);
 			},
@@ -85,6 +80,11 @@ function ExamPage() {
 				setResult(ctx.data.data);
 				void queryClient.refetchQueries(certificateQuery());
 			},
+
+			schemaConfig: defineSchemaConfig((ctx) => ({
+				...ctx.baseSchemaConfig,
+				disableRuntimeValidation: true,
+			})),
 		});
 	};
 

@@ -9,29 +9,29 @@ import { cnJoin } from "@/lib/utils/cn";
 import { emojiFailed, emojiPassed } from "@/public/assets";
 
 export type QuizResultDetail = {
-	question: string | undefined;
-	options: SelectedQuizQuestions[number]["options"];
-	userAnswer: SelectedQuizQuestions[number]["correct_answer"];
 	correctAnswer: SelectedQuizQuestions[number]["correct_answer"];
 	isCorrect: boolean;
+	options: SelectedQuizQuestions[number]["options"];
+	question: string | undefined;
+	userAnswer: SelectedQuizQuestions[number]["correct_answer"];
 };
 
 export type QuizResultPayload = {
+	details: QuizResultDetail[];
+	isPassed: boolean;
+	percentage: number;
 	score: number;
 	total: number;
-	percentage: number;
-	isPassed: boolean;
-	details: QuizResultDetail[];
 };
 
 type QuizResultViewProps = {
-	result: QuizResultPayload;
 	nextModuleHref: string;
 	onRetake: () => void;
+	result: QuizResultPayload;
 };
 
 function QuizResultView(props: QuizResultViewProps) {
-	const { result, nextModuleHref, onRetake } = props;
+	const { nextModuleHref, onRetake, result } = props;
 
 	return (
 		<article className="flex flex-col gap-10">

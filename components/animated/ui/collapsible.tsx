@@ -1,5 +1,3 @@
-"use client";
-
 import { createCustomContext, useCallbackRef, useToggle } from "@zayne-labs/toolkit-react";
 import type { InferProps } from "@zayne-labs/toolkit-react/utils";
 import { isFunction } from "@zayne-labs/toolkit-type-helpers";
@@ -67,7 +65,7 @@ function CollapsibleTrigger(props: CollapsibleTriggerProps) {
 	return <CollapsiblePrimitive.Trigger data-slot="collapsible-trigger" {...props} />;
 }
 
-type CollapsibleContentProps = HTMLMotionProps<"div">
+type CollapsibleContentProps = HTMLMotionProps<"li">
 	& InferProps<typeof CollapsiblePrimitive.Content> & {
 		transition?: Transition;
 	};
@@ -81,7 +79,7 @@ function CollapsibleContent(props: CollapsibleContentProps) {
 		<AnimatePresence>
 			{isOpen && (
 				<CollapsiblePrimitive.Content asChild={true} forceMount={true} {...restOfProps}>
-					<motion.div
+					<motion.li
 						key="collapsible-content"
 						data-slot="collapsible-content"
 						layout={true}
@@ -93,7 +91,7 @@ function CollapsibleContent(props: CollapsibleContentProps) {
 						{...restOfProps}
 					>
 						{children}
-					</motion.div>
+					</motion.li>
 				</CollapsiblePrimitive.Content>
 			)}
 		</AnimatePresence>

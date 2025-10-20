@@ -23,24 +23,24 @@ const buttonVariants = tv({
 	},
 
 	variants: {
-		isLoading: {
-			true: "grid",
-		},
-
-		theme: {
-			"blue-light": "bg-cyberaware-aeces-blue-light text-white",
-			"blue-ghost": "border-2 border-cyberaware-aeces-blue bg-transparent text-cyberaware-aeces-blue",
-			orange: "bg-cyberaware-unizik-orange text-white",
-			white: "bg-white text-cyberaware-aeces-blue",
-			danger: "bg-cyberaware-danger-red text-white",
-		},
-
 		disabled: {
 			true: "cursor-not-allowed bg-cyberaware-neutral-gray-light",
 		},
 
 		isDisabled: {
 			true: "cursor-not-allowed opacity-60",
+		},
+
+		isLoading: {
+			true: "grid",
+		},
+
+		theme: {
+			"blue-ghost": "border-2 border-cyberaware-aeces-blue bg-transparent text-cyberaware-aeces-blue",
+			"blue-light": "bg-cyberaware-aeces-blue-light text-white",
+			danger: "bg-cyberaware-danger-red text-white",
+			orange: "bg-cyberaware-unizik-orange text-white",
+			white: "bg-white text-cyberaware-aeces-blue",
 		},
 	},
 });
@@ -67,11 +67,11 @@ function Button<TElement extends React.ElementType = "button">(
 	const BTN_CLASSES =
 		!unstyled ?
 			buttonVariants({
+				className,
 				disabled,
 				isDisabled,
 				isLoading,
 				theme,
-				className,
 			})
 		:	className;
 

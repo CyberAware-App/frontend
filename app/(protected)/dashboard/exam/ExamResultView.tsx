@@ -15,16 +15,16 @@ import { emojiFailed, emojiPassed, emojiTooBad } from "@/public/assets";
 
 export type ExamResultPayload = z.infer<(typeof apiSchema.routes)["@post/quiz"]["data"]>["data"];
 
-export type ResultStatus = "passed" | "pending" | "exhausted";
+export type ResultStatus = "exhausted" | "passed" | "pending";
 
 type ExamResultViewProps = {
 	maxAttempts: number;
-	result: ExamResultPayload;
 	onRetake: () => void;
+	result: ExamResultPayload;
 };
 
 function ExamResultView(props: ExamResultViewProps) {
-	const { maxAttempts, result, onRetake } = props;
+	const { maxAttempts, onRetake, result } = props;
 
 	const computedResultStatus = (): ResultStatus => {
 		if (result.attempt_number >= maxAttempts) {
@@ -44,13 +44,13 @@ function ExamResultView(props: ExamResultViewProps) {
 
 	const certificateId = certificateQueryResult.data?.certificate_id;
 
-	const { downloadCertificate, isFetching, invalidateCertificateQuery } =
+	const { downloadCertificate, invalidateCertificateQuery, isFetching } =
 		useDownloadCertificate(certificateId);
 
 	const emojiMap = {
+		exhausted: emojiTooBad,
 		passed: emojiPassed,
 		pending: emojiFailed,
-		exhausted: emojiTooBad,
 	} satisfies Record<typeof resultStatus, string>;
 
 	const attemptsLeft = maxAttempts - result.attempt_number;

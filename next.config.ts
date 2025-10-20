@@ -8,7 +8,19 @@ const nextConfig: NextConfig = {
 		position: "bottom-right",
 	},
 
-	typedRoutes: true,
+	eslint: {
+		ignoreDuringBuilds: true,
+	},
+
+	images: {
+		remotePatterns: [
+			{
+				hostname: "avatar.iran.liara.run",
+				pathname: "/**",
+				protocol: "https",
+			},
+		],
+	},
 
 	logging: {
 		fetches: {
@@ -20,19 +32,7 @@ const nextConfig: NextConfig = {
 		root: getRoot(),
 	},
 
-	eslint: {
-		ignoreDuringBuilds: true,
-	},
-
-	images: {
-		remotePatterns: [
-			{
-				protocol: "https",
-				hostname: "avatar.iran.liara.run",
-				pathname: "/**",
-			},
-		],
-	},
+	typedRoutes: true,
 
 	typescript: {
 		ignoreBuildErrors: true,
