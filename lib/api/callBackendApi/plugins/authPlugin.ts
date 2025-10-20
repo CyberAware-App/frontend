@@ -52,7 +52,9 @@ export const authPlugin = definePlugin((authOptions?: AuthPluginMeta["auth"]) =>
 			onRequest: (ctx) => {
 				if (shouldSkipAuthHeaderAddition) return;
 
-				if (authTokenStore.getRefreshToken() === null) {
+				const refreshToken = authTokenStore.getRefreshToken();
+
+				if (refreshToken === null) {
 					!shouldSkipRouteFromRedirect && void redirectFn(signInRoute);
 
 					// == Turn off error toast if redirect is skipped
