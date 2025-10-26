@@ -1,15 +1,15 @@
-import { fileURLToPath } from "node:url";
 import type { NextConfig } from "next";
+// import { fileURLToPath } from "node:url";
 
-const getRoot = (rootPath = "/") => fileURLToPath(new URL(rootPath, import.meta.url));
+// const getRoot = (rootPath = "/") => fileURLToPath(new URL(rootPath, import.meta.url));
 
 const nextConfig: NextConfig = {
 	devIndicators: {
 		position: "bottom-right",
 	},
 
-	eslint: {
-		ignoreDuringBuilds: true,
+	experimental: {
+		turbopackFileSystemCacheForDev: true,
 	},
 
 	images: {
@@ -26,10 +26,6 @@ const nextConfig: NextConfig = {
 		fetches: {
 			fullUrl: true,
 		},
-	},
-
-	turbopack: {
-		root: getRoot(),
 	},
 
 	typedRoutes: true,

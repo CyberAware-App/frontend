@@ -1,21 +1,21 @@
 "use client";
 
-import { useRouter } from "@bprogress/next";
-import { zodResolver } from "@hookform/resolvers/zod";
-import { useQuery, useQueryClient } from "@tanstack/react-query";
-import { defineSchemaConfig } from "@zayne-labs/callapi";
-import { useToggle } from "@zayne-labs/toolkit-react";
-import { useMemo, useState } from "react";
-import { useForm } from "react-hook-form";
-import { toast } from "sonner";
-import type { z } from "zod";
 import { Main } from "@/app/-components";
 import { Switch } from "@/components/common/switch";
 import { callBackendApiForQuery } from "@/lib/api/callBackendApi";
 import { certificateQuery, dashboardQuery, examQuery, sessionQuery } from "@/lib/react-query/queryOptions";
 import { shuffleArray } from "@/lib/utils/common";
-import { LoadingScreen } from "../../../-components/LoadingScreen";
+import { useRouter } from "@bprogress/next";
+import { zodResolver } from "@hookform/resolvers/zod";
+import { useQuery, useQueryClient } from "@tanstack/react-query";
+import { defineSchemaConfig } from "@zayne-labs/callapi/utils";
+import { useToggle } from "@zayne-labs/toolkit-react";
+import { useMemo, useState } from "react";
+import { useForm } from "react-hook-form";
+import { toast } from "sonner";
+import type { z } from "zod";
 import { withProtection } from "../../-components/withProtection";
+import { LoadingScreen } from "../../../-components/LoadingScreen";
 import { DashboardHeading } from "../DashboardHeading";
 import { ExamCertSuccess } from "./ExamCertSuccess";
 import { ExamForm, ExamFormSchema } from "./ExamForm";
@@ -81,10 +81,11 @@ function ExamPage() {
 				void queryClient.refetchQueries(certificateQuery());
 			},
 
-			schemaConfig: defineSchemaConfig((ctx) => ({
-				...ctx.baseSchemaConfig,
-				disableRuntimeValidation: true,
-			})),
+			schemaConfig: (ctx) =>
+				defineSchemaConfig({
+					...ctx.baseSchemaConfig,
+					disableRuntimeValidation: true,
+				}),
 		});
 	};
 

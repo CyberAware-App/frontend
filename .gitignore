@@ -15,7 +15,7 @@
 
 # next.js
 .next/*
-!.next/types/
+!.next/dev/types/
 /out/
 
 # production

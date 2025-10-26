@@ -218,7 +218,7 @@ Components in this project follow a consistent pattern:
 import { cnMerge } from "@/lib/utils/cn";
 
 // 2. Define component with TypeScript types
-function MyComponent(props: { title: string; className?: string }) {
+function MyComponent(props: { className?: string; title: string; }) {
   const { title, className } = props;
 
   // 3. Return JSX with Tailwind classes
@@ -334,7 +334,7 @@ The Button component is your go-to for all clickable actions. Here's how to use 
 **Navigation Button:**
 
 ```tsx
-<Button asChild>
+<Button asChild={true}>
   <NavLink href="/next-page">Continue</NavLink>
 </Button>
 ```
@@ -877,8 +877,8 @@ const withBaseErrorResponse = <TSchemaObject extends z.ZodType = typeof BaseErro
    import { cnMerge } from "@/lib/utils/cn";
 
    type MyComponentProps = {
-     title: string;
      className?: string;
+     title: string;
    };
 
    export function MyComponent({ title, className }: MyComponentProps) {
@@ -905,7 +905,7 @@ const withBaseErrorResponse = <TSchemaObject extends z.ZodType = typeof BaseErro
    import { useQuery } from "@tanstack/react-query";
    import { dashboardQuery } from "@/lib/react-query/queryOptions";
 
-   function Dashboard() {
+   export default function Dashboard() {
      const { data, isLoading, error } = useQuery(dashboardQuery());
 
      if (isLoading) return <div>Loading...</div>;
@@ -960,7 +960,7 @@ const withBaseErrorResponse = <TSchemaObject extends z.ZodType = typeof BaseErro
 1. **Use existing design tokens**:
 
    ```tsx
-   <div className="bg-cyberaware-unizik-orange text-white p-4">
+   <div className="bg-cyberaware-unizik-orange p-4 text-white">
      Orange button style
    </div>
    ```

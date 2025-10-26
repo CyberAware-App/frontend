@@ -2,7 +2,7 @@ import { allowedNextJsExportNames, zayne } from "@zayne-labs/eslint-config";
 
 export default zayne(
 	{
-		ignores: ["dist/**", "build/**", ".next/**", "postcss.config.js"],
+		ignores: ["dist/**", "build/**", ".next/**", "postcss.config.js", "./DEVELOPER-GUIDE.md"],
 		react: {
 			nextjs: true,
 			refresh: {
