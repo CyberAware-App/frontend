@@ -1,9 +1,9 @@
 "use client";
 
-import { useQuery } from "@tanstack/react-query";
 import { AvatarGroupAnimated } from "@/components/animated/ui";
 import { Avatar } from "@/components/ui";
 import { sessionQuery } from "@/lib/react-query/queryOptions";
+import { useQuery } from "@tanstack/react-query";
 
 function UserAvatar() {
 	const sessionQueryResult = useQuery(sessionQuery());
@@ -17,7 +17,7 @@ function UserAvatar() {
 					{sessionQueryResult.data?.avatar}
 				</Avatar.Fallback>
 
-				<AvatarGroupAnimated.Tooltip>
+				<AvatarGroupAnimated.Tooltip className="bg-cyberaware-aeces-blue">
 					{sessionQueryResult.data?.first_name} {sessionQueryResult.data?.last_name}
 				</AvatarGroupAnimated.Tooltip>
 			</Avatar.Root>

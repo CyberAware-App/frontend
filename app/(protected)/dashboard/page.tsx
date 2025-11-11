@@ -1,7 +1,5 @@
 "use client";
 
-import { useRouter } from "@bprogress/next";
-import { useQuery } from "@tanstack/react-query";
 import { Credits, Main } from "@/app/-components";
 import { UserAvatar } from "@/app/-components/UserAvatar";
 import { ProgressAnimated } from "@/components/animated/ui";
@@ -9,11 +7,13 @@ import { IconBox } from "@/components/common/IconBox";
 import { NavLink } from "@/components/common/NavLink";
 import { LockIcon } from "@/components/icons/LockIcon";
 import { Button } from "@/components/ui/button";
+import { downloadCertificateMutation } from "@/lib/react-query/mutationOptions";
 import { certificateQuery, dashboardQuery, sessionQuery } from "@/lib/react-query/queryOptions";
-import { useDownloadCertificate } from "@/lib/react-query/useDownloadCertificate";
 import { cnJoin, cnMerge } from "@/lib/utils/cn";
-import { LoadingScreen } from "../../-components/LoadingScreen";
+import { useRouter } from "@bprogress/next";
+import { useMutation, useQuery } from "@tanstack/react-query";
 import { withProtection } from "../-components/withProtection";
+import { LoadingScreen } from "../../-components/LoadingScreen";
 import { DashboardSideBar } from "./DashboardSideBar";
 
 function DashboardPage() {
@@ -23,7 +23,7 @@ function DashboardPage() {
 
 	const certificateId = certificateQueryResult.data?.certificate_id;
 
-	const { downloadCertificate, isFetching } = useDownloadCertificate(certificateId);
+	const downloadCertificateMutationResult = useMutation(downloadCertificateMutation());
 
 	const ongoingModule = dashboardQueryResult.data?.modules.find((module) => module.status === "ongoing");
 	const completedModulesCount = dashboardQueryResult.data?.completed_modules_count ?? 0;
@@ -96,10 +96,10 @@ function DashboardPage() {
 				<Button
 					theme="orange"
 					disabled={!sessionQueryResult.data?.is_certified}
-					isLoading={isFetching}
-					isDisabled={isFetching}
+					isLoading={downloadCertificateMutationResult.isPending}
+					isDisabled={downloadCertificateMutationResult.isPending}
 					className={cnMerge("max-w-[150px] self-end")}
-					onClick={() => downloadCertificate()}
+					onClick={() => downloadCertificateMutationResult.mutate({ id: certificateId })}
 				>
 					Download certificate
 				</Button>

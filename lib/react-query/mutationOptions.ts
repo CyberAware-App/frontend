@@ -1,5 +1,4 @@
-import { queryOptions, skipToken } from "@tanstack/react-query";
-import type { CallApiExtraOptions } from "@zayne-labs/callapi";
+import { mutationOptions } from "@tanstack/react-query";
 import { createFileURL } from "@zayne-labs/toolkit-core";
 import { callBackendApiForQuery } from "../api/callBackendApi";
 
@@ -16,25 +15,21 @@ const forceDownload = (data: Blob, id: string) => {
 	URL.revokeObjectURL(fileUrl);
 };
 
-export const downloadCertificateQuery = (
-	options: Pick<CallApiExtraOptions, "onResponse"> & { enabled: boolean; id: string | undefined; }
-) => {
-	const { enabled, id = "", onResponse } = options;
+export const downloadCertificateMutation = () => {
+	return mutationOptions({
+		mutationFn: async (options: { id: string | undefined }) => {
+			const { id = "" } = options;
 
-	return queryOptions({
-		queryFn:
-			enabled ?
-				() => {
-					return callBackendApiForQuery("@get/certificate/:id/download", {
-						meta: { toast: { success: false } },
-						onResponse,
-						onSuccess: (ctx) => forceDownload(ctx.data, id),
-						params: { id },
-						responseType: "blob",
-					});
-				}
-			:	skipToken,
-		queryKey: ["certificate", "download", id, onResponse],
-		staleTime: Infinity,
+			return callBackendApiForQuery("@get/certificate/:id/download", {
+				meta: { toast: { success: false } },
+				onSuccess: (ctx) => forceDownload(ctx.data, id),
+				params: { id },
+				responseType: "blob",
+			});
+		},
+
+		mutationKey: ["certificate", "download"],
 	});
 };
+
+// Old mutation imitation

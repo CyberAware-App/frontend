@@ -17,7 +17,6 @@ const [TooltipProviderLocal, useTooltipContext] = createCustomContext<TooltipCon
 });
 
 function TooltipProvider(props: React.ComponentProps<typeof TooltipPrimitive.Provider>) {
-	// eslint-disable-next-line react-x/no-context-provider
 	return <TooltipPrimitive.Provider data-slot="tooltip-provider" {...props} />;
 }
 

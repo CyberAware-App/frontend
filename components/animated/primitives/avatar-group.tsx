@@ -69,7 +69,6 @@ function AvatarGroupRoot(props: AvatarGroupProps) {
 	const childrenArray = toArray(children);
 
 	return (
-		// eslint-disable-next-line react-x/no-context-provider
 		<TooltipPrimitive.Provider
 			id={id}
 			openDelay={openDelay}

@@ -1,15 +1,15 @@
 export const shuffleArray = <TArray extends unknown[]>(array: TArray | undefined) => {
 	if (!array) return;
 
-	const shuffledArray = structuredClone(array);
+	const shuffledArray = [...array];
 
 	// == Using Fisher-Yates algorithm
-	for (let lastElementIndex = shuffledArray.length - 1; lastElementIndex > 0; lastElementIndex--) {
-		const randomIndex = Math.floor(Math.random() * (lastElementIndex + 1));
+	for (let lastIndex = shuffledArray.length - 1; lastIndex > 0; lastIndex--) {
+		const randomIndex = Math.floor(Math.random() * (lastIndex + 1));
 
-		[shuffledArray[lastElementIndex], shuffledArray[randomIndex]] = [
+		[shuffledArray[lastIndex], shuffledArray[randomIndex]] = [
 			shuffledArray[randomIndex],
-			shuffledArray[lastElementIndex],
+			shuffledArray[lastIndex],
 		];
 	}
 

@@ -1,17 +1,17 @@
 "use client";
 
-import { useQuery } from "@tanstack/react-query";
-import Image from "next/image";
-import type { z } from "zod";
 import { IconBox } from "@/components/common/IconBox";
 import { NavLink } from "@/components/common/NavLink";
 import { Switch } from "@/components/common/switch";
 import { Button } from "@/components/ui/button";
 import type { apiSchema } from "@/lib/api/callBackendApi";
+import { downloadCertificateMutation } from "@/lib/react-query/mutationOptions";
 import { certificateQuery } from "@/lib/react-query/queryOptions";
-import { useDownloadCertificate } from "@/lib/react-query/useDownloadCertificate";
 import { cnJoin } from "@/lib/utils/cn";
 import { emojiFailed, emojiPassed, emojiTooBad } from "@/public/assets";
+import { useMutation, useQuery } from "@tanstack/react-query";
+import Image from "next/image";
+import type { z } from "zod";
 
 export type ExamResultPayload = z.infer<(typeof apiSchema.routes)["@post/quiz"]["data"]>["data"];
 
@@ -44,8 +44,7 @@ function ExamResultView(props: ExamResultViewProps) {
 
 	const certificateId = certificateQueryResult.data?.certificate_id;
 
-	const { downloadCertificate, invalidateCertificateQuery, isFetching } =
-		useDownloadCertificate(certificateId);
+	const downloadCertificateMutationResult = useMutation(downloadCertificateMutation());
 
 	const emojiMap = {
 		exhausted: emojiTooBad,
@@ -82,9 +81,9 @@ function ExamResultView(props: ExamResultViewProps) {
 						<Button
 							theme="orange"
 							className="gap-2.5"
-							isLoading={isFetching}
-							isDisabled={isFetching}
-							onClick={() => downloadCertificate()}
+							isLoading={downloadCertificateMutationResult.isPending}
+							isDisabled={downloadCertificateMutationResult.isPending}
+							onClick={() => downloadCertificateMutationResult.mutate({ id: certificateId })}
 						>
 							Download certificate
 						</Button>
@@ -112,9 +111,7 @@ function ExamResultView(props: ExamResultViewProps) {
 				<Switch.Match when={resultStatus === "exhausted"}>
 					<div className="flex flex-col items-center gap-6">
 						<Button theme="danger" className="gap-2.5" asChild={true}>
-							<NavLink href="/dashboard" onClick={() => invalidateCertificateQuery()}>
-								Exit
-							</NavLink>
+							<NavLink href="/dashboard">Exit</NavLink>
 						</Button>
 
 						<div>

@@ -7,7 +7,6 @@ type TooltipProviderProps = React.ComponentProps<typeof TooltipPrimitive.Provide
 function TooltipProvider(props: TooltipProviderProps) {
 	const { openDelay = 0, ...restOfProps } = props;
 
-	// eslint-disable-next-line react-x/no-context-provider
 	return <TooltipPrimitive.Provider openDelay={openDelay} {...restOfProps} />;
 }
 

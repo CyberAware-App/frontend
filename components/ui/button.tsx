@@ -53,7 +53,7 @@ function Button<TElement extends React.ElementType = "button">(
 		asChild,
 		children,
 		className,
-		disabled,
+		disabled = false,
 		isDisabled = disabled,
 		isLoading = false,
 		theme,
@@ -92,7 +92,7 @@ function Button<TElement extends React.ElementType = "button">(
 		<Component
 			type={type}
 			className={BTN_CLASSES}
-			disabled={disabled ?? isDisabled}
+			disabled={disabled || isDisabled}
 			{...extraButtonProps}
 		>
 			{isLoading ? withIcon : children}

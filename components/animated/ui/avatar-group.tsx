@@ -1,6 +1,6 @@
-import * as motion from "motion/react-client";
 import * as AvatarGroupPrimitive from "@/components/animated/primitives/avatar-group";
 import { cnMerge } from "@/lib/utils/cn";
+import * as motion from "motion/react-client";
 
 function AvatarGroupRoot(props: React.ComponentProps<typeof AvatarGroupPrimitive.Root>) {
 	const { className, invertOverlap = true, ...restOfProps } = props;
@@ -32,7 +32,8 @@ function AvatarGroupTooltip(props: AvatarGroupTooltipProps) {
 	return (
 		<AvatarGroupPrimitive.Tooltip
 			className={cnMerge(
-				"z-50 w-fit rounded-md bg-neutral-900 px-3 py-1.5 text-xs text-balance text-neutral-50",
+				`z-50 w-fit rounded-md bg-shadcn-primary px-3 py-1.5 text-xs text-balance
+				text-shadcn-primary-foreground`,
 				className,
 				classNames?.base
 			)}

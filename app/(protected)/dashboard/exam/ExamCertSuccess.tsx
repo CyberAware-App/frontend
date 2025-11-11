@@ -1,17 +1,17 @@
 "use client";
 
-import { useQuery } from "@tanstack/react-query";
-import Image from "next/image";
 import { IconBox } from "@/components/common/IconBox";
 import { Button } from "@/components/ui/button";
+import { downloadCertificateMutation } from "@/lib/react-query/mutationOptions";
 import { certificateQuery } from "@/lib/react-query/queryOptions";
-import { useDownloadCertificate } from "@/lib/react-query/useDownloadCertificate";
 import { emojiPassed } from "@/public/assets";
+import { useMutation, useQuery } from "@tanstack/react-query";
+import Image from "next/image";
 
 function ExamCertSuccess() {
 	const certificateQueryResult = useQuery(certificateQuery());
 	const certificateId = certificateQueryResult.data?.certificate_id;
-	const { downloadCertificate, isFetching } = useDownloadCertificate(certificateId);
+	const downloadCertificateMutationResult = useMutation(downloadCertificateMutation());
 
 	return (
 		<article className="flex flex-col gap-10 pb-[100px]">
@@ -45,9 +45,9 @@ function ExamCertSuccess() {
 				<Button
 					theme="orange"
 					className="max-w-[260px]"
-					isLoading={isFetching}
-					isDisabled={isFetching}
-					onClick={() => downloadCertificate()}
+					isLoading={downloadCertificateMutationResult.isPending}
+					isDisabled={downloadCertificateMutationResult.isPending}
+					onClick={() => downloadCertificateMutationResult.mutate({ id: certificateId })}
 				>
 					Download Certificate
 				</Button>
