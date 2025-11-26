@@ -1,20 +1,7 @@
 import { queryOptions, skipToken, useQuery, useQueryClient } from "@tanstack/react-query";
-import { createFileURL } from "@zayne-labs/toolkit-core";
 import { useToggle } from "@zayne-labs/toolkit-react";
 import { callBackendApiForQuery } from "../api/callBackendApi";
-
-const forceDownload = (data: Blob, id: string) => {
-	const fileUrl = createFileURL(data);
-
-	if (!fileUrl) return;
-
-	const link = document.createElement("a");
-	link.href = fileUrl;
-	link.download = `${id}.pdf`;
-	link.click();
-
-	URL.revokeObjectURL(fileUrl);
-};
+import { forceDownload } from "../utils/common";
 
 export const downloadCertificateQuery = (options: { enabled: boolean; id: string | undefined }) => {
 	const { enabled, id = "" } = options;

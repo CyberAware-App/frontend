@@ -1,3 +1,5 @@
+import { createFileURL } from "@zayne-labs/toolkit-core";
+
 export const shuffleArray = <TArray extends unknown[]>(array: TArray | undefined) => {
 	if (!array) return;
 
@@ -17,3 +19,16 @@ export const shuffleArray = <TArray extends unknown[]>(array: TArray | undefined
 };
 
 export const getUserAvatar = (firstName: string, lastName: string) => `${firstName[0]}${lastName[0]}`;
+
+export const forceDownload = (data: Blob, id: string) => {
+	const fileUrl = createFileURL(data);
+
+	if (!fileUrl) return;
+
+	const link = document.createElement("a");
+	link.href = fileUrl;
+	link.download = `${id}.pdf`;
+	link.click();
+
+	URL.revokeObjectURL(fileUrl);
+};
