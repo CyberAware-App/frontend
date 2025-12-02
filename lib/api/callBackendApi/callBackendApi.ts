@@ -1,7 +1,7 @@
-import { createFetchClient } from "@zayne-labs/callapi";
+import { createFetchClient, type BaseCallApiConfig } from "@zayne-labs/callapi";
 import { defineBaseConfig } from "@zayne-labs/callapi/utils";
 import { apiSchema } from "./apiSchema";
-import { type AuthPluginMeta, type ToastPluginMeta, authPlugin, toastPlugin } from "./plugins";
+import { authPlugin, toastPlugin, type AuthPluginMeta, type ToastPluginMeta } from "./plugins";
 import { isAuthTokenRelatedError } from "./plugins/utils";
 
 type GlobalMeta = AuthPluginMeta & ToastPluginMeta;
@@ -69,5 +69,5 @@ export const callBackendApiForQuery = createFetchClient(
 			...sharedBaseConfig(instanceCtx),
 			resultMode: "onlyData",
 			throwOnError: true,
-		}) satisfies ReturnType<typeof defineBaseConfig>
+		}) satisfies BaseCallApiConfig
 );

@@ -96,7 +96,7 @@ export const authPlugin = (authOptions?: AuthPluginMeta["auth"]) => {
 				ctx.options.auth = selectedAuthToken;
 			},
 
-			onResponseError: async (ctx: ResponseErrorContext<BaseApiErrorResponse>) => {
+			onResponseError: async (ctx: ResponseErrorContext<{ ErrorData: BaseApiErrorResponse }>) => {
 				const { redirectFn, shouldSkipAuthHeaderAddition, shouldSkipRouteFromRedirect, signInRoute } =
 					getAuthMetaAndDerivatives(ctx);
 

@@ -38,7 +38,7 @@ export const toastPlugin = (toastOptions?: ToastPluginMeta["toast"]) => {
 
 		// eslint-disable-next-line perfectionist/sort-objects
 		hooks: {
-			onError: (ctx: ErrorContext<BaseApiErrorResponse>) => {
+			onError: (ctx: ErrorContext<{ ErrorData: BaseApiErrorResponse }>) => {
 				if (!isBrowser()) return;
 
 				const toastMeta = getToastMeta(ctx);
@@ -64,7 +64,7 @@ export const toastPlugin = (toastOptions?: ToastPluginMeta["toast"]) => {
 				toast.error(ctx.error.message);
 			},
 
-			onSuccess: (ctx: SuccessContext<BaseApiSuccessResponse>) => {
+			onSuccess: (ctx: SuccessContext<{ Data: BaseApiSuccessResponse }>) => {
 				if (!isBrowser()) return;
 
 				const toastMeta = getToastMeta(ctx);
