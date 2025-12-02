@@ -14,8 +14,10 @@
 /coverage
 
 # next.js
-.next/*
+.next/**
+!.next/dev/
 !.next/dev/types/
+!.next/dev/types/*
 /out/
 
 # production
