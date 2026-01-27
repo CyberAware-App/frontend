@@ -1,3 +1,5 @@
+"use client";
+
 import {
 	dehydrate,
 	HydrationBoundary as HydrationBoundaryPrimitive,
@@ -12,14 +14,14 @@ type HydrationBoundaryProps = {
 	queryClient?: QueryClient;
 };
 
-async function HydrationBoundary(props: HydrationBoundaryProps) {
+function HydrationBoundary(props: HydrationBoundaryProps) {
 	const { children, onPrefetch, queryClient: queryClientProp } = props;
 
 	const queryClient = queryClientProp ?? getQueryClient();
 
 	const promiseOrPromiseArray = onPrefetch?.(queryClient);
 
-	await (isArray(promiseOrPromiseArray) ? Promise.all(promiseOrPromiseArray) : promiseOrPromiseArray);
+	void (isArray(promiseOrPromiseArray) ? Promise.all(promiseOrPromiseArray) : promiseOrPromiseArray);
 
 	const state = dehydrate(queryClient);
 

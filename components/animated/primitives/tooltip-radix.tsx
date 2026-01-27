@@ -1,7 +1,7 @@
 "use client";
 
 import { createCustomContext, useControllableState } from "@zayne-labs/toolkit-react";
-import { AnimatePresence, type HTMLMotionProps, motion } from "motion/react";
+import { AnimatePresence, motion, type HTMLMotionProps } from "motion/react";
 import { Tooltip as TooltipPrimitive } from "radix-ui";
 import { useMemo } from "react";
 
@@ -24,9 +24,9 @@ function TooltipRoot(props: React.ComponentProps<typeof TooltipPrimitive.Root>) 
 	const { defaultOpen, onOpenChange, open, ...restOfProps } = props;
 
 	const [isOpen, setIsOpen] = useControllableState({
-		defaultValue: defaultOpen,
+		defaultProp: defaultOpen,
 		onChange: onOpenChange,
-		value: open,
+		prop: open,
 	});
 
 	const contextValue = useMemo(() => ({ isOpen, setIsOpen }), [isOpen, setIsOpen]);
@@ -34,7 +34,12 @@ function TooltipRoot(props: React.ComponentProps<typeof TooltipPrimitive.Root>) 
 	return (
 		<TooltipProviderLocal value={contextValue}>
 			<TooltipProvider>
-				<TooltipPrimitive.Root data-slot="tooltip-root" {...restOfProps} onOpenChange={setIsOpen} />
+				<TooltipPrimitive.Root
+					data-slot="tooltip-root"
+					{...restOfProps}
+					open={isOpen}
+					onOpenChange={setIsOpen}
+				/>
 			</TooltipProvider>
 		</TooltipProviderLocal>
 	);

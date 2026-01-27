@@ -13,7 +13,7 @@ declare module "@zayne-labs/callapi" {
 	}
 }
 
-const REMOTE_BACKEND_HOST = "https://familiar-lethia-ferditech-4c835a92.koyeb.app";
+const REMOTE_BACKEND_HOST = "https://hon-agnella-cyberaware-ecca99d6.koyeb.app";
 
 // const BACKEND_HOST =
 // 	process.env.NODE_ENV === "development" ? "http://127.0.0.1:8000" : REMOTE_BACKEND_HOST;
@@ -25,10 +25,8 @@ const BASE_API_URL = `${BACKEND_HOST}/api`;
 const sharedBaseConfig = defineBaseConfig((instanceCtx) => ({
 	baseURL: BASE_API_URL,
 
-	dedupe: {
-		cacheScope: "global",
-		cacheScopeKey: instanceCtx.options.baseURL,
-	},
+	dedupeCacheScope: "global",
+	dedupeCacheScopeKey: instanceCtx.options.baseURL,
 
 	plugins: [authPlugin(), toastPlugin()],
 	schema: apiSchema,

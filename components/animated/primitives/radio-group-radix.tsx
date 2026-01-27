@@ -1,8 +1,11 @@
+/* eslint-disable react-you-might-not-need-an-effect/no-derived-state */
+/* eslint-disable react-you-might-not-need-an-effect/no-pass-data-to-parent */
+/* eslint-disable react-hooks/no-deriving-state-in-effects */
 /* eslint-disable react-x/no-unstable-default-props */
 "use client";
 
 import { createCustomContext, useControllableState } from "@zayne-labs/toolkit-react";
-import { AnimatePresence, type HTMLMotionProps, motion } from "motion/react";
+import { AnimatePresence, motion, type HTMLMotionProps } from "motion/react";
 import { RadioGroup as RadioGroupPrimitive } from "radix-ui";
 import { useEffect, useMemo, useState } from "react";
 
@@ -36,9 +39,9 @@ function RadioGroupRoot(props: RadioGroupProps) {
 	} = props;
 
 	const [value, setValue] = useControllableState({
-		defaultValue: defaultValueProp,
+		defaultProp: defaultValueProp,
 		onChange: onValueChangeProp,
-		value: valueProp ?? undefined,
+		prop: valueProp ?? undefined,
 	});
 
 	const contextValue = useMemo(() => ({ setValue, value }), [setValue, value]);
@@ -94,9 +97,7 @@ function RadioGroupItem(props: RadioGroupItemProps) {
 	const { value } = useRadioGroupContext();
 	const [isChecked, setIsChecked] = useState(value === valueProp);
 
-	// eslint-disable-next-line react-you-might-not-need-an-effect/no-reset-all-state-on-prop-change
 	useEffect(() => {
-		// eslint-disable-next-line react-you-might-not-need-an-effect/no-derived-state
 		setIsChecked(value === valueProp);
 	}, [value, valueProp]);
 

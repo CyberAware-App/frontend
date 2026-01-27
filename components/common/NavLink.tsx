@@ -1,7 +1,6 @@
 import type { InferProps } from "@zayne-labs/toolkit-react/utils";
 import type { AnyString } from "@zayne-labs/toolkit-type-helpers";
-import type { LinkProps } from "next/link";
-import Link from "next/link";
+import Link, { type LinkProps } from "next/link";
 
 type ActualLinkProps = Omit<LinkProps, "href"> & { href: AnyString | AppRoutes };
 

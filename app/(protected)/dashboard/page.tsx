@@ -1,5 +1,7 @@
 "use client";
 
+import { useRouter } from "@bprogress/next";
+import { useMutation, useQuery } from "@tanstack/react-query";
 import { Credits, Main } from "@/app/-components";
 import { UserAvatar } from "@/app/-components/UserAvatar";
 import { ProgressAnimated } from "@/components/animated/ui";
@@ -10,8 +12,6 @@ import { Button } from "@/components/ui/button";
 import { downloadCertificateMutation } from "@/lib/react-query/mutationOptions";
 import { certificateQuery, dashboardQuery, sessionQuery } from "@/lib/react-query/queryOptions";
 import { cnJoin, cnMerge } from "@/lib/utils/cn";
-import { useRouter } from "@bprogress/next";
-import { useMutation, useQuery } from "@tanstack/react-query";
 import { withProtection } from "../-components/withProtection";
 import { LoadingScreen } from "../../-components/LoadingScreen";
 import { DashboardSideBar } from "./DashboardSideBar";

@@ -60,7 +60,7 @@ function SignupPage() {
 			</header>
 
 			<section>
-				<Form.Root methods={form} className="gap-6" onSubmit={(event) => void onSubmit(event)}>
+				<Form.Root form={form} className="gap-6" onSubmit={(event) => void onSubmit(event)}>
 					<Form.Field control={form.control} name="first_name">
 						<Form.Label className="text-white">First name</Form.Label>
 						<Form.Input

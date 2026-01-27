@@ -1,7 +1,7 @@
 "use client";
 
 import { toArray } from "@zayne-labs/toolkit-core";
-import { type HTMLMotionProps, motion, type Transition } from "motion/react";
+import { motion, type HTMLMotionProps, type Transition } from "motion/react";
 import * as TooltipPrimitive from "./tooltip";
 
 type AvatarProps = Omit<HTMLMotionProps<"div">, "translate">

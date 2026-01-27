@@ -1,6 +1,7 @@
 "use client";
 
-import { type IconProps, Icon as IconifyIcon, type IconifyIcon as IconifyIconType } from "@iconify/react";
+import { Icon as IconifyIcon, type IconifyIcon as IconifyIconType, type IconProps } from "@iconify/react";
+
 // import { type MoniconProps, camelCasedProps, getIconDetails } from "@monicon/icon-loader";
 // import type { InferProps } from "@zayne-labs/toolkit-react/utils";
 // import { isString } from "@zayne-labs/toolkit-type-helpers";

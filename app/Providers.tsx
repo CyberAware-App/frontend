@@ -1,10 +1,9 @@
 "use client";
 
 import { ProgressProvider } from "@bprogress/next/app";
+import { QueryClientProvider } from "@tanstack/react-query";
 import { ReactQueryDevtools } from "@tanstack/react-query-devtools";
 import { getQueryClient } from "@/lib/react-query/queryClient";
-import { dashboardQuery, sessionQuery } from "@/lib/react-query/queryOptions";
-import { HydrationBoundary } from "./HydrationBoundary";
 
 type ProvidersProps = {
 	children: React.ReactNode;
@@ -16,13 +15,7 @@ export function Providers(props: ProvidersProps) {
 	const queryClient = getQueryClient();
 
 	return (
-		<HydrationBoundary
-			queryClient={queryClient}
-			onPrefetch={(client) => {
-				void client.prefetchQuery(sessionQuery());
-				void client.prefetchQuery(dashboardQuery());
-			}}
-		>
+		<QueryClientProvider client={queryClient}>
 			<ProgressProvider
 				height="2px"
 				color="hsl(27, 100%, 56%)"
@@ -33,6 +26,6 @@ export function Providers(props: ProvidersProps) {
 			</ProgressProvider>
 
 			<ReactQueryDevtools buttonPosition="bottom-left" initialIsOpen={false} />
-		</HydrationBoundary>
+		</QueryClientProvider>
 	);
 }

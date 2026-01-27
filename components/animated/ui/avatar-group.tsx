@@ -1,6 +1,6 @@
+import * as motion from "motion/react-client";
 import * as AvatarGroupPrimitive from "@/components/animated/primitives/avatar-group";
 import { cnMerge } from "@/lib/utils/cn";
-import * as motion from "motion/react-client";
 
 function AvatarGroupRoot(props: React.ComponentProps<typeof AvatarGroupPrimitive.Root>) {
 	const { className, invertOverlap = true, ...restOfProps } = props;

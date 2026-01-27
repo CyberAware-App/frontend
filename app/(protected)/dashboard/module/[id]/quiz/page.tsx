@@ -13,7 +13,7 @@ import { shuffleArray } from "@/lib/utils/common";
 import { DashboardHeading } from "../../../DashboardHeading";
 import { ExamFormSchema } from "../../../exam/ExamForm";
 import { QuizForm } from "./QuizForm";
-import { type QuizResultPayload, QuizResultView } from "./QuizResultView";
+import { QuizResultView, type QuizResultPayload } from "./QuizResultView";
 
 const MAX_QUESTION = 5;
 

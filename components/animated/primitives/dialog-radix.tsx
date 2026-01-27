@@ -2,8 +2,9 @@
 "use client";
 
 import { createCustomContext, useControllableState } from "@zayne-labs/toolkit-react";
-import { AnimatePresence, type HTMLMotionProps, motion } from "motion/react";
+import { AnimatePresence, motion, type HTMLMotionProps } from "motion/react";
 import { Dialog as DialogPrimitive } from "radix-ui";
+import { useMemo } from "react";
 
 type DialogContextType = {
 	isOpen: boolean;
@@ -19,18 +20,30 @@ const [DialogContextProvider, useDialogContext] = createCustomContext<DialogCont
 type DialogProps = React.ComponentProps<typeof DialogPrimitive.Root>;
 
 function DialogRoot(props: DialogProps) {
-	// eslint-disable-next-line ts-eslint/unbound-method
-	const { defaultOpen: defaultOpenProp, onOpenChange: onOpenChangeProps, open: openProp } = props;
+	const {
+		defaultOpen: defaultOpenProp,
+		// eslint-disable-next-line ts-eslint/unbound-method
+		onOpenChange: onOpenChangeProp,
+		open: openProp,
+		...restOfProps
+	} = props;
 
 	const [isOpen, setIsOpen] = useControllableState({
-		defaultValue: defaultOpenProp,
-		onChange: onOpenChangeProps,
-		value: openProp,
+		defaultProp: defaultOpenProp,
+		onChange: onOpenChangeProp,
+		prop: openProp,
 	});
 
+	const contextValue = useMemo(() => ({ isOpen, setIsOpen }), [isOpen, setIsOpen]);
+
 	return (
-		<DialogContextProvider value={{ isOpen, setIsOpen }}>
-			<DialogPrimitive.Root data-slot="dialog" open={isOpen} onOpenChange={setIsOpen} />
+		<DialogContextProvider value={contextValue}>
+			<DialogPrimitive.Root
+				data-slot="dialog-root"
+				{...restOfProps}
+				open={isOpen}
+				onOpenChange={setIsOpen}
+			/>
 		</DialogContextProvider>
 	);
 }

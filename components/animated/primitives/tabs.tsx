@@ -1,10 +1,15 @@
+/* eslint-disable react-you-might-not-need-an-effect/no-derived-state */
+/* eslint-disable react-you-might-not-need-an-effect/no-pass-ref-to-parent */
+/* eslint-disable react-you-might-not-need-an-effect/no-chain-state-updates */
+/* eslint-disable react-you-might-not-need-an-effect/no-pass-data-to-parent */
+/* eslint-disable react-hooks/preserve-manual-memoization */
 /* eslint-disable react-x/no-unstable-default-props */
 /* eslint-disable react-hooks/set-state-in-effect */
 "use client";
 
 import { toArray } from "@zayne-labs/toolkit-core";
 import { createCustomContext } from "@zayne-labs/toolkit-react";
-import { type HTMLMotionProps, motion, type Transition } from "motion/react";
+import { motion, type HTMLMotionProps, type Transition } from "motion/react";
 import {
 	isValidElement,
 	useCallback,
@@ -51,20 +56,21 @@ function TabsRoot(props: TabsProps) {
 	const { children, defaultValue, onValueChange, value, ...restOfProps } = props;
 	const [activeValue, setActiveValue] = useState<string | undefined>(defaultValue);
 	const triggersRef = useRef(new Map<string, HTMLElement>());
-	const initialSet = useRef(false);
+	const initialSetRef = useRef(false);
 	const isControlled = value !== undefined;
 
 	useEffect(() => {
 		if (
+			// eslint-disable-next-line react-you-might-not-need-an-effect/no-event-handler
 			!isControlled
 			&& activeValue === undefined
 			&& triggersRef.current.size > 0
-			&& !initialSet.current
+			&& !initialSetRef.current
 		) {
 			const firstTab = triggersRef.current.keys().next().value;
 			if (firstTab !== undefined) {
 				setActiveValue(firstTab);
-				initialSet.current = true;
+				initialSetRef.current = true;
 			}
 		}
 	}, [activeValue, isControlled]);
@@ -73,9 +79,9 @@ function TabsRoot(props: TabsProps) {
 		(val: string, node: HTMLElement | null) => {
 			if (node) {
 				triggersRef.current.set(val, node);
-				if (!isControlled && activeValue === undefined && !initialSet.current) {
+				if (!isControlled && activeValue === undefined && !initialSetRef.current) {
 					setActiveValue(val);
-					initialSet.current = true;
+					initialSetRef.current = true;
 				}
 			} else {
 				triggersRef.current.delete(val);
@@ -195,12 +201,12 @@ function TabsContentList(props: TabsContentsProps) {
 	);
 
 	const containerRef = useRef<HTMLDivElement | null>(null);
-	const itemRefs = useRef<Array<HTMLDivElement | null>>([]);
+	const itemsRef = useRef<Array<HTMLDivElement | null>>([]);
 	const [height, setHeight] = useState(0);
 	const roRef = useRef<ResizeObserver | null>(null);
 
 	const measure = useCallback(() => {
-		const pane = itemRefs.current[activeIndex];
+		const pane = itemsRef.current[activeIndex];
 		const container = containerRef.current;
 		if (!pane || !container) return 0;
 
@@ -221,7 +227,6 @@ function TabsContentList(props: TabsContentsProps) {
 		total = Math.ceil(total * dpr) / dpr;
 
 		return total;
-		// eslint-disable-next-line react-hooks/preserve-manual-memoization
 	}, [activeIndex]);
 
 	useEffect(() => {
@@ -230,7 +235,7 @@ function TabsContentList(props: TabsContentsProps) {
 			roRef.current = null;
 		}
 
-		const pane = itemRefs.current[activeIndex];
+		const pane = itemsRef.current[activeIndex];
 		const container = containerRef.current;
 		if (!pane || !container) return;
 
@@ -277,7 +282,7 @@ function TabsContentList(props: TabsContentsProps) {
 						// eslint-disable-next-line react-x/no-array-index-key
 						key={index}
 						ref={(el) => {
-							itemRefs.current[index] = el;
+							itemsRef.current[index] = el;
 						}}
 						className="size-full shrink-0 px-2"
 					>

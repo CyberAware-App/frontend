@@ -1,8 +1,8 @@
 import { ForWithWrapper } from "@zayne-labs/ui-react/common/for";
 import { IconBox } from "@/components/common/IconBox";
 import { NavLink } from "@/components/common/NavLink";
-import { Main } from "../../-components";
 import { NavBar } from "../-components";
+import { Main } from "../../-components";
 
 const teamLeads = [
 	{

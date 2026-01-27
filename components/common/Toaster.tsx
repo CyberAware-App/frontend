@@ -5,12 +5,12 @@ import { Toaster as Sonner } from "sonner";
 import { useThemeStore } from "@/lib/zustand/themeStore";
 
 function SonnerToaster(props: InferProps<typeof Sonner>) {
-	const { theme = "dark" } = useThemeStore((state) => state);
+	const { theme } = useThemeStore((state) => state);
 
 	return (
 		<Sonner
 			theme={theme}
-			// eslint-disable-next-line tailwindcss-better/no-unregistered-classes
+			// eslint-disable-next-line tailwindcss-better/no-unknown-classes
 			className="toaster group"
 			richColors={true}
 			position="bottom-right"

@@ -2,18 +2,18 @@
 
 import {
 	autoUpdate,
-	FloatingArrow,
-	FloatingPortal,
 	flip,
+	FloatingArrow,
 	arrow as floatingArrow,
 	offset as floatingOffset,
+	FloatingPortal,
 	shift,
-	type UseFloatingReturn,
 	useFloating,
+	type UseFloatingReturn,
 } from "@floating-ui/react";
 import { createCustomContext } from "@zayne-labs/toolkit-react";
-import { AnimatePresence, type HTMLMotionProps, LayoutGroup, motion, type Transition } from "motion/react";
-import React, {
+import { AnimatePresence, LayoutGroup, motion, type HTMLMotionProps, type Transition } from "motion/react";
+import {
 	useCallback,
 	useEffect,
 	useId,

@@ -1019,7 +1019,7 @@ function SignupPage() {
 
   return (
     <Form.Root
-      methods={form}
+      form={form}
       className="gap-6"
       onSubmit={(event) =>
         void form.handleSubmit(async (data) => {

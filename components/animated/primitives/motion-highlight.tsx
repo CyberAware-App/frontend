@@ -179,8 +179,7 @@ function MotionHighlightRoot<T extends React.ElementType = "div">(props: Highlig
 
 			setBoundsState((prev) => {
 				if (
-					prev
-					&& prev.top === newBounds.top
+					prev?.top === newBounds.top
 					&& prev.left === newBounds.left
 					&& prev.width === newBounds.width
 					&& prev.height === newBounds.height
@@ -425,8 +424,7 @@ function MotionHighlightItem<T extends React.ElementType = "div">(props: Highlig
 
 			if (shouldUpdateBounds) {
 				if (
-					previousBounds
-					&& previousBounds.top === bounds.top
+					previousBounds?.top === bounds.top
 					&& previousBounds.left === bounds.left
 					&& previousBounds.width === bounds.width
 					&& previousBounds.height === bounds.height

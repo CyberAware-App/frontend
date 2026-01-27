@@ -28,7 +28,7 @@ function QuizForm(props: QuizFormProps) {
 
 				<Form.Root
 					id="quiz-form"
-					methods={form}
+					form={form}
 					onSubmit={(event) => void onSubmit(event)}
 					className="gap-10"
 				>
@@ -53,7 +53,7 @@ function QuizForm(props: QuizFormProps) {
 									name={`${quizIndex}.selected_option`}
 									className="ml-3"
 								>
-									<Form.FieldController
+									<Form.FieldBoundController
 										render={({ field }) => (
 											<RadioGroupAnimated.Root
 												value={(field.value as string | undefined) ?? ""}

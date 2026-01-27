@@ -1,9 +1,10 @@
 import { createCustomContext, useCallbackRef, useToggle } from "@zayne-labs/toolkit-react";
 import type { InferProps } from "@zayne-labs/toolkit-react/utils";
 import { isFunction } from "@zayne-labs/toolkit-type-helpers";
-import { AnimatePresence, type HTMLMotionProps, motion, type Transition } from "motion/react";
+import { AnimatePresence, motion, type HTMLMotionProps, type Transition } from "motion/react";
 import { Collapsible as CollapsiblePrimitive } from "radix-ui";
 import { useCallback, useMemo } from "react";
+import { cnMerge } from "@/lib/utils/cn";
 
 type ContextValue = {
 	isOpen: boolean;
@@ -34,7 +35,7 @@ function CollapsibleRoot(props: InferProps<typeof CollapsiblePrimitive.Root>) {
 			// == Otherwise, toggle the internal open state
 			const selectedOpenChange = openProp ? savedSetOpenProp : toggleInternalOpen;
 
-			selectedOpenChange(resolvedValue);
+			selectedOpenChange?.(resolvedValue);
 		},
 		[isOpen, openProp, savedSetOpenProp, toggleInternalOpen]
 	);
@@ -62,30 +63,42 @@ function CollapsibleRoot(props: InferProps<typeof CollapsiblePrimitive.Root>) {
 type CollapsibleTriggerProps = InferProps<typeof CollapsiblePrimitive.Trigger>;
 
 function CollapsibleTrigger(props: CollapsibleTriggerProps) {
-	return <CollapsiblePrimitive.Trigger data-slot="collapsible-trigger" {...props} />;
+	const { className, ...restOfProps } = props;
+
+	return (
+		<CollapsiblePrimitive.Trigger
+			data-slot="collapsible-trigger"
+			className={cnMerge("flex w-full items-center justify-between", className)}
+			{...restOfProps}
+		/>
+	);
 }
 
 type CollapsibleContentProps = HTMLMotionProps<"li">
 	& InferProps<typeof CollapsiblePrimitive.Content> & {
+		keepRendered?: boolean;
 		transition?: Transition;
 	};
 
 function CollapsibleContent(props: CollapsibleContentProps) {
-	const { children, className, transition, ...restOfProps } = props;
+	const { children, className, keepRendered = false, transition, ...restOfProps } = props;
 
 	const { isOpen } = useCollapsibleContext();
 
 	return (
 		<AnimatePresence>
-			{isOpen && (
-				<CollapsiblePrimitive.Content asChild={true} forceMount={true} {...restOfProps}>
+			{keepRendered ?
+				<CollapsiblePrimitive.Content asChild={true} forceMount={true}>
 					<motion.li
 						key="collapsible-content"
 						data-slot="collapsible-content"
 						layout={true}
 						initial={{ height: 0, opacity: 0, overflow: "hidden" }}
-						animate={{ height: "auto", opacity: 1, overflow: "hidden" }}
-						exit={{ height: 0, opacity: 0, overflow: "hidden" }}
+						animate={
+							isOpen ?
+								{ height: "auto", opacity: 1, overflow: "hidden", y: 0 }
+							:	{ height: 0, opacity: 0, overflow: "hidden", y: 20 }
+						}
 						transition={transition ?? { damping: 22, stiffness: 150, type: "spring" }}
 						className={className}
 						{...restOfProps}
@@ -93,7 +106,24 @@ function CollapsibleContent(props: CollapsibleContentProps) {
 						{children}
 					</motion.li>
 				</CollapsiblePrimitive.Content>
-			)}
+			:	isOpen && (
+					<CollapsiblePrimitive.Content asChild={true} forceMount={true}>
+						<motion.li
+							key="collapsible-content"
+							data-slot="collapsible-content"
+							layout={true}
+							initial={{ height: 0, opacity: 0, overflow: "hidden" }}
+							animate={{ height: "auto", opacity: 1, overflow: "hidden" }}
+							exit={{ height: 0, opacity: 0, overflow: "hidden" }}
+							transition={transition ?? { damping: 22, stiffness: 150, type: "spring" }}
+							className={className}
+							{...restOfProps}
+						>
+							{children}
+						</motion.li>
+					</CollapsiblePrimitive.Content>
+				)
+			}
 		</AnimatePresence>
 	);
 }

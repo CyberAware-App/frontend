@@ -2,8 +2,8 @@ import type { Metadata } from "next";
 import { Work_Sans } from "next/font/google";
 import { SonnerToaster } from "@/components/common/Toaster";
 import { cnJoin } from "../lib/utils/cn";
-import "../tailwind.css";
 import { Providers } from "./Providers";
+import "../tailwind.css";
 
 const workSans = Work_Sans({
 	subsets: ["latin"],

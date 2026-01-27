@@ -1,5 +1,5 @@
+export * as CollapsibleAnimated from "../primitives/collapsible-radix";
 export * as AvatarGroupAnimated from "./avatar-group";
-export * as CollapsibleAnimated from "./collapsible";
 export * as DialogAnimated from "./dialog";
 export * as ProgressAnimated from "./progress";
 export * as RadioGroupAnimated from "./radio-group";

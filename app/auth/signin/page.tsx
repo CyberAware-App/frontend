@@ -63,7 +63,7 @@ function SigninPage() {
 
 			<section>
 				<Form.Root
-					methods={form}
+					form={form}
 					className="flex flex-col gap-6"
 					onSubmit={(event) => void onSubmit(event)}
 				>

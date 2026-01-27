@@ -86,7 +86,6 @@
 		}
 	}
 
-
 	@keyframes sidebar-in {
 		from {
 			transform: translateX(-100%);

@@ -6,8 +6,8 @@ import {
 	authTokenStore,
 	isAuthTokenRelatedError,
 	isPathnameMatchingRoute,
-	type PossibleAuthToken,
 	redirectTo,
+	type PossibleAuthToken,
 } from "./utils";
 import { getNewUserSession } from "./utils/session";
 

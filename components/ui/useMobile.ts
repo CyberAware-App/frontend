@@ -16,7 +16,6 @@ const useIsMobile = (options: { enable?: boolean; mobileBreakpoint?: number }) =
 
 		const onChange = () => setIsMobile(window.innerWidth < mobileBreakpoint);
 
-		// eslint-disable-next-line react-you-might-not-need-an-effect/no-pass-live-state-to-parent
 		mql.addEventListener("change", onChange, { signal: abortController.signal });
 
 		// eslint-disable-next-line react-hooks/set-state-in-effect

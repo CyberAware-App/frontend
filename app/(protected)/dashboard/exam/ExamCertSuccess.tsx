@@ -1,12 +1,12 @@
 "use client";
 
+import { useMutation, useQuery } from "@tanstack/react-query";
+import Image from "next/image";
 import { IconBox } from "@/components/common/IconBox";
 import { Button } from "@/components/ui/button";
 import { downloadCertificateMutation } from "@/lib/react-query/mutationOptions";
 import { certificateQuery } from "@/lib/react-query/queryOptions";
 import { emojiPassed } from "@/public/assets";
-import { useMutation, useQuery } from "@tanstack/react-query";
-import Image from "next/image";
 
 function ExamCertSuccess() {
 	const certificateQueryResult = useQuery(certificateQuery());

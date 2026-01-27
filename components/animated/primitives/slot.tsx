@@ -2,7 +2,7 @@
 
 import { composeRefs, mergeProps } from "@zayne-labs/toolkit-react/utils";
 import { isObject } from "@zayne-labs/toolkit-type-helpers";
-import { type HTMLMotionProps, isMotionComponent, motion } from "motion/react";
+import { isMotionComponent, motion, type HTMLMotionProps } from "motion/react";
 import { isValidElement, useMemo } from "react";
 
 type AnyProps = Record<string, unknown>;

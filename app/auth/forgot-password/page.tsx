@@ -47,7 +47,7 @@ function ForgotPasswordPage() {
 			</header>
 
 			<section>
-				<Form.Root methods={form} className="gap-6" onSubmit={(event) => void onSubmit(event)}>
+				<Form.Root form={form} className="gap-6" onSubmit={(event) => void onSubmit(event)}>
 					<Form.Field control={form.control} name="email">
 						<Form.Label className="text-white">Email address</Form.Label>
 						<Form.Input

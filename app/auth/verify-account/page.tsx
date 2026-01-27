@@ -68,9 +68,9 @@ function VerifyAccountPage() {
 			</header>
 
 			<section>
-				<Form.Root methods={form} className="gap-6" onSubmit={(event) => void onSubmit(event)}>
+				<Form.Root form={form} className="gap-6" onSubmit={(event) => void onSubmit(event)}>
 					<Form.Field control={form.control} name="code">
-						<Form.FieldController
+						<Form.FieldBoundController
 							render={({ field }) => (
 								<InputOTP.Root
 									pattern={REGEXP_ONLY_DIGITS}

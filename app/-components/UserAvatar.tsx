@@ -1,9 +1,9 @@
 "use client";
 
+import { useQuery } from "@tanstack/react-query";
 import { AvatarGroupAnimated } from "@/components/animated/ui";
 import { Avatar } from "@/components/ui";
 import { sessionQuery } from "@/lib/react-query/queryOptions";
-import { useQuery } from "@tanstack/react-query";
 
 function UserAvatar() {
 	const sessionQueryResult = useQuery(sessionQuery());
