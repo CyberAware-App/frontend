@@ -1,10 +1,19 @@
 import type { CallApiResultErrorVariant } from "@zayne-labs/callapi";
 import { isHTTPError } from "@zayne-labs/callapi/utils";
 import { hardNavigate, isBrowser } from "@zayne-labs/toolkit-core";
+import { isObject } from "@zayne-labs/toolkit-type-helpers";
 import type { BaseApiErrorResponse } from "../../apiSchema";
 
 type ErrorWithCodeAndDetail = CallApiResultErrorVariant<BaseApiErrorResponse>["error"] & {
-	errorData: { code: string; detail: string } | { code?: never; detail: string };
+	errorData:
+		| {
+				code: string;
+				detail: string;
+		  }
+		| {
+				code?: never;
+				detail: string;
+		  };
 };
 
 export const isAuthTokenRelatedError = (
@@ -16,15 +25,18 @@ export const isAuthTokenRelatedError = (
 
 	const errorData = error.errorData;
 
+	if (!isObject(errorData)) {
+		return false;
+	}
+
 	return (
 		("code" in errorData && errorData.code === "token_not_valid")
 		|| ("detail" in errorData && errorData.detail === "Authentication credentials were not provided.")
 	);
 };
-export type PossibleAuthToken = "getAccessToken" | "getRefreshToken";
 
-const refreshTokenKey = "refreshToken";
-const accessTokenKey = "accessToken";
+const refreshTokenKey = "cyberaware-refreshToken";
+const accessTokenKey = "cyberaware-accessToken";
 
 /* eslint-disable ts-eslint/no-unnecessary-condition */
 export const authTokenStore = {
@@ -58,7 +70,14 @@ export const authTokenStore = {
 };
 /* eslint-enable ts-eslint/no-unnecessary-condition */
 
-export const redirectTo = (route: AppRoutes) => {
+type SafeExtract<TUnion, TUnionSubset extends TUnion> = Extract<TUnion, TUnionSubset>;
+
+export type PossibleAuthTokenUnion = SafeExtract<
+	keyof typeof authTokenStore,
+	"getAccessToken" | "getRefreshToken"
+>;
+
+export const redirectTo = (route: string) => {
 	setTimeout(() => hardNavigate(route), 1500);
 };
 

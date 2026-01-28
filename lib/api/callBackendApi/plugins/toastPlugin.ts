@@ -8,14 +8,14 @@ import { definePlugin, isHTTPError } from "@zayne-labs/callapi/utils";
 import { isBrowser } from "@zayne-labs/toolkit-core";
 import { isBoolean } from "@zayne-labs/toolkit-type-helpers";
 import { toast } from "sonner";
-import type { BaseApiErrorResponse, BaseApiSuccessResponse } from "../apiSchema";
+import type { BaseApiErrorResponse, BaseApiSuccessResponse, RouteSchemaKeys } from "../apiSchema";
 
 export type ToastPluginMeta = {
 	toast?: {
 		endpointsToSkip?: {
-			error?: Array<string | undefined>;
-			errorAndSuccess?: Array<string | undefined>;
-			success?: Array<string | undefined>;
+			error?: Array<RouteSchemaKeys | undefined>;
+			errorAndSuccess?: Array<RouteSchemaKeys | undefined>;
+			success?: Array<RouteSchemaKeys | undefined>;
 		};
 		error?: boolean;
 		errorAndSuccess?: boolean;
@@ -28,7 +28,7 @@ export type ToastPluginMeta = {
 };
 
 export const toastPlugin = (toastOptions?: ToastPluginMeta["toast"]) => {
-	const getToastMeta = (ctx: RequestContext) => {
+	const getToastMeta = (ctx: RequestContext<{ Meta: ToastPluginMeta }>) => {
 		return toastOptions ? { ...toastOptions, ...ctx.options.meta?.toast } : ctx.options.meta?.toast;
 	};
 
@@ -47,8 +47,8 @@ export const toastPlugin = (toastOptions?: ToastPluginMeta["toast"]) => {
 				const shouldSkipErrorToast =
 					(isBoolean(toastMeta?.error) && !toastMeta.error)
 					|| (isBoolean(toastMeta?.errorAndSuccess) && !toastMeta.errorAndSuccess)
-					|| toastMeta?.endpointsToSkip?.error?.includes(ctx.options.initURLNormalized)
-					|| toastMeta?.endpointsToSkip?.errorAndSuccess?.includes(ctx.options.initURLNormalized)
+					|| toastMeta?.endpointsToSkip?.error?.includes(ctx.options.initURL)
+					|| toastMeta?.endpointsToSkip?.errorAndSuccess?.includes(ctx.options.initURL)
 					|| toastMeta?.errorsToSkip?.includes(ctx.error.name)
 					|| toastMeta?.errorsToSkipCondition?.(ctx.error);
 				/* eslint-enable ts-eslint/prefer-nullish-coalescing */
@@ -73,8 +73,8 @@ export const toastPlugin = (toastOptions?: ToastPluginMeta["toast"]) => {
 				const shouldSkipSuccessToast =
 					(isBoolean(toastMeta?.success) && !toastMeta.success)
 					|| (isBoolean(toastMeta?.errorAndSuccess) && !toastMeta.errorAndSuccess)
-					|| toastMeta?.endpointsToSkip?.success?.includes(ctx.options.initURLNormalized)
-					|| toastMeta?.endpointsToSkip?.errorAndSuccess?.includes(ctx.options.initURLNormalized);
+					|| toastMeta?.endpointsToSkip?.success?.includes(ctx.options.initURL)
+					|| toastMeta?.endpointsToSkip?.errorAndSuccess?.includes(ctx.options.initURL);
 				/* eslint-enable ts-eslint/prefer-nullish-coalescing */
 
 				if (shouldSkipSuccessToast) return;

@@ -1,7 +1,9 @@
-import { sessionQuery } from "@/lib/react-query/queryOptions";
-import { HydrationBoundary } from "../HydrationBoundary.client";
+"use client";
 
-function ProtectedLayout({ children }: LayoutProps<"/">) {
+import { sessionQuery } from "@/lib/react-query/queryOptions";
+import { HydrationBoundary } from "./HydrationBoundary.client";
+
+function RootTemplate({ children }: LayoutProps<"/">) {
 	return (
 		<HydrationBoundary onPrefetch={(client) => client.prefetchQuery(sessionQuery())}>
 			{children}
@@ -9,4 +11,4 @@ function ProtectedLayout({ children }: LayoutProps<"/">) {
 	);
 }
 
-export default ProtectedLayout;
+export default RootTemplate;

@@ -2,27 +2,28 @@ import type { RequestContext, ResponseErrorContext } from "@zayne-labs/callapi";
 import { definePlugin, isHTTPError } from "@zayne-labs/callapi/utils";
 import type { Awaitable, CallbackFn } from "@zayne-labs/toolkit-type-helpers";
 import type { BaseApiErrorResponse } from "../apiSchema";
+import type { ToastPluginMeta } from "./toastPlugin";
 import {
 	authTokenStore,
 	isAuthTokenRelatedError,
 	isPathnameMatchingRoute,
 	redirectTo,
-	type PossibleAuthToken,
+	type PossibleAuthTokenUnion,
 } from "./utils";
 import { getNewUserSession } from "./utils/session";
 
 export type AuthPluginMeta = {
 	auth?: {
-		redirectFn?: CallbackFn<AppRoutes, Awaitable<void>>;
-		routesToExemptFromHeaderAddition?: Array<`${string}/**` | AppRoutes>;
-		routesToExemptFromRedirectOnAuthError?: Array<`${string}/**` | AppRoutes>;
-		signInRoute?: AppRoutes;
+		redirectFn?: CallbackFn<`/${string}`, Awaitable<void>>;
+		routesToExemptFromHeaderAddition?: Array<`/${string}` | `${string}/**`>;
+		routesToExemptFromRedirectOnAuthError?: Array<`/${string}` | `${string}/**`>;
+		signInRoute?: `/${string}`;
 		skipHeaderAddition?: boolean;
-		tokenToAdd?: PossibleAuthToken;
+		tokenToAdd?: PossibleAuthTokenUnion;
 	};
 };
 
-const defaultSignInRoute = "/auth/signin" satisfies Required<AuthPluginMeta>["auth"]["signInRoute"];
+const defaultSignInRoute = "/auth/signin";
 
 const defaultRedirectionMessage = "Session is missing! Automatically redirecting to login...";
 
@@ -32,7 +33,7 @@ const defaultRedirectionMessageOnHTTPError =
 	"Session is invalid or expired! Automatically redirecting to login...";
 
 export const authPlugin = (authOptions?: AuthPluginMeta["auth"]) => {
-	const getAuthMetaAndDerivatives = (ctx: RequestContext) => {
+	const getAuthMetaAndDerivatives = (ctx: RequestContext<{ Meta: AuthPluginMeta & ToastPluginMeta }>) => {
 		const authMeta =
 			authOptions ? { ...authOptions, ...ctx.options.meta?.auth } : ctx.options.meta?.auth;
 
@@ -49,12 +50,19 @@ export const authPlugin = (authOptions?: AuthPluginMeta["auth"]) => {
 			isPathnameMatchingRoute(route)
 		);
 
+		const turnOffErrorToast = () => {
+			ctx.options.meta ??= {};
+			ctx.options.meta.toast ??= {};
+			ctx.options.meta.toast.error = false;
+		};
+
 		return {
 			authMeta,
 			redirectFn,
 			shouldSkipAuthHeaderAddition,
 			shouldSkipRouteFromRedirect,
 			signInRoute,
+			turnOffErrorToast,
 		};
 	};
 
@@ -64,13 +72,14 @@ export const authPlugin = (authOptions?: AuthPluginMeta["auth"]) => {
 
 		// eslint-disable-next-line perfectionist/sort-objects
 		hooks: {
-			onRequest: (ctx) => {
+			onRequest: (ctx: RequestContext<{ Meta: AuthPluginMeta }>) => {
 				const {
 					authMeta,
 					redirectFn,
 					shouldSkipAuthHeaderAddition,
 					shouldSkipRouteFromRedirect,
 					signInRoute,
+					turnOffErrorToast,
 				} = getAuthMetaAndDerivatives(ctx);
 
 				if (shouldSkipAuthHeaderAddition) return;
@@ -79,9 +88,7 @@ export const authPlugin = (authOptions?: AuthPluginMeta["auth"]) => {
 
 				if (refreshToken === null) {
 					// == Turn off error toast if redirect is skipped
-					ctx.options.meta ??= {};
-					ctx.options.meta.toast ??= {};
-					shouldSkipRouteFromRedirect && (ctx.options.meta.toast.error = false);
+					shouldSkipRouteFromRedirect && turnOffErrorToast();
 
 					// == Redirect if redirect is not skipped
 					!shouldSkipRouteFromRedirect && void redirectFn(signInRoute);

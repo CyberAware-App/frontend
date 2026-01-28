@@ -97,9 +97,9 @@ function MobileNavigation(props: MobileNavProps) {
 			<Presence present={isNavShow} forceMount={true}>
 				<aside
 					className={cnMerge(
-						`absolute inset-[4px_auto_4px_4px] z-200 flex w-(--nav-width) max-w-[380px] flex-col
-						items-center gap-7 overflow-x-hidden bg-cyberaware-aeces-blue pt-[150px] text-white
-						shadow-lg shadow-cyberaware-light-orange transition-[width] [--nav-width:82%]`,
+						`absolute inset-[4px_auto_4px_4px] z-200 flex min-h-svh w-(--nav-width) max-w-[380px]
+						flex-col items-center gap-7 overflow-x-hidden bg-cyberaware-aeces-blue pt-[150px]
+						text-white shadow-lg shadow-cyberaware-light-orange transition-[width] [--nav-width:82%]`,
 						// == Turn on forceMount if you want the transition to work
 						isNavShow ? "w-(--nav-width) duration-500" : "w-0 duration-350",
 						// == Turn off forceMount if you want the animation to not suddenly activate on first load

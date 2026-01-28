@@ -1,5 +1,6 @@
 "use client";
 
+import type { InferAllMainRouteKeys } from "@zayne-labs/callapi";
 import { fallBackRouteSchemaKey } from "@zayne-labs/callapi/constants";
 import { defineSchema } from "@zayne-labs/callapi/utils";
 import { REGEXP_ONLY_DIGITS } from "input-otp";
@@ -286,3 +287,5 @@ export const apiSchema = defineSchema(
 	},
 	{ strict: true }
 );
+
+export type RouteSchemaKeys = InferAllMainRouteKeys<typeof apiSchema.routes, typeof apiSchema.config>;
