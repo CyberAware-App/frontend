@@ -1,6 +1,7 @@
-/* eslint-disable react-hooks/set-state-in-effect */
+/* eslint-disable react-you-might-not-need-an-effect/no-event-handler */
+/* eslint-disable react/set-state-in-effect */
 /* eslint-disable react-you-might-not-need-an-effect/no-derived-state */
-/* eslint-disable react-x/no-unstable-default-props */
+/* eslint-disable react/no-unstable-default-props */
 "use client";
 
 import { toArray } from "@zayne-labs/toolkit-core";
@@ -27,6 +28,13 @@ type Bounds = {
 	left: number;
 	top: number;
 	width: number;
+};
+
+const DEFAULT_BOUNDS_OFFSET: Bounds = {
+	height: 0,
+	left: 0,
+	top: 0,
+	width: 0,
 };
 
 type HighlightContextType<T extends string> = {
@@ -114,7 +122,7 @@ type HighlightProps<T extends React.ElementType = "div"> =
 	| UncontrolledChildrenModeHighlightProps<T>
 	| UncontrolledParentModeHighlightProps<T>;
 
-function MotionHighlightRoot<T extends React.ElementType = "div">(props: HighlightProps<T>) {
+function HighlightRoot<T extends React.ElementType = "div">(props: HighlightProps<T>) {
 	const {
 		as: Component = "div",
 		children,
@@ -137,44 +145,59 @@ function MotionHighlightRoot<T extends React.ElementType = "div">(props: Highlig
 	const localRef = useRef<HTMLDivElement>(null);
 	useImperativeHandle(ref, () => localRef.current as HTMLDivElement);
 
-	const [activeValue, setActiveValue] = useState<string | null>(value ?? defaultValue ?? null);
+	const propsBoundsOffset = (props as ParentModeHighlightProps).boundsOffset;
+	const boundsOffset = propsBoundsOffset ?? DEFAULT_BOUNDS_OFFSET;
+	const boundsOffsetTop = boundsOffset.top ?? 0;
+	const boundsOffsetLeft = boundsOffset.left ?? 0;
+	const boundsOffsetWidth = boundsOffset.width ?? 0;
+	const boundsOffsetHeight = boundsOffset.height ?? 0;
+
+	const boundsOffsetRef = useRef({
+		height: boundsOffsetHeight,
+		left: boundsOffsetLeft,
+		top: boundsOffsetTop,
+		width: boundsOffsetWidth,
+	});
 
 	useEffect(() => {
-		if (value !== undefined) {
-			setActiveValue(value);
-		} else if (defaultValue !== undefined) {
-			setActiveValue(defaultValue);
-		}
-	}, [value, defaultValue]);
+		boundsOffsetRef.current = {
+			height: boundsOffsetHeight,
+			left: boundsOffsetLeft,
+			top: boundsOffsetTop,
+			width: boundsOffsetWidth,
+		};
+	}, [boundsOffsetTop, boundsOffsetLeft, boundsOffsetWidth, boundsOffsetHeight]);
 
+	const [activeValue, setActiveValue] = useState<string | null>(value ?? defaultValue ?? null);
 	const [boundsState, setBoundsState] = useState<Bounds | null>(null);
 	const [activeClassNameState, setActiveClassNameState] = useState<string>("");
 
 	const safeSetActiveValue = useCallback(
 		(id: string | null) => {
-			setActiveValue((prev) => (prev === id ? prev : id));
-			if (id !== activeValue) onValueChange?.(id);
+			setActiveValue((prev) => {
+				if (prev !== id) {
+					onValueChange?.(id);
+					return id;
+				}
+				return prev;
+			});
 		},
-		[activeValue, onValueChange]
+		[onValueChange]
 	);
 
-	const safeSetBounds = useCallback(
-		(bounds: DOMRect) => {
+	const safeSetBoundsRef = useRef<((bounds: DOMRect) => void) | undefined>(undefined);
+
+	useEffect(() => {
+		safeSetBoundsRef.current = (bounds: DOMRect) => {
 			if (!localRef.current) return;
 
-			const boundsOffset = (props as ParentModeHighlightProps).boundsOffset ?? {
-				height: 0,
-				left: 0,
-				top: 0,
-				width: 0,
-			};
-
 			const containerRect = localRef.current.getBoundingClientRect();
+			const offset = boundsOffsetRef.current;
 			const newBounds: Bounds = {
-				height: bounds.height + (boundsOffset.height ?? 0),
-				left: bounds.left - containerRect.left + (boundsOffset.left ?? 0),
-				top: bounds.top - containerRect.top + (boundsOffset.top ?? 0),
-				width: bounds.width + (boundsOffset.width ?? 0),
+				height: bounds.height + offset.height,
+				left: bounds.left - containerRect.left + offset.left,
+				top: bounds.top - containerRect.top + offset.top,
+				width: bounds.width + offset.width,
 			};
 
 			setBoundsState((prev) => {
@@ -188,13 +211,21 @@ function MotionHighlightRoot<T extends React.ElementType = "div">(props: Highlig
 				}
 				return newBounds;
 			});
-		},
-		[props]
-	);
+		};
+	});
+
+	const safeSetBounds = useCallback((bounds: DOMRect) => {
+		safeSetBoundsRef.current?.(bounds);
+	}, []);
 
 	const clearBounds = useCallback(() => {
 		setBoundsState((prev) => (prev === null ? prev : null));
 	}, []);
+
+	useEffect(() => {
+		if (value !== undefined) setActiveValue(value);
+		else if (defaultValue !== undefined) setActiveValue(defaultValue);
+	}, [value, defaultValue]);
 
 	const id = useId();
 
@@ -208,12 +239,12 @@ function MotionHighlightRoot<T extends React.ElementType = "div">(props: Highlig
 			const activeEl = container.querySelector<HTMLElement>(
 				`[data-value="${activeValue}"][data-highlight="true"]`
 			);
-			if (activeEl) safeSetBounds(activeEl.getBoundingClientRect());
+			if (activeEl) safeSetBoundsRef.current?.(activeEl.getBoundingClientRect());
 		};
 
 		container.addEventListener("scroll", onScroll, { passive: true });
 		return () => container.removeEventListener("scroll", onScroll);
-	}, [mode, activeValue, safeSetBounds]);
+	}, [mode, activeValue]);
 
 	const render = (innerChildren: React.ReactNode) => {
 		if (mode === "parent") {
@@ -246,7 +277,7 @@ function MotionHighlightRoot<T extends React.ElementType = "div">(props: Highlig
 									opacity: 0,
 									transition: {
 										...transition,
-										delay: (transition.delay ?? 0) + exitDelay / 1000,
+										delay: (transition.delay ?? 0) + (exitDelay || 0) / 1000,
 									},
 								}}
 								transition={transition}
@@ -311,10 +342,10 @@ function MotionHighlightRoot<T extends React.ElementType = "div">(props: Highlig
 					render(children)
 				:	render(
 						toArray(children).map((child, index) => (
-							// eslint-disable-next-line react-x/no-array-index-key, react-x/prefer-destructuring-assignment
-							<MotionHighlightItem key={index} className={props.itemsClassName}>
+							// eslint-disable-next-line react/no-array-index-key
+							<HighlightItem key={index} className={props.itemsClassName}>
 								{child}
-							</MotionHighlightItem>
+							</HighlightItem>
 						))
 					)
 
@@ -362,7 +393,9 @@ type HighlightItemProps<T extends React.ElementType = "div"> = PolymorphicProps<
 	}
 >;
 
-function MotionHighlightItem<T extends React.ElementType = "div">(props: HighlightItemProps<T>) {
+function HighlightItem<T extends React.ElementType = "div">(
+	props: HighlightItemProps<T>
+): React.ReactNode {
 	const {
 		activeClassName,
 		as: Component = "div",
@@ -410,8 +443,13 @@ function MotionHighlightItem<T extends React.ElementType = "div">(props: Highlig
 	const localRef = useRef<HTMLDivElement>(null);
 	useImperativeHandle(ref, () => localRef.current as HTMLDivElement);
 
+	const refCallback = useCallback((node: HTMLElement | null) => {
+		localRef.current = node as HTMLDivElement;
+	}, []);
+
 	useEffect(() => {
 		if (mode !== "parent") return;
+
 		let rafId: number;
 		let previousBounds: Bounds | null = null;
 		const shouldUpdateBounds =
@@ -442,7 +480,9 @@ function MotionHighlightItem<T extends React.ElementType = "div">(props: Highlig
 		if (isActive) {
 			updateBounds();
 			setActiveClassName(activeClassName ?? "");
-		} else if (!activeValue) clearBounds();
+		} else if (!activeValue) {
+			clearBounds();
+		}
 
 		if (!shouldUpdateBounds) return;
 
@@ -460,7 +500,7 @@ function MotionHighlightItem<T extends React.ElementType = "div">(props: Highlig
 	]);
 
 	if (!isValidElement(children)) {
-		return children as React.ReactNode;
+		return children;
 	}
 
 	const dataAttributes = {
@@ -497,17 +537,16 @@ function MotionHighlightItem<T extends React.ElementType = "div">(props: Highlig
 		if (mode === "children") {
 			return cloneElement(
 				element,
-				// eslint-disable-next-line react-hooks/refs
 				{
 					className: cnMerge("relative", element.props.className),
 					key: childValue,
-					ref: localRef,
+					ref: refCallback,
 					...getNonOverridingDataAttributes(element, {
 						...dataAttributes,
 						"data-slot": "motion-highlight-item-container",
 					}),
 					...commonHandlers,
-					...restOfProps,
+					...props,
 				},
 				<>
 					<AnimatePresence initial={false} mode="wait">
@@ -551,9 +590,8 @@ function MotionHighlightItem<T extends React.ElementType = "div">(props: Highlig
 			);
 		}
 
-		// eslint-disable-next-line react-hooks/refs
 		return cloneElement(element, {
-			ref: localRef,
+			ref: refCallback,
 			...getNonOverridingDataAttributes(element, {
 				...dataAttributes,
 				"data-slot": "motion-highlight-item",
@@ -615,9 +653,9 @@ function MotionHighlightItem<T extends React.ElementType = "div">(props: Highlig
 		:	children;
 }
 
-export const Root = MotionHighlightRoot;
-
-export const Item = MotionHighlightItem;
-
-// eslint-disable-next-line react-refresh/only-export-components
-export { useHighlightContext };
+export {
+	HighlightRoot as Root,
+	HighlightItem as Item,
+	// eslint-disable-next-line react-refresh/only-export-components
+	useHighlightContext,
+};

@@ -151,26 +151,24 @@ export function SidebarContextProvider(
 
 	return (
 		<SidebarContext value={contextValue}>
-			<Tooltip.ContextProvider delayDuration={0}>
-				<div
-					data-slot="sidebar-wrapper"
-					className={cnMerge(
-						`group/sidebar-wrapper flex min-h-svh w-full flex-col
-						has-data-[variant=inset]:bg-shadcn-sidebar`,
-						className
-					)}
-					style={
-						{
-							"--sidebar-width": sidebarWidth,
-							"--sidebar-width-icon": sidebarWidthIcon,
-							...style,
-						} as React.CSSProperties
-					}
-					{...restOfProps}
-				>
-					{children}
-				</div>
-			</Tooltip.ContextProvider>
+			<div
+				data-slot="sidebar-wrapper"
+				className={cnMerge(
+					`group/sidebar-wrapper flex min-h-svh w-full flex-col
+					has-data-[variant=inset]:bg-shadcn-sidebar`,
+					className
+				)}
+				style={
+					{
+						"--sidebar-width": sidebarWidth,
+						"--sidebar-width-icon": sidebarWidthIcon,
+						...style,
+					} as React.CSSProperties
+				}
+				{...restOfProps}
+			>
+				{children}
+			</div>
 		</SidebarContext>
 	);
 }
@@ -280,8 +278,8 @@ function SidebarRoot(
 					variant === "sidebar-unfixed" && "sticky",
 
 					side === "left" ?
-						"left-0 group-data-[collapsible=offcanvas]:left-[calc(var(--sidebar-width)*-1)]"
-					:	"right-0 group-data-[collapsible=offcanvas]:right-[calc(var(--sidebar-width)*-1)]",
+						"left-0 group-data-[collapsible=offcanvas]:-left-(--sidebar-width)"
+					:	"right-0 group-data-[collapsible=offcanvas]:-right-(--sidebar-width)",
 
 					// side === "left" ?
 					// 	`not-group-data-[collapsible=icon]:has-[[data-slot=sidebar-rail]:hover]:-ms-2
@@ -375,9 +373,9 @@ function SidebarRail(props: InferProps<"button"> & { side?: "left" | "right" }) 
 				<div
 					className="pointer-events-none h-6 w-4 opacity-50 transition-all ease-in-out
 						group-data-[state=collapsed]:translate-x-0 before:absolute before:top-[calc(50%-7px)]
-						before:h-[9px] before:w-0.5 before:rounded-full before:bg-shadcn-muted-foreground
-						before:transition-all after:absolute after:bottom-[calc(50%-7px)] after:h-[9px]
-						after:w-0.5 after:rounded-full after:bg-shadcn-muted-foreground after:transition-all
+						before:h-2.5 before:w-0.5 before:rounded-full before:bg-shadcn-muted-foreground
+						before:transition-all after:absolute after:bottom-[calc(50%-7px)] after:h-2.5 after:w-0.5
+						after:rounded-full after:bg-shadcn-muted-foreground after:transition-all
 						in-data-[side=left]:translate-x-2 in-data-[side=left]:before:left-[calc(50%-1px)]
 						in-data-[side=left]:after:left-[calc(50%-1px)] in-data-[side=right]:ml-auto
 						in-data-[side=right]:-translate-x-2 in-data-[side=right]:before:left-[calc(50%+1)]

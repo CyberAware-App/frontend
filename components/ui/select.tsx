@@ -33,7 +33,7 @@ function SelectTrigger(
 				outline-none focus-visible:border-shadcn-ring focus-visible:ring-[3px]
 				focus-visible:ring-shadcn-ring/50 disabled:cursor-not-allowed disabled:opacity-50
 				aria-invalid:border-shadcn-destructive aria-invalid:ring-shadcn-destructive/20
-				data-[placeholder]:text-shadcn-muted-foreground *:data-[slot=select-value]:line-clamp-1
+				data-placeholder:text-shadcn-muted-foreground *:data-[slot=select-value]:line-clamp-1
 				*:data-[slot=select-value]:flex *:data-[slot=select-value]:items-center
 				*:data-[slot=select-value]:gap-2 dark:aria-invalid:ring-shadcn-destructive/40
 				[&_svg]:pointer-events-none [&_svg]:shrink-0 [&_svg:not([class*='size-'])]:size-4
@@ -97,7 +97,7 @@ function SelectContent(
 			<SelectPrimitive.Content
 				data-slot="select-content"
 				className={cnMerge(
-					`relative z-50 max-h-(--radix-select-content-available-height) min-w-[8rem]
+					`relative z-50 max-h-(--radix-select-content-available-height) min-w-32
 					origin-(--radix-select-content-transform-origin) overflow-x-hidden overflow-y-auto
 					rounded-md border bg-shadcn-popover text-shadcn-popover-foreground shadow-md
 					data-[side=bottom]:slide-in-from-top-2 data-[side=left]:slide-in-from-right-2
@@ -154,7 +154,7 @@ function SelectItem(props: InferProps<typeof SelectPrimitive.Item> & { withIndic
 			className={cnMerge(
 				`relative flex w-full cursor-default items-center gap-2 rounded-sm py-1.5 pr-8 pl-2 text-sm
 				outline-hidden select-none focus:bg-shadcn-accent focus:text-shadcn-accent-foreground
-				data-[disabled]:pointer-events-none data-[disabled]:opacity-50 [&_svg]:pointer-events-none
+				data-disabled:pointer-events-none data-disabled:opacity-50 [&_svg]:pointer-events-none
 				[&_svg]:shrink-0 [&_svg:not([class*='size-'])]:size-4
 				[&_svg:not([class*='text-'])]:text-shadcn-muted-foreground *:[span]:last:flex
 				*:[span]:last:items-center *:[span]:last:gap-2`,

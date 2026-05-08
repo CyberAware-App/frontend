@@ -2,20 +2,12 @@
 	"extends": "@zayne-labs/tsconfig/bundler/next",
 
 	"compilerOptions": {
-		"baseUrl": ".",
 		"paths": {
 			"@/*": ["./*"]
-		}
+		},
+		"types": ["node"]
 	},
 
-	"include": [
-		"stub.d.ts",
-		"stub-routes.d.ts",
-		"**/*.ts",
-		"**/*.tsx",
-		"public/**/*.ts",
-		".next/types/**/*.ts",
-		"next-env.d.ts"
-	],
-	"exclude": ["node_modules/**", ".next"]
+	"include": ["**/*.ts", "**/*.tsx", ".next/dev/types/**/*.ts"],
+	"exclude": ["node_modules"]
 }

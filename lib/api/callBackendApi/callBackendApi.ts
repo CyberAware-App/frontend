@@ -33,8 +33,8 @@ const sharedBaseCallApiConfig = defineBaseConfig({
 		authPlugin({
 			// routesToExemptFromHeaderAddition: ["/auth/**"],
 			// navigateFn: redirectTo,
+			redirectRoute: "/auth/signin",
 			routesToExemptFromRedirectOnAuthError: ["/", "/auth/**"],
-			signInRoute: "/auth/signin",
 		}),
 		toastPlugin({
 			endpointsToSkip: {

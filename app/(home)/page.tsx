@@ -1,8 +1,8 @@
+import { tw } from "@zayne-labs/toolkit-core";
 import Image from "next/image";
 import { ForWithWrapper } from "@/components/common/for";
 import { NavLink } from "@/components/common/NavLink";
 import { Button } from "@/components/ui/button";
-import { tw } from "@/lib/utils/cn";
 import {
 	modelOne,
 	modelTwo,
@@ -99,7 +99,7 @@ function HomePage() {
 
 			<section className="mt-20 flex flex-col gap-7 bg-cyberaware-light-orange p-4">
 				<div className="flex">
-					<span className="block w-[15px] shrink-0 bg-cyberaware-unizik-orange" />
+					<span className="block w-4 shrink-0 bg-cyberaware-unizik-orange" />
 					<div>
 						<Image src={modelTwo} priority={true} alt="Model Two" />
 					</div>
@@ -128,7 +128,7 @@ function HomePage() {
 				<p className="mt-3.5 text-[14px]">
 					Join thousands of users becoming cyber smart in just 10 modules.
 				</p>
-				<Button theme="white" className="mt-10 h-[72px] max-w-[314px]" asChild={true}>
+				<Button theme="white" className="mt-10 h-[72px] max-w-[314px]">
 					<NavLink href="/auth/signin">Get Started</NavLink>
 				</Button>
 			</section>
@@ -141,7 +141,7 @@ function HomePage() {
 					Electronics and Computer Engineering, NAU.
 				</p>
 
-				<Button className="mt-5 h-[57px] max-w-[240px]" asChild={true}>
+				<Button className="mt-5 h-[56px] max-w-[240px]">
 					<NavLink href="/team-leads">Meet the team Leads</NavLink>
 				</Button>
 			</section>

@@ -1,7 +1,7 @@
 "use client";
 
 import { useMutation, useQuery } from "@tanstack/react-query";
-import Image from "next/image";
+import Image, { type StaticImageData } from "next/image";
 import type { z } from "zod";
 import { IconBox } from "@/components/common/IconBox";
 import { NavLink } from "@/components/common/NavLink";
@@ -50,7 +50,7 @@ function ExamResultView(props: ExamResultViewProps) {
 		exhausted: emojiTooBad,
 		passed: emojiPassed,
 		pending: emojiFailed,
-	} satisfies Record<typeof resultStatus, string>;
+	} satisfies Record<typeof resultStatus, StaticImageData>;
 
 	const attemptsLeft = maxAttempts - result.attempt_number;
 

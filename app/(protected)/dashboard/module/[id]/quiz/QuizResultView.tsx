@@ -1,7 +1,7 @@
 import Image from "next/image";
 import { ForWithWrapper } from "@/components/common/for";
 import { IconBox } from "@/components/common/IconBox";
-import { NavLink } from "@/components/common/NavLink";
+import { NavLink, type MainAppRoutes } from "@/components/common/NavLink";
 import { Show } from "@/components/common/show";
 import { Button } from "@/components/ui/button";
 import type { SelectedQuizQuestions } from "@/lib/react-query/queryOptions";
@@ -24,13 +24,13 @@ export type QuizResultPayload = {
 	total: number;
 };
 
-type QuizResultViewProps = {
-	nextModuleHref: string;
+type QuizResultViewProps<TRouteType extends string> = {
+	nextModuleHref: MainAppRoutes<TRouteType>;
 	onRetake: () => void;
 	result: QuizResultPayload;
 };
 
-function QuizResultView(props: QuizResultViewProps) {
+function QuizResultView<TRouteType extends string>(props: QuizResultViewProps<TRouteType>) {
 	const { nextModuleHref, onRetake, result } = props;
 
 	return (

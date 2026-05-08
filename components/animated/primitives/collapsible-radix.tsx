@@ -1,3 +1,4 @@
+/* eslint-disable react/no-unstable-default-props */
 import { createCustomContext, useCallbackRef, useToggle } from "@zayne-labs/toolkit-react";
 import type { InferProps } from "@zayne-labs/toolkit-react/utils";
 import { isFunction } from "@zayne-labs/toolkit-type-helpers";
@@ -81,7 +82,12 @@ type CollapsibleContentProps = HTMLMotionProps<"li">
 	};
 
 function CollapsibleContent(props: CollapsibleContentProps) {
-	const { children, className, keepRendered = false, transition, ...restOfProps } = props;
+	const {
+		children,
+		keepRendered = false,
+		transition = { duration: 0.35, ease: "easeInOut" },
+		...restOfProps
+	} = props;
 
 	const { isOpen } = useCollapsibleContext();
 
@@ -93,14 +99,13 @@ function CollapsibleContent(props: CollapsibleContentProps) {
 						key="collapsible-content"
 						data-slot="collapsible-content"
 						layout={true}
-						initial={{ height: 0, opacity: 0, overflow: "hidden" }}
+						initial={{ height: 0, opacity: 0, overflow: "hidden", y: 20 }}
 						animate={
 							isOpen ?
 								{ height: "auto", opacity: 1, overflow: "hidden", y: 0 }
 							:	{ height: 0, opacity: 0, overflow: "hidden", y: 20 }
 						}
-						transition={transition ?? { damping: 22, stiffness: 150, type: "spring" }}
-						className={className}
+						transition={transition}
 						{...restOfProps}
 					>
 						{children}
@@ -112,11 +117,10 @@ function CollapsibleContent(props: CollapsibleContentProps) {
 							key="collapsible-content"
 							data-slot="collapsible-content"
 							layout={true}
-							initial={{ height: 0, opacity: 0, overflow: "hidden" }}
-							animate={{ height: "auto", opacity: 1, overflow: "hidden" }}
-							exit={{ height: 0, opacity: 0, overflow: "hidden" }}
-							transition={transition ?? { damping: 22, stiffness: 150, type: "spring" }}
-							className={className}
+							initial={{ height: 0, opacity: 0, overflow: "hidden", y: 20 }}
+							animate={{ height: "auto", opacity: 1, overflow: "hidden", y: 0 }}
+							exit={{ height: 0, opacity: 0, overflow: "hidden", y: 20 }}
+							transition={transition}
 							{...restOfProps}
 						>
 							{children}

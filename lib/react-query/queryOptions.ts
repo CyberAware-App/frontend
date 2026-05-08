@@ -82,7 +82,7 @@ export const moduleQuizQuery = (options?: {
 				params: { id: moduleId },
 			});
 		},
-		queryKey: ["module-quiz", moduleId, { isUnaccessible }],
+		queryKey: ["module-quiz", moduleId, { isUnaccessible }, router],
 		select: (data) => data.data,
 		staleTime: Infinity,
 	});
@@ -103,6 +103,8 @@ export const examQuery = (options?: {
 		queryFn: () => {
 			if (isCertified) {
 				const message = "You have already been certified!";
+				toast.info(message);
+				router?.push("/dashboard");
 				throw new Error(message);
 			}
 
@@ -125,7 +127,7 @@ export const examQuery = (options?: {
 				},
 			});
 		},
-		queryKey: ["exam", { isCertified, isUnaccessible }],
+		queryKey: ["exam", { isCertified, isUnaccessible }, router],
 		select: (data) => data.data,
 		staleTime: Infinity,
 	});

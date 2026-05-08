@@ -1,3 +1,5 @@
+"use client";
+
 import * as motion from "motion/react-client";
 import * as AvatarGroupPrimitive from "@/components/animated/primitives/avatar-group";
 import { cnMerge } from "@/lib/utils/cn";
@@ -32,8 +34,7 @@ function AvatarGroupTooltip(props: AvatarGroupTooltipProps) {
 	return (
 		<AvatarGroupPrimitive.Tooltip
 			className={cnMerge(
-				`z-50 w-fit rounded-md bg-shadcn-primary px-3 py-1.5 text-xs text-balance
-				text-shadcn-primary-foreground`,
+				"z-50 w-fit rounded-md bg-neutral-900 px-3 py-1.5 text-xs text-balance text-neutral-50",
 				className,
 				classNames?.base
 			)}
@@ -45,9 +46,9 @@ function AvatarGroupTooltip(props: AvatarGroupTooltipProps) {
 
 			<AvatarGroupPrimitive.TooltipArrow
 				className={cnMerge(
-					`size-3 fill-shadcn-primary data-[side=bottom]:translate-y-[1px]
-					data-[side=left]:translate-x-[-1px] data-[side=right]:translate-x-[1px]
-					data-[side=top]:translate-y-[-1px]`,
+					`size-3 fill-shadcn-primary data-[side=bottom]:translate-y-px
+					data-[side=left]:-translate-x-px data-[side=right]:translate-x-px
+					data-[side=top]:-translate-y-px`,
 					classNames?.arrow
 				)}
 				tipRadius={2}
@@ -56,6 +57,4 @@ function AvatarGroupTooltip(props: AvatarGroupTooltipProps) {
 	);
 }
 
-export const Root = AvatarGroupRoot;
-
-export const Tooltip = AvatarGroupTooltip;
+export { AvatarGroupRoot as Root, AvatarGroupTooltip as Tooltip };

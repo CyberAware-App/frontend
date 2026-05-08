@@ -1,3 +1,4 @@
+/* eslint-disable react/no-unstable-default-props */
 "use client";
 
 import { toArray } from "@zayne-labs/toolkit-core";
@@ -60,8 +61,8 @@ function AvatarGroupRoot(props: AvatarGroupProps) {
 		side = "top",
 		sideOffset = 15,
 		style,
-		tooltipTransition,
-		transition,
+		tooltipTransition = { damping: 35, stiffness: 300, type: "spring" },
+		transition = { damping: 17, stiffness: 300, type: "spring" },
 		translate = "-30%",
 		...restOfProps
 	} = props;
@@ -73,7 +74,7 @@ function AvatarGroupRoot(props: AvatarGroupProps) {
 			id={id}
 			openDelay={openDelay}
 			closeDelay={closeDelay}
-			transition={tooltipTransition ?? { damping: 35, stiffness: 300, type: "spring" }}
+			transition={tooltipTransition}
 		>
 			<div
 				ref={ref}
@@ -87,10 +88,10 @@ function AvatarGroupRoot(props: AvatarGroupProps) {
 			>
 				{childrenArray.map((child, index) => (
 					<AvatarContainer
-						// eslint-disable-next-line react-x/no-array-index-key
+						// eslint-disable-next-line react/no-array-index-key
 						key={index}
 						zIndex={invertOverlap ? childrenArray.length - index : index}
-						transition={transition ?? { damping: 17, stiffness: 300, type: "spring" }}
+						transition={transition}
 						translate={translate}
 						side={side}
 						sideOffset={sideOffset}
@@ -113,6 +114,4 @@ function AvatarGroupTooltipArrow(props: React.ComponentProps<typeof TooltipPrimi
 	return <TooltipPrimitive.Arrow {...props} />;
 }
 
-export const Root = AvatarGroupRoot;
-export const Tooltip = AvatarGroupTooltip;
-export const TooltipArrow = AvatarGroupTooltipArrow;
+export { AvatarGroupRoot as Root, AvatarGroupTooltip as Tooltip, AvatarGroupTooltipArrow as TooltipArrow };

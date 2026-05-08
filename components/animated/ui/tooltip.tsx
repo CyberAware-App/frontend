@@ -1,3 +1,5 @@
+"use client";
+
 import { motion } from "motion/react";
 import * as TooltipPrimitive from "@/components/animated/primitives/tooltip";
 import { cnMerge } from "@/lib/utils/cn";
@@ -51,8 +53,8 @@ function TooltipContent(props: TooltipContentProps) {
 
 			<TooltipPrimitive.Arrow
 				className={cnMerge(
-					`size-3 fill-shadcn-primary data-[side=bottom]:translate-y-px
-					data-[side=left]:-translate-x-px data-[side=right]:translate-x-px
+					`size-3 fill-shadcn-primary data-[side=bottom]:-translate-y-px
+					data-[side=left]:-translate-x-px data-[side=right]:-translate-x-px
 					data-[side=top]:-translate-y-px`,
 					classNames?.arrow
 				)}
@@ -62,8 +64,9 @@ function TooltipContent(props: TooltipContentProps) {
 	);
 }
 
-export const Provider = TooltipProvider;
-
-export const Root = TooltipRoot;
-export const Trigger = TooltipTrigger;
-export const Content = TooltipContent;
+export {
+	TooltipProvider as Provider,
+	TooltipRoot as Root,
+	TooltipTrigger as Trigger,
+	TooltipContent as Content,
+};

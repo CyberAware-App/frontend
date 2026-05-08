@@ -151,6 +151,7 @@ export const Root = DialogRoot;
 
 export const Context = DialogContext;
 
+// eslint-disable-next-line react-refresh/only-export-components
 export const Close = DialogPrimitive.Close;
 
 export const Content = DialogContent;
@@ -163,10 +164,12 @@ export const Header = DialogHeader;
 
 export const Overlay = DialogOverlay;
 
+// eslint-disable-next-line react-refresh/only-export-components
 export const Portal = DialogPrimitive.Portal;
 
 export const Title = DialogTitle;
 
+// eslint-disable-next-line react-refresh/only-export-components
 export const Trigger = DialogPrimitive.Trigger;
 
 // eslint-disable-next-line react-refresh/only-export-components

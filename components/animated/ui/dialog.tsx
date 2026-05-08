@@ -1,3 +1,5 @@
+"use client";
+
 import type { InferProps } from "@zayne-labs/toolkit-react/utils";
 import { IconBox } from "@/components/common/IconBox";
 import { cnMerge } from "@/lib/utils/cn";
@@ -50,8 +52,8 @@ function DialogContent(props: DialogContentProps) {
 			<DialogOverlay className={classNames?.overlay} />
 			<DialogPrimitive.Content
 				className={cnMerge(
-					`fixed top-[50%] left-[50%] z-50 grid w-full max-w-[calc(100%-2rem)] translate-[-50%] gap-4
-					rounded-lg border bg-shadcn-background p-6 shadow-lg sm:max-w-lg`,
+					`fixed top-1/2 left-1/2 z-50 grid w-full max-w-lg -translate-1/2 gap-4 rounded-lg border
+					bg-shadcn-background p-6 shadow-lg`,
 					className,
 					classNames?.base
 				)}
@@ -94,10 +96,7 @@ function DialogFooter(props: DialogFooterProps) {
 	const { className, ...restOfProps } = props;
 
 	return (
-		<DialogPrimitive.Footer
-			className={cnMerge("flex flex-col-reverse gap-2 sm:flex-row sm:justify-end", className)}
-			{...restOfProps}
-		/>
+		<DialogPrimitive.Footer className={cnMerge("flex flex-col gap-2", className)} {...restOfProps} />
 	);
 }
 
@@ -127,12 +126,14 @@ function DialogDescription(props: DialogDescriptionProps) {
 	);
 }
 
-export const Root = DialogRoot;
-export const Trigger = DialogTrigger;
-export const Close = DialogClose;
-export const Overlay = DialogOverlay;
-export const Content = DialogContent;
-export const Header = DialogHeader;
-export const Footer = DialogFooter;
-export const Title = DialogTitle;
-export const Description = DialogDescription;
+export {
+	DialogRoot as Root,
+	DialogTrigger as Trigger,
+	DialogClose as Close,
+	DialogOverlay as Overlay,
+	DialogContent as Content,
+	DialogHeader as Header,
+	DialogFooter as Footer,
+	DialogTitle as Title,
+	DialogDescription as Description,
+};

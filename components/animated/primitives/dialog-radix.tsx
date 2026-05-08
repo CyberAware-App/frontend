@@ -1,4 +1,4 @@
-/* eslint-disable react-x/no-unstable-default-props */
+/* eslint-disable react/no-unstable-default-props */
 "use client";
 
 import { createCustomContext, useControllableState } from "@zayne-labs/toolkit-react";
@@ -174,16 +174,17 @@ function DialogDescription(props: DialogDescriptionProps) {
 	return <DialogPrimitive.Description data-slot="dialog-description" {...props} />;
 }
 
-export const Root = DialogRoot;
-export const Portal = DialogPortal;
-export const Overlay = DialogOverlay;
-export const Close = DialogClose;
-export const Trigger = DialogTrigger;
-export const Content = DialogContent;
-export const Header = DialogHeader;
-export const Footer = DialogFooter;
-export const Title = DialogTitle;
-export const Description = DialogDescription;
-
-// eslint-disable-next-line react-refresh/only-export-components
-export { useDialogContext };
+export {
+	DialogRoot as Root,
+	DialogPortal as Portal,
+	DialogOverlay as Overlay,
+	DialogClose as Close,
+	DialogTrigger as Trigger,
+	DialogContent as Content,
+	DialogHeader as Header,
+	DialogFooter as Footer,
+	DialogTitle as Title,
+	DialogDescription as Description,
+	// eslint-disable-next-line react-refresh/only-export-components
+	useDialogContext,
+};

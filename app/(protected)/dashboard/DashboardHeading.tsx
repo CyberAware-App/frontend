@@ -6,30 +6,27 @@ import { usePathname } from "next/navigation";
 import { UserAvatar } from "@/app/-components/UserAvatar";
 import { ProgressAnimated } from "@/components/animated/ui";
 import { IconBox } from "@/components/common/IconBox";
-import { NavLink } from "@/components/common/NavLink";
+import { NavLink, type MainAppRoutes } from "@/components/common/NavLink";
 import { dashboardQuery } from "@/lib/react-query/queryOptions";
 import { logoSmall } from "@/public/assets";
-
-const testPaths = ["/quiz", "/exam"];
 
 function DashboardHeading() {
 	const dashboardQueryResult = useQuery(dashboardQuery());
 
 	const pathName = usePathname();
 
-	const testPath = testPaths.find((path) => pathName.endsWith(path));
+	const quizOrExamPath = ["/quiz", "/exam"].find((path) => pathName.endsWith(path));
 
-	const isTestPage = Boolean(testPath);
-	const modulePath = testPath ? pathName.replace(testPath, "") : pathName;
+	const modulePath = quizOrExamPath ? pathName.replace(quizOrExamPath, "") : pathName;
 
 	return (
 		<header className="px-4 pt-[50px] pb-8">
 			<NavLink
-				href={isTestPage ? modulePath : "/dashboard"}
+				href={quizOrExamPath ? (modulePath as MainAppRoutes) : "/dashboard"}
 				className="flex items-center gap-1 text-[12px] font-medium text-cyberaware-unizik-orange"
 			>
 				<IconBox icon="ri:arrow-left-line" className="size-4" />
-				Back to {isTestPage ? "module" : "dashboard"}
+				Back to {quizOrExamPath ? "module" : "dashboard"}
 			</NavLink>
 
 			<article className="mt-4 flex items-center justify-between gap-5">

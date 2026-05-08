@@ -28,4 +28,4 @@ function ProgressRoot(props: ProgressRootProps) {
 	);
 }
 
-export const Root = ProgressRoot;
+export { ProgressRoot as Root };

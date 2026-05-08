@@ -1,4 +1,4 @@
-/* eslint-disable react-x/no-unstable-default-props */
+/* eslint-disable react/no-unstable-default-props */
 "use client";
 
 import { createCustomContext } from "@zayne-labs/toolkit-react";
@@ -48,8 +48,9 @@ function ProgressIndicator({
 	);
 }
 
-export const Root = ProgressRoot;
-export const Indicator = ProgressIndicator;
-
-// eslint-disable-next-line react-refresh/only-export-components
-export { useProgressContext };
+export {
+	ProgressRoot as Root,
+	ProgressIndicator as Indicator,
+	// eslint-disable-next-line react-refresh/only-export-components
+	useProgressContext,
+};

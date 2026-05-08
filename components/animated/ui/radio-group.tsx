@@ -39,7 +39,7 @@ function RadioGroupItem(props: RadioGroupItemProps) {
 	);
 }
 
-export const Root = RadioGroupRoot;
-export const Item = RadioGroupItem;
-
+// eslint-disable-next-line react-refresh/only-export-components
 export const Indicator = RadioGroupPrimitive.Indicator;
+
+export { RadioGroupRoot as Root, RadioGroupItem as Item };

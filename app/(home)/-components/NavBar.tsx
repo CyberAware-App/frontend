@@ -6,7 +6,7 @@ import { Presence } from "@zayne-labs/ui-react/common/presence";
 import Image from "next/image";
 import { usePathname } from "next/navigation";
 import { IconBox } from "@/components/common/IconBox";
-import { NavLink } from "@/components/common/NavLink";
+import { NavLink, type MainAppRoutes } from "@/components/common/NavLink";
 import { HamburgerIcon, XIcon } from "@/components/icons";
 import { Button } from "@/components/ui/button";
 import { cnJoin, cnMerge } from "@/lib/utils/cn";
@@ -77,7 +77,7 @@ const linkItems = [
 	// 	icon: "ri:team-fill",
 	// 	title: "Partners",
 	// },
-];
+] satisfies Array<{ href: MainAppRoutes; icon: string; title: string }>;
 
 function MobileNavigation(props: MobileNavProps) {
 	const { className, isNavShow, toggleNavShow } = props;

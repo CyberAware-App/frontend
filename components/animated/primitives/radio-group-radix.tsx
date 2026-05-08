@@ -1,7 +1,7 @@
+/* eslint-disable react/set-state-in-effect */
 /* eslint-disable react-you-might-not-need-an-effect/no-derived-state */
-/* eslint-disable react-you-might-not-need-an-effect/no-pass-data-to-parent */
 /* eslint-disable react-hooks/no-deriving-state-in-effects */
-/* eslint-disable react-x/no-unstable-default-props */
+/* eslint-disable react/no-unstable-default-props */
 "use client";
 
 import { createCustomContext, useControllableState } from "@zayne-labs/toolkit-react";
@@ -101,8 +101,10 @@ function RadioGroupItem(props: RadioGroupItemProps) {
 		setIsChecked(value === valueProp);
 	}, [value, valueProp]);
 
+	const contextValue = useMemo(() => ({ isChecked, setIsChecked }), [isChecked, setIsChecked]);
+
 	return (
-		<RadioGroupItemContextProvider value={{ isChecked, setIsChecked }}>
+		<RadioGroupItemContextProvider value={contextValue}>
 			<RadioGroupPrimitive.Item
 				asChild={true}
 				value={valueProp}
@@ -120,9 +122,12 @@ function RadioGroupItem(props: RadioGroupItemProps) {
 	);
 }
 
-export const Root = RadioGroupRoot;
-export const Item = RadioGroupItem;
-export const Indicator = RadioGroupIndicator;
-
-// eslint-disable-next-line react-refresh/only-export-components
-export { useRadioGroupContext, useRadioGroupItemContext };
+export {
+	RadioGroupRoot as Root,
+	RadioGroupItem as Item,
+	RadioGroupIndicator as Indicator,
+	// eslint-disable-next-line react-refresh/only-export-components
+	useRadioGroupContext,
+	// eslint-disable-next-line react-refresh/only-export-components
+	useRadioGroupItemContext,
+};

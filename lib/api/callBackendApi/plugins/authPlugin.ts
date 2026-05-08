@@ -1,6 +1,7 @@
 import type { RequestContext, ResponseErrorContext } from "@zayne-labs/callapi";
 import { definePlugin, isHTTPError } from "@zayne-labs/callapi/utils";
 import type { Awaitable, CallbackFn } from "@zayne-labs/toolkit-type-helpers";
+import type { MainAppRoutes } from "@/components/common/NavLink";
 import type { BaseApiErrorResponse } from "../apiSchema";
 import type { ToastPluginMeta } from "./toastPlugin";
 import {
@@ -14,16 +15,18 @@ import { getNewUserSession } from "./utils/session";
 
 export type AuthPluginMeta = {
 	auth?: {
-		redirectFn?: CallbackFn<`/${string}`, Awaitable<void>>;
-		routesToExemptFromHeaderAddition?: Array<`/${string}` | `${string}/**`>;
-		routesToExemptFromRedirectOnAuthError?: Array<`/${string}` | `${string}/**`>;
-		signInRoute?: `/${string}`;
+		redirectFn?: CallbackFn<MainAppRoutes, Awaitable<void>>;
+		redirectRoute?: MainAppRoutes;
+		routesToExemptFromHeaderAddition?: Array<`${MainAppRoutes}/**` | `${string}/**` | MainAppRoutes>;
+		routesToExemptFromRedirectOnAuthError?: Array<
+			`${MainAppRoutes}/**` | `${string}/**` | MainAppRoutes
+		>;
 		skipHeaderAddition?: boolean;
 		tokenToAdd?: PossibleAuthTokenUnion;
 	};
 };
 
-const defaultSignInRoute = "/auth/signin";
+const defaultRedirectRoute = "/auth/signin" satisfies Required<AuthPluginMeta>["auth"]["redirectRoute"];
 
 const defaultRedirectionMessage = "Session is missing! Automatically redirecting to login...";
 
@@ -38,7 +41,7 @@ export const authPlugin = (authOptions?: AuthPluginMeta["auth"]) => {
 			authOptions ? { ...authOptions, ...ctx.options.meta?.auth } : ctx.options.meta?.auth;
 
 		const redirectFn = authMeta?.redirectFn ?? redirectTo;
-		const signInRoute = authMeta?.signInRoute ?? defaultSignInRoute;
+		const signInRoute = authMeta?.redirectRoute ?? defaultRedirectRoute;
 
 		const isExemptedRoute = Boolean(
 			authMeta?.routesToExemptFromHeaderAddition?.some((route) => isPathnameMatchingRoute(route))
@@ -132,7 +135,9 @@ export const authPlugin = (authOptions?: AuthPluginMeta["auth"]) => {
 
 				result.data?.data && authTokenStore.setAccessToken({ access: result.data.data.access });
 
-				ctx.options.retryAttempts = 1;
+				// ctx.options.retryAttempts = 1;  Old way of refetcing the request request
+
+				void ctx.options.refetch(); // New way - This is the proper way to refetch the request
 			},
 		},
 	});

@@ -56,7 +56,8 @@ function QuizForm(props: QuizFormProps) {
 									<Form.FieldBoundController
 										render={({ field }) => (
 											<RadioGroupAnimated.Root
-												value={(field.value as string | undefined) ?? ""}
+												// eslint-disable-next-line ts-eslint/no-unnecessary-condition
+												value={field.value ?? ""}
 												onValueChange={field.onChange}
 											>
 												<For
@@ -121,7 +122,7 @@ function QuizForm(props: QuizFormProps) {
 					classNames={{
 						base: `top-[70%] max-w-[367px] translate-y-[-70%] gap-[60px] rounded-none border-none
 						px-5.5 pt-8 pb-[170px]`,
-						overlay: "bg-[hsl(0,0%,85%)]/70 backdrop-blur-[4px]",
+						overlay: "bg-[hsl(0,0%,85%)]/70 backdrop-blur-xs",
 					}}
 				>
 					<DialogAnimated.Header className="flex-row justify-center">

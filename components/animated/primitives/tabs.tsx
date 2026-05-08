@@ -1,10 +1,9 @@
+/* eslint-disable react-you-might-not-need-an-effect/no-event-handler */
+/* eslint-disable react/set-state-in-effect */
 /* eslint-disable react-you-might-not-need-an-effect/no-derived-state */
-/* eslint-disable react-you-might-not-need-an-effect/no-pass-ref-to-parent */
 /* eslint-disable react-you-might-not-need-an-effect/no-chain-state-updates */
-/* eslint-disable react-you-might-not-need-an-effect/no-pass-data-to-parent */
 /* eslint-disable react-hooks/preserve-manual-memoization */
-/* eslint-disable react-x/no-unstable-default-props */
-/* eslint-disable react-hooks/set-state-in-effect */
+/* eslint-disable react/no-unstable-default-props */
 "use client";
 
 import { toArray } from "@zayne-labs/toolkit-core";
@@ -19,7 +18,7 @@ import {
 	useRef,
 	useState,
 } from "react";
-import * as MotionHighlightPrimitive from "./motion-highlight";
+import * as HighlightPrimitive from "./effects/highlight";
 import { Slot, type WithAsChild } from "./slot";
 
 type TabsContextType = {
@@ -54,14 +53,13 @@ type TabsProps = ControlledTabsProps | UnControlledTabsProps;
 
 function TabsRoot(props: TabsProps) {
 	const { children, defaultValue, onValueChange, value, ...restOfProps } = props;
-	const [activeValue, setActiveValue] = useState<string | undefined>(defaultValue);
+	const [activeValue, setActiveValue] = useState(defaultValue);
 	const triggersRef = useRef(new Map<string, HTMLElement>());
 	const initialSetRef = useRef(false);
 	const isControlled = value !== undefined;
 
 	useEffect(() => {
 		if (
-			// eslint-disable-next-line react-you-might-not-need-an-effect/no-event-handler
 			!isControlled
 			&& activeValue === undefined
 			&& triggersRef.current.size > 0
@@ -114,7 +112,7 @@ function TabsRoot(props: TabsProps) {
 }
 
 type TabsHighlightProps = Omit<
-	React.ComponentProps<typeof MotionHighlightPrimitive.Root>,
+	React.ComponentProps<typeof HighlightPrimitive.Root>,
 	"controlledItems" | "value"
 >;
 
@@ -123,7 +121,7 @@ function TabsHighlight(props: TabsHighlightProps) {
 	const { activeValue } = useTabsContext();
 
 	return (
-		<MotionHighlightPrimitive.Root
+		<HighlightPrimitive.Root
 			data-slot="tabs-highlight-root"
 			controlledItems={true}
 			value={activeValue}
@@ -141,12 +139,12 @@ function TabsList(props: TabsListProps) {
 	return <div role="tablist" data-slot="tabs-list" {...props} />;
 }
 
-type TabsHighlightItemProps = React.ComponentProps<typeof MotionHighlightPrimitive.Item> & {
+type TabsHighlightItemProps = React.ComponentProps<typeof HighlightPrimitive.Item> & {
 	value: string;
 };
 
 function TabsHighlightItem(props: TabsHighlightItemProps) {
-	return <MotionHighlightPrimitive.Item data-slot="tabs-highlight-item" {...props} />;
+	return <HighlightPrimitive.Item data-slot="tabs-highlight-item" {...props} />;
 }
 
 type TabsTriggerProps = WithAsChild<
@@ -279,7 +277,7 @@ function TabsContentList(props: TabsContentsProps) {
 			>
 				{childrenArray.map((child, index) => (
 					<div
-						// eslint-disable-next-line react-x/no-array-index-key
+						// eslint-disable-next-line react/no-array-index-key
 						key={index}
 						ref={(el) => {
 							itemsRef.current[index] = el;

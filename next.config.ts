@@ -21,6 +21,8 @@ const nextConfig: NextConfig = {
 		},
 	},
 
+	reactStrictMode: true,
+
 	typedRoutes: true,
 
 	typescript: {

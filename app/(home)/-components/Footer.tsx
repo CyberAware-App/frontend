@@ -1,6 +1,6 @@
 import { ForWithWrapper } from "@zayne-labs/ui-react/common/for";
 import Image from "next/image";
-import { NavLink } from "@/components/common/NavLink";
+import { NavLink, type MainAppRoutes } from "@/components/common/NavLink";
 import { logoLarge } from "@/public/assets";
 
 const footerLinks = [
@@ -20,7 +20,7 @@ const footerLinks = [
 		href: "/partners",
 		title: "Partners",
 	},
-];
+] satisfies Array<{ href: MainAppRoutes; title: string }>;
 
 function Footer() {
 	return (

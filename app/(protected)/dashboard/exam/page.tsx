@@ -59,7 +59,7 @@ function ExamPage() {
 
 	const selectedExamQuestions = useMemo(() => {
 		return shuffleArray(examQueryResult.data?.exam_data)?.slice(0, MAX_QUESTIONS);
-		// eslint-disable-next-line react-hooks/exhaustive-deps
+		// eslint-disable-next-line react/exhaustive-deps
 	}, [examQueryResult.data, shouldReshuffleQuestions]);
 
 	const queryClient = useQueryClient();
@@ -121,7 +121,7 @@ function ExamPage() {
 		<Main>
 			<DashboardHeading />
 
-			<section className="flex grow flex-col gap-[50px] bg-white px-5 pt-5 pb-[50px]">
+			<section className="flex grow flex-col gap-12 bg-white px-5 pt-5 pb-12">
 				<hr className="h-px w-full border-none bg-cyberaware-neutral-gray-light" />
 
 				<Switch.Root>

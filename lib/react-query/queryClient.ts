@@ -10,7 +10,7 @@ const makeQueryClient = () => {
 				shouldDehydrateQuery: (query) => {
 					return defaultShouldDehydrateQuery(query) || query.state.status === "pending";
 				},
-				shouldRedactErrors: (_error) => {
+				shouldRedactErrors: () => {
 					// We should not catch Next.js server errors
 					// as that's how Next.js detects dynamic pages
 					// so we cannot redact them.

@@ -49,7 +49,7 @@ function QuizPage({ params }: PageProps<"/dashboard/module/[id]/quiz">) {
 
 	const selectedQuizQuestions = useMemo(() => {
 		return shuffleArray(moduleQuizQueryResult.data)?.slice(0, MAX_QUESTION);
-		// eslint-disable-next-line react-hooks/exhaustive-deps
+		// eslint-disable-next-line react/exhaustive-deps
 	}, [moduleQuizQueryResult.data, shouldReshuffleQuestions]);
 
 	const onSubmit = form.handleSubmit((data) => {

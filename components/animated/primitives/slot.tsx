@@ -1,3 +1,5 @@
+/* eslint-disable react/refs */
+/* eslint-disable react/static-components */
 "use client";
 
 import { composeRefs, mergeProps } from "@zayne-labs/toolkit-react/utils";
@@ -38,7 +40,6 @@ function Slot<TElement extends HTMLElement = HTMLElement>(props: SlotProps<TElem
 
 	const mergedProps = mergeProps(childProps, restOfProps);
 
-	// eslint-disable-next-line react-hooks/static-components
 	return <Base {...mergedProps} ref={composeRefs(childRef as React.Ref<TElement>, ref)} />;
 }
 
