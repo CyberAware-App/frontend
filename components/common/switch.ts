@@ -1,3 +1,3 @@
 "use client";
 
-export * from "@zayne-labs/ui-react/common/switch";
+export { Switch } from "@zayne-labs/ui-react/common/switch";

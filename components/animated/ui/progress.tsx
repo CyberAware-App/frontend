@@ -1,8 +1,7 @@
-import type { InferProps } from "@zayne-labs/toolkit-react/utils";
 import { cnMerge } from "@/lib/utils/cn";
 import * as ProgressPrimitive from "../primitives/progress-radix";
 
-type ProgressRootProps = InferProps<typeof ProgressPrimitive.Root> & {
+type ProgressRootProps = React.ComponentProps<typeof ProgressPrimitive.Root> & {
 	classNames?: {
 		base?: string;
 		indicator?: string;

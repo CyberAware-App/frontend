@@ -1,9 +1,8 @@
-import type { InferProps } from "@zayne-labs/toolkit-react/utils";
 import { IconBox } from "@/components/common/IconBox";
 import { cnMerge } from "@/lib/utils/cn";
 import * as RadioGroupPrimitive from "../primitives/radio-group-radix";
 
-type RadioGroupRootProps = InferProps<typeof RadioGroupPrimitive.Root>;
+type RadioGroupRootProps = React.ComponentProps<typeof RadioGroupPrimitive.Root>;
 
 function RadioGroupRoot(props: RadioGroupRootProps) {
 	const { className, ...restOfProps } = props;
@@ -11,7 +10,7 @@ function RadioGroupRoot(props: RadioGroupRootProps) {
 	return <RadioGroupPrimitive.Root className={cnMerge("grid gap-3", className)} {...restOfProps} />;
 }
 
-type RadioGroupItemProps = InferProps<typeof RadioGroupPrimitive.Item>;
+type RadioGroupItemProps = React.ComponentProps<typeof RadioGroupPrimitive.Item>;
 
 function RadioGroupItem(props: RadioGroupItemProps) {
 	const { children, className, ...restOfProps } = props;

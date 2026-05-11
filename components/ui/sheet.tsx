@@ -1,27 +1,26 @@
 "use client";
 
-import type { InferProps } from "@zayne-labs/toolkit-react/utils";
 import { Dialog as SheetPrimitive } from "radix-ui";
 import { cnMerge } from "@/lib/utils/cn";
 import { IconBox } from "../common/IconBox";
 
-function SheetRoot(props: InferProps<typeof SheetPrimitive.Root>) {
+function SheetRoot(props: React.ComponentProps<typeof SheetPrimitive.Root>) {
 	return <SheetPrimitive.Root data-slot="sheet-root" {...props} />;
 }
 
-function SheetTrigger(props: InferProps<typeof SheetPrimitive.Trigger>) {
+function SheetTrigger(props: React.ComponentProps<typeof SheetPrimitive.Trigger>) {
 	return <SheetPrimitive.Trigger data-slot="sheet-trigger" {...props} />;
 }
 
-function SheetClose(props: InferProps<typeof SheetPrimitive.Close>) {
+function SheetClose(props: React.ComponentProps<typeof SheetPrimitive.Close>) {
 	return <SheetPrimitive.Close data-slot="sheet-close" {...props} />;
 }
 
-function SheetPortal(props: InferProps<typeof SheetPrimitive.Portal>) {
+function SheetPortal(props: React.ComponentProps<typeof SheetPrimitive.Portal>) {
 	return <SheetPrimitive.Portal data-slot="sheet-portal" {...props} />;
 }
 
-function SheetOverlay(props: InferProps<typeof SheetPrimitive.Overlay>) {
+function SheetOverlay(props: React.ComponentProps<typeof SheetPrimitive.Overlay>) {
 	const { className, ...restOfProps } = props;
 
 	return (
@@ -38,7 +37,7 @@ function SheetOverlay(props: InferProps<typeof SheetPrimitive.Overlay>) {
 }
 
 function SheetContent(
-	props: InferProps<typeof SheetPrimitive.Content> & {
+	props: React.ComponentProps<typeof SheetPrimitive.Content> & {
 		side?: "bottom" | "left" | "right" | "top";
 	}
 ) {
@@ -86,7 +85,7 @@ function SheetContent(
 	);
 }
 
-function SheetHeader(props: InferProps<"div">) {
+function SheetHeader(props: React.ComponentProps<"div">) {
 	const { className, ...restOfProps } = props;
 
 	return (
@@ -98,7 +97,7 @@ function SheetHeader(props: InferProps<"div">) {
 	);
 }
 
-function SheetFooter(props: InferProps<"div">) {
+function SheetFooter(props: React.ComponentProps<"div">) {
 	const { className, ...restOfProps } = props;
 
 	return (
@@ -110,7 +109,7 @@ function SheetFooter(props: InferProps<"div">) {
 	);
 }
 
-function SheetTitle(props: InferProps<typeof SheetPrimitive.Title>) {
+function SheetTitle(props: React.ComponentProps<typeof SheetPrimitive.Title>) {
 	const { className, ...restOfProps } = props;
 
 	return (
@@ -122,7 +121,7 @@ function SheetTitle(props: InferProps<typeof SheetPrimitive.Title>) {
 	);
 }
 
-function SheetDescription(props: InferProps<typeof SheetPrimitive.Description>) {
+function SheetDescription(props: React.ComponentProps<typeof SheetPrimitive.Description>) {
 	const { className, ...restOfProps } = props;
 
 	return (

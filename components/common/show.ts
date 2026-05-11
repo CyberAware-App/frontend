@@ -1,3 +1,3 @@
 "use client";
 
-export * from "@zayne-labs/ui-react/common/show";
+export { Show } from "@zayne-labs/ui-react/common/show";

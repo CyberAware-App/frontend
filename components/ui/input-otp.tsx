@@ -1,11 +1,10 @@
-import type { InferProps } from "@zayne-labs/toolkit-react/utils";
 import { OTPInput, OTPInputContext } from "input-otp";
 import { use } from "react";
 import { cnMerge } from "@/lib/utils/cn";
 import { IconBox } from "../common/IconBox";
 
 function InputOTPRoot(
-	props: InferProps<typeof OTPInput> & { classNames?: { container?: string; input?: string } }
+	props: React.ComponentProps<typeof OTPInput> & { classNames?: { container?: string; input?: string } }
 ) {
 	const { className, classNames, containerClassName, ...restOfProps } = props;
 
@@ -23,7 +22,7 @@ function InputOTPRoot(
 	);
 }
 
-function InputOTPGroup(props: InferProps<"div">) {
+function InputOTPGroup(props: React.ComponentProps<"div">) {
 	const { className, ...restOfProps } = props;
 
 	return (
@@ -36,7 +35,10 @@ function InputOTPGroup(props: InferProps<"div">) {
 }
 
 function InputOTPSlot(
-	props: InferProps<"div"> & { classNames?: { base?: string; isActive?: string }; index: number }
+	props: React.ComponentProps<"div"> & {
+		classNames?: { base?: string; isActive?: string };
+		index: number;
+	}
 ) {
 	const { className, classNames, index, ...restOfProps } = props;
 
@@ -71,7 +73,7 @@ function InputOTPSlot(
 	);
 }
 
-function InputOTPSeparator(props: InferProps<"div">) {
+function InputOTPSeparator(props: React.ComponentProps<"div">) {
 	return (
 		<div data-slot="input-otp-separator" role="separator" {...props}>
 			<IconBox icon="radix-icons:dash" />

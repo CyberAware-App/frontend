@@ -1,7 +1,7 @@
 "use client";
 
 import { createCustomContext, useControllableState } from "@zayne-labs/toolkit-react";
-import type { DiscriminatedRenderProps, InferProps } from "@zayne-labs/toolkit-react/utils";
+import type { DiscriminatedRenderProps } from "@zayne-labs/toolkit-react/utils";
 import { Dialog as DialogPrimitive } from "radix-ui";
 import { useMemo } from "react";
 import { cnMerge } from "@/lib/utils/cn";
@@ -14,7 +14,7 @@ type ContextType = {
 
 const [DialogStateContextProvider, useDialogStateContext] = createCustomContext<ContextType>();
 
-function DialogRoot(props: InferProps<typeof DialogPrimitive.Root>) {
+function DialogRoot(props: React.ComponentProps<typeof DialogPrimitive.Root>) {
 	const {
 		defaultOpen: defaultOpenProp,
 		// eslint-disable-next-line ts-eslint/unbound-method
@@ -55,7 +55,7 @@ function DialogContext(props: DiscriminatedRenderProps<RenderFn>) {
 	return selectedRenderFn(dialogCtx);
 }
 
-function DialogOverlay(props: InferProps<typeof DialogPrimitive.Overlay>) {
+function DialogOverlay(props: React.ComponentProps<typeof DialogPrimitive.Overlay>) {
 	const { className, ...restOfProps } = props;
 
 	return (
@@ -70,7 +70,9 @@ function DialogOverlay(props: InferProps<typeof DialogPrimitive.Overlay>) {
 	);
 }
 
-function DialogContent(props: InferProps<typeof DialogPrimitive.Content> & { withCloseButton?: boolean }) {
+function DialogContent(
+	props: React.ComponentProps<typeof DialogPrimitive.Content> & { withCloseButton?: boolean }
+) {
 	const { children, className, withCloseButton = true, ...restOfProps } = props;
 
 	return (
@@ -108,7 +110,7 @@ function DialogContent(props: InferProps<typeof DialogPrimitive.Content> & { wit
 	);
 }
 
-function DialogHeader(props: InferProps<"div">) {
+function DialogHeader(props: React.ComponentProps<"div">) {
 	const { className, ...restOfProps } = props;
 
 	return (
@@ -119,13 +121,13 @@ function DialogHeader(props: InferProps<"div">) {
 	);
 }
 
-function DialogFooter(props: InferProps<"div">) {
+function DialogFooter(props: React.ComponentProps<"div">) {
 	const { className, ...restOfProps } = props;
 
 	return <div className={cnMerge("flex flex-col", className)} {...restOfProps} />;
 }
 
-function DialogTitle(props: InferProps<typeof DialogPrimitive.Title>) {
+function DialogTitle(props: React.ComponentProps<typeof DialogPrimitive.Title>) {
 	const { className, ...restOfProps } = props;
 
 	return (
@@ -136,7 +138,7 @@ function DialogTitle(props: InferProps<typeof DialogPrimitive.Title>) {
 	);
 }
 
-function DialogDescription(props: InferProps<typeof DialogPrimitive.Description>) {
+function DialogDescription(props: React.ComponentProps<typeof DialogPrimitive.Description>) {
 	const { className, ...restOfProps } = props;
 
 	return (

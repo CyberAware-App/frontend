@@ -1,22 +1,21 @@
-import type { InferProps } from "@zayne-labs/toolkit-react/utils";
 import { Select as SelectPrimitive } from "radix-ui";
 import { cnMerge } from "@/lib/utils/cn";
 import { IconBox } from "../common/IconBox";
 
-function SelectRoot(props: InferProps<typeof SelectPrimitive.Root>) {
+function SelectRoot(props: React.ComponentProps<typeof SelectPrimitive.Root>) {
 	return <SelectPrimitive.Root data-slot="select-root" {...props} />;
 }
 
-function SelectGroup(props: InferProps<typeof SelectPrimitive.Group>) {
+function SelectGroup(props: React.ComponentProps<typeof SelectPrimitive.Group>) {
 	return <SelectPrimitive.Group data-slot="select-group" {...props} />;
 }
 
-function SelectValue(props: InferProps<typeof SelectPrimitive.Value>) {
+function SelectValue(props: React.ComponentProps<typeof SelectPrimitive.Value>) {
 	return <SelectPrimitive.Value data-slot="select-value" {...props} />;
 }
 
 function SelectTrigger(
-	props: InferProps<typeof SelectPrimitive.Trigger> & {
+	props: React.ComponentProps<typeof SelectPrimitive.Trigger> & {
 		classNames?: { base?: string; icon?: string };
 		icon?: string;
 		size?: "default" | "sm";
@@ -57,7 +56,7 @@ function SelectTrigger(
 	);
 }
 
-function SelectScrollUpButton(props: InferProps<typeof SelectPrimitive.ScrollUpButton>) {
+function SelectScrollUpButton(props: React.ComponentProps<typeof SelectPrimitive.ScrollUpButton>) {
 	const { className, ...restOfProps } = props;
 
 	return (
@@ -71,7 +70,7 @@ function SelectScrollUpButton(props: InferProps<typeof SelectPrimitive.ScrollUpB
 	);
 }
 
-function SelectScrollDownButton(props: InferProps<typeof SelectPrimitive.ScrollDownButton>) {
+function SelectScrollDownButton(props: React.ComponentProps<typeof SelectPrimitive.ScrollDownButton>) {
 	const { className, ...restOfProps } = props;
 
 	return (
@@ -86,7 +85,7 @@ function SelectScrollDownButton(props: InferProps<typeof SelectPrimitive.ScrollD
 }
 
 function SelectContent(
-	props: InferProps<typeof SelectPrimitive.Content> & {
+	props: React.ComponentProps<typeof SelectPrimitive.Content> & {
 		classNames?: { base?: string; viewport?: string };
 	}
 ) {
@@ -133,7 +132,7 @@ function SelectContent(
 	);
 }
 
-function SelectLabel(props: InferProps<typeof SelectPrimitive.Label>) {
+function SelectLabel(props: React.ComponentProps<typeof SelectPrimitive.Label>) {
 	const { className, ...restOfProps } = props;
 
 	return (
@@ -145,7 +144,9 @@ function SelectLabel(props: InferProps<typeof SelectPrimitive.Label>) {
 	);
 }
 
-function SelectItem(props: InferProps<typeof SelectPrimitive.Item> & { withIndicator?: boolean }) {
+function SelectItem(
+	props: React.ComponentProps<typeof SelectPrimitive.Item> & { withIndicator?: boolean }
+) {
 	const { children, className, withIndicator = true, ...restOfProps } = props;
 
 	return (
@@ -175,7 +176,7 @@ function SelectItem(props: InferProps<typeof SelectPrimitive.Item> & { withIndic
 	);
 }
 
-function SelectSeparator(props: InferProps<typeof SelectPrimitive.Separator>) {
+function SelectSeparator(props: React.ComponentProps<typeof SelectPrimitive.Separator>) {
 	const { className, ...restOfProps } = props;
 
 	return (

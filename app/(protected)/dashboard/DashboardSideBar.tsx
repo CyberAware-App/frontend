@@ -29,19 +29,23 @@ function DashboardSideBar() {
 	const { ref: rootRef } = useClickOutside<HTMLDivElement>({ onClick: () => setIsOpen(false) });
 
 	return (
-		<Sidebar.ContextProvider
+		<Sidebar.Provider
 			open={isOpen}
 			onOpenChange={setIsOpen}
 			sidebarWidth="250px"
 			sidebarWidthIcon="60px"
 			withMobileBreakpoint={false}
-			className="max-w-(--sidebar-width-icon) shrink-0"
+			className="shrink-0 transition-[width] duration-300 ease-in-out
+				data-[state=collapsed]:w-(--sidebar-width-icon) data-[state=expanded]:w-(--sidebar-width)"
 		>
 			<Sidebar.Root
 				ref={rootRef}
 				collapsible="icon"
-				variant="sidebar-unfixed"
-				classNames={{ inner: "gap-8 bg-cyberaware-aeces-blue text-white" }}
+				variant="sidebar-sticky"
+				classNames={{
+					container: "border-r-[hsl(231,20%,80%,0.2)]",
+					inner: "gap-8 bg-cyberaware-aeces-blue text-white",
+				}}
 			>
 				<Sidebar.Header
 					className="mt-[80px] items-center justify-between gap-8 overflow-hidden px-4 py-0
@@ -54,7 +58,7 @@ function DashboardSideBar() {
 						</h3>
 					</NavLink>
 
-					<Sidebar.Trigger className="size-6">
+					<Sidebar.Trigger unstyled={true} className="size-6">
 						<HamburgerIcon />
 					</Sidebar.Trigger>
 				</Sidebar.Header>
@@ -78,7 +82,7 @@ function DashboardSideBar() {
 											<Button
 												theme="blue-light"
 												isDisabled={sidebarItem.status === "locked"}
-												className="h-[45px] justify-start gap-7 px-10 opacity-100"
+												className="h-11 justify-start gap-7 px-10 opacity-100"
 												asChild={true}
 											>
 												<CollapsibleAnimated.Trigger>
@@ -106,7 +110,7 @@ function DashboardSideBar() {
 
 											<Sidebar.MenuSub className="mx-0 border-none px-0">
 												<CollapsibleAnimated.Content>
-													<Sidebar.MenuSubItem className="group/menu-item">
+													<Sidebar.MenuSubItem className="group/menu-item" asChild={true}>
 														<NavLink
 															href={`/dashboard/module/${sidebarItem.id}`}
 															className="flex items-center gap-3 py-2.5 pr-6 pl-10
@@ -123,7 +127,7 @@ function DashboardSideBar() {
 																/>
 															</span>
 
-															<span className="line-clamp-2">{sidebarItem.name}</span>
+															<p className="line-clamp-2">{sidebarItem.name}</p>
 														</NavLink>
 													</Sidebar.MenuSubItem>
 												</CollapsibleAnimated.Content>
@@ -149,7 +153,7 @@ function DashboardSideBar() {
 						group-data-[state=collapsed]:-translate-x-6 group-data-[state=expanded]:translate-x-0"
 				/>
 			</Sidebar.Root>
-		</Sidebar.ContextProvider>
+		</Sidebar.Provider>
 	);
 }
 

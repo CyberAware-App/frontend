@@ -1,29 +1,28 @@
 "use client";
 
-import type { InferProps } from "@zayne-labs/toolkit-react/utils";
 import { IconBox } from "@/components/common/IconBox";
 import { cnMerge } from "@/lib/utils/cn";
 import * as DialogPrimitive from "../primitives/dialog-radix";
 
-type DialogProps = InferProps<typeof DialogPrimitive.Root>;
+type DialogProps = React.ComponentProps<typeof DialogPrimitive.Root>;
 
 function DialogRoot(props: DialogProps) {
 	return <DialogPrimitive.Root {...props} />;
 }
 
-type DialogTriggerProps = InferProps<typeof DialogPrimitive.Trigger>;
+type DialogTriggerProps = React.ComponentProps<typeof DialogPrimitive.Trigger>;
 
 function DialogTrigger(props: DialogTriggerProps) {
 	return <DialogPrimitive.Trigger {...props} />;
 }
 
-type DialogCloseProps = InferProps<typeof DialogPrimitive.Close>;
+type DialogCloseProps = React.ComponentProps<typeof DialogPrimitive.Close>;
 
 function DialogClose(props: DialogCloseProps) {
 	return <DialogPrimitive.Close {...props} />;
 }
 
-type DialogOverlayProps = InferProps<typeof DialogPrimitive.Overlay>;
+type DialogOverlayProps = React.ComponentProps<typeof DialogPrimitive.Overlay>;
 
 function DialogOverlay(props: DialogOverlayProps) {
 	const { className, ...restOfProps } = props;
@@ -36,7 +35,7 @@ function DialogOverlay(props: DialogOverlayProps) {
 	);
 }
 
-type DialogContentProps = InferProps<typeof DialogPrimitive.Content> & {
+type DialogContentProps = React.ComponentProps<typeof DialogPrimitive.Content> & {
 	classNames?: {
 		base?: string;
 		overlay?: string;
@@ -77,7 +76,7 @@ function DialogContent(props: DialogContentProps) {
 	);
 }
 
-type DialogHeaderProps = InferProps<typeof DialogPrimitive.Header>;
+type DialogHeaderProps = React.ComponentProps<typeof DialogPrimitive.Header>;
 
 function DialogHeader(props: DialogHeaderProps) {
 	const { className, ...restOfProps } = props;
@@ -90,7 +89,7 @@ function DialogHeader(props: DialogHeaderProps) {
 	);
 }
 
-type DialogFooterProps = InferProps<typeof DialogPrimitive.Footer>;
+type DialogFooterProps = React.ComponentProps<typeof DialogPrimitive.Footer>;
 
 function DialogFooter(props: DialogFooterProps) {
 	const { className, ...restOfProps } = props;
@@ -100,7 +99,7 @@ function DialogFooter(props: DialogFooterProps) {
 	);
 }
 
-type DialogTitleProps = InferProps<typeof DialogPrimitive.Title>;
+type DialogTitleProps = React.ComponentProps<typeof DialogPrimitive.Title>;
 
 function DialogTitle(props: DialogTitleProps) {
 	const { className, ...restOfProps } = props;
@@ -113,7 +112,7 @@ function DialogTitle(props: DialogTitleProps) {
 	);
 }
 
-type DialogDescriptionProps = InferProps<typeof DialogPrimitive.Description>;
+type DialogDescriptionProps = React.ComponentProps<typeof DialogPrimitive.Description>;
 
 function DialogDescription(props: DialogDescriptionProps) {
 	const { className, ...restOfProps } = props;

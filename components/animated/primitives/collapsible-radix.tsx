@@ -1,6 +1,5 @@
 /* eslint-disable react/no-unstable-default-props */
 import { createCustomContext, useCallbackRef, useToggle } from "@zayne-labs/toolkit-react";
-import type { InferProps } from "@zayne-labs/toolkit-react/utils";
 import { isFunction } from "@zayne-labs/toolkit-type-helpers";
 import { AnimatePresence, motion, type HTMLMotionProps, type Transition } from "motion/react";
 import { Collapsible as CollapsiblePrimitive } from "radix-ui";
@@ -16,7 +15,7 @@ type ContextValue = {
 
 const [CollapsibleContextProvider, useCollapsibleContext] = createCustomContext<ContextValue>();
 
-function CollapsibleRoot(props: InferProps<typeof CollapsiblePrimitive.Root>) {
+function CollapsibleRoot(props: React.ComponentProps<typeof CollapsiblePrimitive.Root>) {
 	// eslint-disable-next-line ts-eslint/unbound-method
 	const { defaultOpen, onOpenChange: setOpenProp, open: openProp, ...restOfProps } = props;
 
@@ -61,7 +60,7 @@ function CollapsibleRoot(props: InferProps<typeof CollapsiblePrimitive.Root>) {
 	);
 }
 
-type CollapsibleTriggerProps = InferProps<typeof CollapsiblePrimitive.Trigger>;
+type CollapsibleTriggerProps = React.ComponentProps<typeof CollapsiblePrimitive.Trigger>;
 
 function CollapsibleTrigger(props: CollapsibleTriggerProps) {
 	const { className, ...restOfProps } = props;
@@ -76,7 +75,7 @@ function CollapsibleTrigger(props: CollapsibleTriggerProps) {
 }
 
 type CollapsibleContentProps = HTMLMotionProps<"li">
-	& InferProps<typeof CollapsiblePrimitive.Content> & {
+	& React.ComponentProps<typeof CollapsiblePrimitive.Content> & {
 		keepRendered?: boolean;
 		transition?: Transition;
 	};
@@ -132,9 +131,10 @@ function CollapsibleContent(props: CollapsibleContentProps) {
 	);
 }
 
-export const Root = CollapsibleRoot;
-export const Trigger = CollapsibleTrigger;
-export const Content = CollapsibleContent;
-
-// eslint-disable-next-line react-refresh/only-export-components
-export { useCollapsibleContext };
+export {
+	CollapsibleContent as Content,
+	CollapsibleRoot as Root,
+	CollapsibleTrigger as Trigger,
+	// eslint-disable-next-line react-refresh/only-export-components
+	useCollapsibleContext,
+};

@@ -1,1 +1,3 @@
-export * from "@zayne-labs/ui-react/common/slot";
+"use client";
+
+export { Slot } from "@zayne-labs/ui-react/common/slot";

@@ -1,1 +1,1 @@
-export * from "@zayne-labs/ui-react/common/for";
+export { For, ForWithWrapper } from "@zayne-labs/ui-react/common/for";

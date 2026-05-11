@@ -1,10 +1,9 @@
 "use client";
 
-import { useConstant } from "@zayne-labs/toolkit-react";
-import type { InferProps } from "@zayne-labs/toolkit-react/utils";
-import { Slot } from "@zayne-labs/ui-react/common/slot";
+import { useConstant, useControllableState } from "@zayne-labs/toolkit-react";
 import { createContext, use, useCallback, useEffect, useMemo, useState } from "react";
 import { tv, type VariantProps } from "tailwind-variants";
+import { Slot } from "@/components/common/slot";
 import { FormInput } from "@/components/ui/form";
 import { Separator as SeparatorPrimitive } from "@/components/ui/separator";
 import * as Sheet from "@/components/ui/sheet";
@@ -13,6 +12,7 @@ import * as Tooltip from "@/components/ui/tooltip";
 import { useIsMobile } from "@/components/ui/useMobile";
 import { cnMerge } from "@/lib/utils/cn";
 import { IconBox } from "../common/IconBox";
+import { shadcnButtonVariants } from "./constants";
 
 const SIDEBAR_COOKIE_NAME = "sidebar_state";
 const SIDEBAR_COOKIE_MAX_AGE = 60 * 60 * 24 * 7;
@@ -47,9 +47,9 @@ export function useSidebarContext() {
 	return context;
 }
 
-export function SidebarContextProvider(
-	props: InferProps<"div">
-		& Pick<SidebarContextType, "sidebarWidth" | "sidebarWidthIcon" | "sidebarWidthMobile"> & {
+export function SidebarProvider(
+	props: Pick<SidebarContextType, "sidebarWidth" | "sidebarWidthIcon" | "sidebarWidthMobile">
+		& React.ComponentProps<"div"> & {
 			defaultOpen?: boolean;
 			onOpenChange?: (open: boolean) => void;
 			open?: boolean;
@@ -59,8 +59,8 @@ export function SidebarContextProvider(
 	const {
 		children,
 		className,
-		defaultOpen = true,
-		onOpenChange: setOpenProp,
+		defaultOpen: defaultOpenProp = true,
+		onOpenChange: onOpenChangeProp,
 		open: openProp,
 		sidebarWidth = SIDEBAR_WIDTH,
 		sidebarWidthIcon = SIDEBAR_WIDTH_ICON,
@@ -74,49 +74,41 @@ export function SidebarContextProvider(
 	const [openMobile, setOpenMobile] = useState(false);
 
 	// This is the internal state of the sidebar.
-	// We use openProp and setOpenProp for control from outside the component.
-	const [internalOpen, setInternalOpen] = useState(defaultOpen);
-
-	const open = openProp ?? internalOpen;
+	// We use openProp and onOpenChangeProp for control from outside the component.
+	const [open, setIsOpen] = useControllableState({
+		defaultProp: defaultOpenProp,
+		onChange: onOpenChangeProp,
+		prop: openProp,
+	});
 
 	const setOpen = useCallback(
 		(value: boolean | ((value: boolean) => boolean)) => {
 			const openState = typeof value === "function" ? value(open) : value;
 
-			if (setOpenProp) {
-				setOpenProp(openState);
-			} else {
-				setInternalOpen(openState);
-			}
+			setIsOpen(openState);
 
 			// This sets the cookie to keep the sidebar state.
 			// eslint-disable-next-line unicorn/no-document-cookie
 			document.cookie = `${SIDEBAR_COOKIE_NAME}=${openState}; path=/; max-age=${SIDEBAR_COOKIE_MAX_AGE}`;
 		},
-		[setOpenProp, open]
+		[open, setIsOpen]
 	);
 
 	// Helper to toggle the sidebar.
 	const toggleSidebar = useCallback(() => {
-		return isMobile ? setOpenMobile((prevOpen) => !prevOpen) : setOpen((prevOpen) => !prevOpen);
+		return isMobile ? setOpenMobile((prev) => !prev) : setOpen((prev) => !prev);
 	}, [isMobile, setOpen, setOpenMobile]);
 
 	// Adds a keyboard shortcut to toggle the sidebar.
 	useEffect(() => {
-		const controller = new AbortController();
-
-		window.addEventListener(
-			"keydown",
-			(event) => {
-				if ((event.metaKey || event.ctrlKey) && event.key === SIDEBAR_KEYBOARD_SHORTCUT) {
-					event.preventDefault();
-					toggleSidebar();
-				}
-			},
-			{ signal: controller.signal }
-		);
-
-		return () => controller.abort();
+		const handleKeyDown = (event: KeyboardEvent) => {
+			if (event.key === SIDEBAR_KEYBOARD_SHORTCUT && (event.metaKey || event.ctrlKey)) {
+				event.preventDefault();
+				toggleSidebar();
+			}
+		};
+		window.addEventListener("keydown", handleKeyDown);
+		return () => window.removeEventListener("keydown", handleKeyDown);
 	}, [toggleSidebar]);
 
 	// We add a state so that we can do data-state="expanded" or "collapsed".
@@ -153,6 +145,7 @@ export function SidebarContextProvider(
 		<SidebarContext value={contextValue}>
 			<div
 				data-slot="sidebar-wrapper"
+				data-state={sidebarState}
 				className={cnMerge(
 					`group/sidebar-wrapper flex min-h-svh w-full flex-col
 					has-data-[variant=inset]:bg-shadcn-sidebar`,
@@ -174,15 +167,15 @@ export function SidebarContextProvider(
 }
 
 function SidebarRoot(
-	props: InferProps<"div"> & {
+	props: React.ComponentProps<"div"> & {
 		classNames?: {
+			base?: string;
 			container?: string;
 			inner?: string;
-			root?: string;
 		};
 		collapsible?: "icon" | "none" | "offcanvas";
 		side?: "left" | "right";
-		variant?: "floating" | "inset" | "sidebar-unfixed" | "sidebar";
+		variant?: "floating" | "inset" | "sidebar-sticky" | "sidebar";
 	}
 ) {
 	const {
@@ -204,7 +197,7 @@ function SidebarRoot(
 				className={cnMerge(
 					"flex w-(--sidebar-width) grow bg-shadcn-sidebar text-shadcn-sidebar-foreground",
 					className,
-					classNames?.root
+					classNames?.base
 				)}
 				{...restOfProps}
 			>
@@ -224,7 +217,7 @@ function SidebarRoot(
 						`w-(--sidebar-width) grow bg-shadcn-sidebar p-0 text-shadcn-sidebar-foreground
 						[&>button]:hidden`,
 						className,
-						classNames?.root
+						classNames?.base
 					)}
 					style={
 						{
@@ -246,9 +239,9 @@ function SidebarRoot(
 	return (
 		<aside
 			className={cnMerge(
-				"group peer grow text-shadcn-sidebar-foreground data-[side=right]:order-last",
+				"group peer hidden grow text-shadcn-sidebar-foreground data-[side=right]:order-last md:block",
 				className,
-				classNames?.root
+				classNames?.base
 			)}
 			data-slot="sidebar-root"
 			data-state={state}
@@ -275,7 +268,14 @@ function SidebarRoot(
 					`fixed inset-y-0 z-10 h-svh w-(--sidebar-width) transition-[left,right,width,margin]
 					duration-[300ms,300ms,500ms,150ms] ease-in-out md:flex`,
 
-					variant === "sidebar-unfixed" && "sticky",
+					// Adjust the padding for floating and inset variants.
+					variant === "floating" || variant === "inset" ?
+						`p-2
+							group-data-[collapsible=icon]:w-[calc(var(--sidebar-width-icon)+(--spacing(4))+2px)]`
+					:	`group-data-[collapsible=icon]:w-(--sidebar-width-icon) group-data-[side=left]:border-r
+						group-data-[side=right]:border-l`,
+
+					variant === "sidebar-sticky" && "sticky",
 
 					side === "left" ?
 						"left-0 group-data-[collapsible=offcanvas]:-left-(--sidebar-width)"
@@ -286,13 +286,6 @@ function SidebarRoot(
 					// 		group-data-[collapsible=offcanvas]:has-[[data-slot=sidebar-rail]:hover]:ms-2`
 					// :	`not-group-data-[collapsible=icon]:has-[[data-slot=sidebar-rail]:hover]:-me-2
 					// 	group-data-[collapsible=offcanvas]:has-[[data-slot=sidebar-rail]:hover]:me-2`,
-
-					// Adjust the padding for floating and inset variants.
-					variant === "floating" || variant === "inset" ?
-						`p-2
-							group-data-[collapsible=icon]:w-[calc(var(--sidebar-width-icon)+(--spacing(4))+2px)]`
-					:	`group-data-[collapsible=icon]:w-(--sidebar-width-icon) group-data-[side=left]:border-r
-						group-data-[side=right]:border-l`,
 					className,
 					classNames?.container
 				)}
@@ -317,8 +310,9 @@ function SidebarRoot(
 	);
 }
 
-function SidebarTrigger(props: InferProps<"button">) {
-	const { children, className, onClick, ...restOfProps } = props;
+function SidebarTrigger(props: React.ComponentProps<"button"> & { unstyled?: boolean }) {
+	const { children, className, onClick, unstyled = false, ...restOfProps } = props;
+
 	const { toggleSidebar } = useSidebarContext();
 
 	return (
@@ -327,7 +321,7 @@ function SidebarTrigger(props: InferProps<"button">) {
 			data-sidebar="trigger"
 			data-slot="sidebar-trigger"
 			className={cnMerge(
-				// shadcnButtonVariants({ size: "icon", variant: "ghost" }),
+				!unstyled && shadcnButtonVariants({ size: "icon-sm", variant: "ghost" }),
 				"size-7 shrink-0",
 				className
 			)}
@@ -337,13 +331,13 @@ function SidebarTrigger(props: InferProps<"button">) {
 			}}
 			{...restOfProps}
 		>
-			{children ?? <IconBox icon="lucide:panel-left" />}
+			{children ?? <IconBox icon="lucide:panel-left" className="size-4" />}
 			<span className="sr-only">Toggle Sidebar</span>
 		</button>
 	);
 }
 
-function SidebarRail(props: InferProps<"button"> & { side?: "left" | "right" }) {
+function SidebarRail(props: React.ComponentProps<"button"> & { side?: "left" | "right" }) {
 	const { className, side = "left", ...restOfProps } = props;
 
 	const { state, toggleSidebar } = useSidebarContext();
@@ -406,7 +400,7 @@ function SidebarRail(props: InferProps<"button"> & { side?: "left" | "right" }) 
 	);
 }
 
-export function SidebarInset(props: InferProps<"main">) {
+export function SidebarInset(props: React.ComponentProps<"main">) {
 	const { className, ...restOfProps } = props;
 
 	return (
@@ -424,7 +418,7 @@ export function SidebarInset(props: InferProps<"main">) {
 	);
 }
 
-function SidebarInput(props: InferProps<typeof FormInput>) {
+function SidebarInput(props: React.ComponentProps<typeof FormInput>) {
 	const { className, ...restOfProps } = props;
 
 	return (
@@ -437,7 +431,7 @@ function SidebarInput(props: InferProps<typeof FormInput>) {
 	);
 }
 
-function SidebarHeader(props: InferProps<"div">) {
+function SidebarHeader(props: React.ComponentProps<"div">) {
 	const { className, ...restOfProps } = props;
 
 	return (
@@ -450,7 +444,7 @@ function SidebarHeader(props: InferProps<"div">) {
 	);
 }
 
-function SidebarFooter(props: InferProps<"div">) {
+function SidebarFooter(props: React.ComponentProps<"div">) {
 	const { className, ...restOfProps } = props;
 
 	return (
@@ -463,7 +457,7 @@ function SidebarFooter(props: InferProps<"div">) {
 	);
 }
 
-function SidebarSeparator(props: InferProps<typeof SeparatorPrimitive>) {
+function SidebarSeparator(props: React.ComponentProps<typeof SeparatorPrimitive>) {
 	const { className, ...restOfProps } = props;
 
 	return (
@@ -476,14 +470,14 @@ function SidebarSeparator(props: InferProps<typeof SeparatorPrimitive>) {
 	);
 }
 
-function SidebarContent(props: InferProps<"div">) {
+function SidebarContent(props: React.ComponentProps<"div">) {
 	const { className, ...restOfProps } = props;
 	return (
 		<div
 			data-slot="sidebar-content"
 			data-sidebar="content"
 			className={cnMerge(
-				`flex min-h-0 flex-1 flex-col gap-2 overflow-auto
+				`flex min-h-0 flex-1 flex-col gap-0 overflow-auto
 				group-data-[collapsible=icon]:overflow-hidden`,
 				className
 			)}
@@ -492,7 +486,7 @@ function SidebarContent(props: InferProps<"div">) {
 	);
 }
 
-function SidebarGroup(props: InferProps<"div">) {
+function SidebarGroup(props: React.ComponentProps<"div">) {
 	const { className, ...restOfProps } = props;
 
 	return (
@@ -505,7 +499,7 @@ function SidebarGroup(props: InferProps<"div">) {
 	);
 }
 
-function SidebarGroupLabel(props: InferProps<"h4"> & { asChild?: boolean }) {
+function SidebarGroupLabel(props: React.ComponentProps<"h4"> & { asChild?: boolean }) {
 	const { asChild = false, className, ...restOfProps } = props;
 
 	const Component = asChild ? Slot.Root : "h4";
@@ -526,7 +520,7 @@ function SidebarGroupLabel(props: InferProps<"h4"> & { asChild?: boolean }) {
 	);
 }
 
-function SidebarGroupAction(props: InferProps<"button"> & { asChild?: boolean }) {
+function SidebarGroupAction(props: React.ComponentProps<"button"> & { asChild?: boolean }) {
 	const { asChild = false, className, ...restOfProps } = props;
 
 	const Component = asChild ? Slot.Root : "button";
@@ -550,7 +544,7 @@ function SidebarGroupAction(props: InferProps<"button"> & { asChild?: boolean })
 	);
 }
 
-function SidebarGroupContent(props: InferProps<"div">) {
+function SidebarGroupContent(props: React.ComponentProps<"div">) {
 	const { className, ...restOfProps } = props;
 
 	return (
@@ -563,7 +557,7 @@ function SidebarGroupContent(props: InferProps<"div">) {
 	);
 }
 
-function SidebarMenu(props: InferProps<"ul">) {
+function SidebarMenu(props: React.ComponentProps<"ul">) {
 	const { className, ...restOfProps } = props;
 
 	return (
@@ -576,7 +570,7 @@ function SidebarMenu(props: InferProps<"ul">) {
 	);
 }
 
-function SidebarMenuItem(props: InferProps<"li">) {
+function SidebarMenuItem(props: React.ComponentProps<"li">) {
 	const { className, ...restOfProps } = props;
 
 	return (
@@ -622,11 +616,11 @@ const sidebarMenuButtonVariants = tv({
 });
 
 function SidebarMenuButton(
-	props: InferProps<"button">
+	props: React.ComponentProps<"button">
 		& VariantProps<typeof sidebarMenuButtonVariants> & {
 			asChild?: boolean;
 			isActive?: boolean;
-			tooltip?: string | InferProps<typeof Tooltip.Content>;
+			tooltip?: string | React.ComponentProps<typeof Tooltip.Content>;
 		}
 ) {
 	let {
@@ -679,7 +673,7 @@ function SidebarMenuButton(
 }
 
 function SidebarMenuAction(
-	props: InferProps<"button"> & {
+	props: React.ComponentProps<"button"> & {
 		asChild?: boolean;
 		showOnHover?: boolean;
 	}
@@ -715,7 +709,7 @@ function SidebarMenuAction(
 	);
 }
 
-function SidebarMenuBadge(props: InferProps<"div">) {
+function SidebarMenuBadge(props: React.ComponentProps<"div">) {
 	const { className, ...restOfProps } = props;
 	return (
 		<div
@@ -738,7 +732,7 @@ function SidebarMenuBadge(props: InferProps<"div">) {
 }
 
 function SidebarMenuSkeleton(
-	props: InferProps<"div"> & {
+	props: React.ComponentProps<"div"> & {
 		showIcon?: boolean;
 	}
 ) {
@@ -769,7 +763,7 @@ function SidebarMenuSkeleton(
 	);
 }
 
-function SidebarMenuSub(props: InferProps<"ul">) {
+function SidebarMenuSub(props: React.ComponentProps<"ul">) {
 	const { className, ...restOfProps } = props;
 
 	return (
@@ -787,11 +781,13 @@ function SidebarMenuSub(props: InferProps<"ul">) {
 	);
 }
 
-function SidebarMenuSubItem(props: InferProps<"li">) {
-	const { className, ...restOfProps } = props;
+function SidebarMenuSubItem(props: React.ComponentProps<"li"> & { asChild?: boolean }) {
+	const { asChild = false, className, ...restOfProps } = props;
+
+	const Component = asChild ? Slot.Root : "li";
 
 	return (
-		<li
+		<Component
 			data-slot="sidebar-menu-sub-item"
 			data-sidebar="menu-sub-item"
 			className={cnMerge("group/menu-sub-item relative", className)}
@@ -801,7 +797,7 @@ function SidebarMenuSubItem(props: InferProps<"li">) {
 }
 
 function SidebarMenuSubButton(
-	props: InferProps<"a"> & {
+	props: React.ComponentProps<"a"> & {
 		asChild?: boolean;
 		isActive?: boolean;
 		size?: "md" | "sm";
@@ -837,26 +833,28 @@ function SidebarMenuSubButton(
 	);
 }
 
-export const Root = SidebarRoot;
-export const ContextProvider = SidebarContextProvider;
-export const Content = SidebarContent;
-export const Footer = SidebarFooter;
-export const Group = SidebarGroup;
-export const GroupAction = SidebarGroupAction;
-export const GroupContent = SidebarGroupContent;
-export const GroupLabel = SidebarGroupLabel;
-export const Header = SidebarHeader;
-export const Input = SidebarInput;
-export const Inset = SidebarInset;
-export const Menu = SidebarMenu;
-export const MenuAction = SidebarMenuAction;
-export const MenuBadge = SidebarMenuBadge;
-export const MenuButton = SidebarMenuButton;
-export const MenuItem = SidebarMenuItem;
-export const MenuSkeleton = SidebarMenuSkeleton;
-export const MenuSub = SidebarMenuSub;
-export const MenuSubButton = SidebarMenuSubButton;
-export const MenuSubItem = SidebarMenuSubItem;
-export const Rail = SidebarRail;
-export const Separator = SidebarSeparator;
-export const Trigger = SidebarTrigger;
+export {
+	SidebarRoot as Root,
+	SidebarProvider as Provider,
+	SidebarContent as Content,
+	SidebarFooter as Footer,
+	SidebarGroup as Group,
+	SidebarGroupAction as GroupAction,
+	SidebarGroupContent as GroupContent,
+	SidebarGroupLabel as GroupLabel,
+	SidebarHeader as Header,
+	SidebarInput as Input,
+	SidebarInset as Inset,
+	SidebarMenu as Menu,
+	SidebarMenuAction as MenuAction,
+	SidebarMenuBadge as MenuBadge,
+	SidebarMenuButton as MenuButton,
+	SidebarMenuItem as MenuItem,
+	SidebarMenuSkeleton as MenuSkeleton,
+	SidebarMenuSub as MenuSub,
+	SidebarMenuSubButton as MenuSubButton,
+	SidebarMenuSubItem as MenuSubItem,
+	SidebarRail as Rail,
+	SidebarSeparator as Separator,
+	SidebarTrigger as Trigger,
+};

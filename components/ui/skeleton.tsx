@@ -1,7 +1,6 @@
-import type { InferProps } from "@zayne-labs/toolkit-react/utils";
 import { cnMerge } from "@/lib/utils/cn";
 
-function Skeleton(props: InferProps<"div">) {
+function Skeleton(props: React.ComponentProps<"div">) {
 	const { className, ...restOfProps } = props;
 
 	return (
