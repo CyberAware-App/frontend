@@ -19,9 +19,8 @@ const makeQueryClient = () => {
 					return false;
 				},
 			},
-
 			queries: {
-				retry: 1,
+				retry: 0,
 			},
 		},
 	});
